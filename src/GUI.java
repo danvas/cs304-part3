@@ -7,6 +7,9 @@ public class GUI {
 
 private static void createandshowGUI(){
 	
+	//****** this is a change to test GIT
+	
+	
 	//creates and prepares window
 	JFrame frame = new JFrame("Gui");
 	frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
