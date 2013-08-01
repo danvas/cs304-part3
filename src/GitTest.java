@@ -1,4 +1,5 @@
 // this is to test the Git repo
+// this is another test
 public class GitTest {
 	
 	public GitTest(){}
