@@ -8,6 +8,7 @@ public class GUI {
 private static void createandshowGUI(){
 	
 	//****** this is a change to test GIT
+	// *****another Git test
 	
 	
 	//creates and prepares window
