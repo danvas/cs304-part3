@@ -8,3 +8,5 @@ public class GitTest {
 }
 
 // another comment test
+
+// comment test - Allan
