@@ -93,7 +93,29 @@ public class MainFrame extends JFrame {
 		
 		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
 		contentPane.add(tabbedPane, "name_1442560847488307");
+		
+		JPanel panel_2 = new JPanel();
+		panel_2.setBorder(new EmptyBorder(10, 10, 10, 10));
+		tabbedPane.addTab("Purchase", null, panel_2, null);
+		panel_2.setLayout(new GridLayout(0, 2, 0, 0));
+		
+		JLabel lblUpc = new JLabel("UPC:");
+		panel_2.add(lblUpc);
+		
+		JTextPane textPane_1 = new JTextPane();
+		panel_2.add(textPane_1);
+		
+		JLabel lblQuantity = new JLabel("Quantity:");
+		panel_2.add(lblQuantity);
+		
+		JTextPane textPane_2 = new JTextPane();
+		panel_2.add(textPane_2);
+		
+		JLabel lblCreditCardNumber = new JLabel("Credit Card Number:");
+		panel_2.add(lblCreditCardNumber);
+		
+		JPanel panel_3 = new JPanel();
+		tabbedPane.addTab("Return", null, panel_3, null);
 		contentPane.add(panel_1, "name_1441150078382489");
 	}
-
 }
