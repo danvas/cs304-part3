@@ -12,7 +12,7 @@ import java.awt.Font;
 import javax.swing.JRadioButton;
 import javax.swing.JComboBox;
 import javax.swing.BoxLayout;
-import net.miginfocom.swing.MigLayout;
+//import net.miginfocom.swing.MigLayout;
 import javax.swing.JFormattedTextField;
 import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
