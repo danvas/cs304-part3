@@ -7,6 +7,6 @@ public class GitTest {
 
 }
 
-// changed this comment to test git. again.
+// changed this comment to test git. again. and again.
 
 // test comment and testing adding JDBC drivers to referenced libraries - Allan
