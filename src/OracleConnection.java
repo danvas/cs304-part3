@@ -15,16 +15,16 @@ public class OracleConnection {
     }
     
     /*
-     * Returns an instance of MvbOracleConnection
+     * Returns an instance of OracleConnection
      */ 
     public static OracleConnection getInstance()
     {
-	if (oCon == null)
-	{
-	    oCon = new OracleConnection(); 
-	}
+    	if (oCon == null)
+    	{
+    		oCon = new OracleConnection(); 
+    	}
 
-	return oCon;
+    	return oCon;
     }
     
     /*
@@ -32,20 +32,27 @@ public class OracleConnection {
      */ 
     private boolean connect(String username, String password)
     {
-      String connectURL = "jdbc:oracle:thin:@dbhost.ugrad.cs.ubc.ca:1522:ug"; 
 
-      try 
-      {
-	con = DriverManager.getConnection(connectURL,username,password);
+    	try 
+    	{
+    		String connectURL = "jdbc:oracle:thin:@dbhost.ugrad.cs.ubc.ca:1522:ug";   
 
-	System.out.println("\nConnected to Oracle!");
-	return true;
-      }
-      catch (SQLException ex)
-      {
-	System.out.println("Message: " + ex.getMessage());
-	return false;
-      }
+    		if (!driverLoaded) {
+    			DriverManager.registerDriver(new oracle.jdbc.driver.OracleDriver());
+    			driverLoaded = true;
+    		}
+
+    		con = DriverManager.getConnection(connectURL,username,password);
+
+    		con.setAutoCommit(false);
+    		System.out.println("\nConnected to Oracle!");
+    		return true;
+    	}
+    	catch (SQLException ex)
+    	{
+    		System.out.println("Message: " + ex.getMessage());
+    		return false;
+    	}
     }
     
     /*
@@ -53,7 +60,7 @@ public class OracleConnection {
      */
     public Connection getConnection()
     {
-	return con; 
+    	return con; 
     }
     
     /*
@@ -61,7 +68,7 @@ public class OracleConnection {
      */
     public void setConnection(Connection connect)
     {
-	con = connect; 
+    	con = connect; 
     }
     
     /*
@@ -69,7 +76,7 @@ public class OracleConnection {
      */ 
     public boolean isDriverLoaded()
     {
-	return driverLoaded; 
+    	return driverLoaded; 
     }
     
     /*
@@ -78,14 +85,20 @@ public class OracleConnection {
      */ 
     protected void finalize() throws Throwable
     {		
-	if (con != null)
-	{
-	    con.close();
-	}
+    	if (con != null)
+    	{
+    		con.close();
+    	}
 
 	// finalize() must call super.finalize() as the last thing it does
 	super.finalize();	
     }
 
-    
+    /*
+     * Test main to check for Oracle Connection 
+    public static void main (String args[]) {
+    	getInstance();
+    	oCon.connect("ora_o0g6", "a40493058");
+    }
+     */
 }
