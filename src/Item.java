@@ -14,7 +14,7 @@ public class Item {
 	 */ 
 	public Item(){
 		
-		con = OracleConnection.getInstance().getConnection();
+		con = AMSOracleConnection.getInstance().getConnection();
 	}
 
 	public void insertItem(String upc, String iTitle, String type, String category, 
@@ -189,7 +189,7 @@ public class Item {
 		
 		System.out.println("test");
 		
-		OracleConnection oCon = OracleConnection.getInstance();
+		AMSOracleConnection oCon = AMSOracleConnection.getInstance();
 		oCon.connect("ora_o0g6", "a40493058");
 		
 		Item item = new Item();

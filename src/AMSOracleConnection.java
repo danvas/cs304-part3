@@ -1,7 +1,7 @@
 import java.sql.*; 
 
-public class OracleConnection {
-	private static OracleConnection oCon = null;
+public class AMSOracleConnection {
+	private static AMSOracleConnection oCon = null;
 	protected Connection con = null;
 	protected boolean driverLoaded = false;
 	
@@ -9,7 +9,7 @@ public class OracleConnection {
      * The constructor is declared protected so that only subclasses
      * can access it.
      */ 
-    protected OracleConnection()
+    protected AMSOracleConnection()
     {
 	// empty
     }
@@ -17,11 +17,11 @@ public class OracleConnection {
     /*
      * Returns an instance of OracleConnection
      */ 
-    public static OracleConnection getInstance()
+    public static AMSOracleConnection getInstance()
     {
     	if (oCon == null)
     	{
-    		oCon = new OracleConnection(); 
+    		oCon = new AMSOracleConnection(); 
     	}
 
     	return oCon;
