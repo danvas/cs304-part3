@@ -72,7 +72,7 @@ public class Item {
 		{
 			stmt = con.createStatement();
 
-			rs = stmt.executeQuery("SELECT * FROM branch");
+			rs = stmt.executeQuery("SELECT * FROM item");
 
 			// get info on ResultSet
 			ResultSetMetaData rsmd = rs.getMetaData();
@@ -171,7 +171,7 @@ public class Item {
 				{
 					System.out.printf("%-20.20s", stock);
 				}
-     
+				System.out.println("");
 			}
 
 			// close the statement; 
@@ -197,8 +197,8 @@ public class Item {
 		item.displayItem();
 		
 		item.insertItem("9999999999999999", "test", "CD", "test", "test", "test", 999.99, 99);
-		
-		item.displayItem();
+		item.insertItem("12345678901", "iTitle", "CD", "instrumental", "company", "year", 111.12, 27);
+		//item.displayItem();
 
 	}
 	
