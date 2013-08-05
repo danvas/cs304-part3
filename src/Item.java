@@ -13,10 +13,12 @@ public class Item {
 	 * Default constructor
 	 */ 
 	public Item(){
+		
 		con = OracleConnection.getInstance().getConnection();
 	}
 
-	public void insertItem(String upc, String iTitle, String type, String category, String company, String year, double price, int stock)	{
+	public void insertItem(String upc, String iTitle, String type, String category, 
+			String company, String year, double price, int stock)	{
 		try
 		{	   
 			ps = con.prepareStatement("INSERT INTO item VALUES (?,?,?,?,?,?,?,?)");
@@ -184,13 +186,20 @@ public class Item {
 
 	public static void main(String args[])
 	{
+		
+		System.out.println("test");
+		
+		OracleConnection oCon = OracleConnection.getInstance();
+		oCon.connect("ora_o0g6", "a40493058");
+		
 		Item item = new Item();
 		
 		item.displayItem();
 		
-		item.insertItem("9999999999999999", "test", "test", "test", "test", "test", 999.99, 99);
+		item.insertItem("9999999999999999", "test", "CD", "test", "test", "test", 999.99, 99);
 		
 		item.displayItem();
 
 	}
+	
 }

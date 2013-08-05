@@ -30,7 +30,7 @@ public class OracleConnection {
     /*
      * connects to Oracle database named ug using user supplied username and password
      */ 
-    private boolean connect(String username, String password)
+    public boolean connect(String username, String password)
     {
 
     	try 
