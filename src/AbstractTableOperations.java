@@ -4,12 +4,12 @@ import java.sql.PreparedStatement;
 import javax.swing.event.EventListenerList;
 
 
-public abstract class TableOperations {
+public abstract class AbstractTableOperations {
 	protected Connection con = null;
 	protected PreparedStatement ps = null;
 	protected EventListenerList listenerList;
 	
-	protected TableOperations(){
+	protected AbstractTableOperations(){
 		con = AMSOracleConnection.getInstance().getConnection();
 		listenerList = new EventListenerList();
 	}

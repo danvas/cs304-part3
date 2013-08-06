@@ -5,13 +5,13 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import javax.swing.event.EventListenerList;
 
-public class itemOperations extends TableOperations{
+public class ItemOperations extends AbstractTableOperations{
 	
 	protected PreparedStatement ps = null;
 	protected Connection con = null;
 	protected EventListenerList listenerList = new EventListenerList();
 	
-	itemOperations(){
+	ItemOperations(){
 		con = AMSOracleConnection.getInstance().getConnection();
 	}
 	

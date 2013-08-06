@@ -1,8 +1,7 @@
 
 
-public class returnItemOperations {
+public class LeadSingerOperations extends AbstractTableOperations {
 
-	
 	void insert(){
 		
 	}

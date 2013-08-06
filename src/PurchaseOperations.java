@@ -1,9 +1,10 @@
 import java.sql.Date;
 import java.sql.SQLException;
+import java.sql.Types;
 
 
 
-public class purchaseOperations extends TableOperations {
+public class PurchaseOperations extends AbstractTableOperations {
 	
 	boolean insert(Date date,String cid,String cardno, String expdate, Date expected,Date delivered){
 		try{
@@ -64,6 +65,42 @@ public class purchaseOperations extends TableOperations {
 			return false; 
 		    }
 		}
+	}
+	
+	boolean updateDeliveryDate(Integer receiptId,Date ddate){
+		try{
+			ps = con.prepareStatement("UPDATE purchase SET delivereddate = ? WHERE receiptId = ?");
+			if(receiptId!=null){
+				ps.setInt(2, receiptId);
+			}
+			else ps.setNull(2,Types.INTEGER);
+			if(ddate!=null){
+				ps.setDate(1,ddate);
+			}
+			else{
+				ps.setDate(1,null);
+			}
+			ps.executeUpdate();
+			con.commit();
+			return true;
+		}
+		catch(SQLException ex){
+			 ExceptionEvent event = new ExceptionEvent(this, ex.getMessage());
+			    fireExceptionGenerated(event);
+			    
+			    try
+			    {
+				con.rollback();
+				return false; 
+			    }
+			    catch (SQLException ex2)
+			    {
+				 event = new ExceptionEvent(this, ex2.getMessage());
+				 fireExceptionGenerated(event);
+				 return false; 
+			    }
+		}
+		
 	}
 	
 	//TODO

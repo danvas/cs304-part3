@@ -1,6 +1,6 @@
 import java.sql.SQLException;
 
-public class purchaseItemOperations extends TableOperations{
+public class PurchaseItemOperations extends AbstractTableOperations{
  
 	boolean insert(String receiptId, String upc, int qty){
 		try{

@@ -4,7 +4,7 @@ import java.sql.Types;
 
 
 
-public class returnOperations extends TableOperations {
+public class ReturnOperations extends AbstractTableOperations {
 	boolean insert(Integer receiptId,Date rdate){
 		try {
 			ps = con.prepareStatement("INSERT INTO return VALUES receipt_retid.nextval,?,?");
