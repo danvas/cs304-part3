@@ -605,7 +605,7 @@ public class MainFrame extends JFrame {
 		JPanel topSellingItems = new JPanel();
 		managerOperations.addTab("Top Selling Items", null, topSellingItems, null);
 		
-		JPanel customerOperations = new JPanel();
+		final JPanel customerOperations = new JPanel();
 		contentPane.add(customerOperations, "name_1452058092586835");
 		customerOperations.setLayout(new CardLayout(0, 0));
 		
@@ -662,6 +662,13 @@ public class MainFrame extends JFrame {
 		custPW.setColumns(10);
 		
 		JButton btnSubmit_1 = new JButton("Submit");
+		//TODO: submit operations to login customer
+//		btnSubmit_1.addActionListener(new ActionListener() {
+//			public void actionPerformed(ActionEvent e) {
+//				CustomerOperations c = new CustomerOperations();
+//				if (c.)
+//			}
+//		});
 		GridBagConstraints gbc_btnSubmit_1 = new GridBagConstraints();
 		gbc_btnSubmit_1.insets = new Insets(0, 0, 5, 5);
 		gbc_btnSubmit_1.gridx = 4;
@@ -676,6 +683,12 @@ public class MainFrame extends JFrame {
 		customerLogin.add(lblNotRegistered, gbc_lblNotRegistered);
 		
 		JButton btnRegisterNow = new JButton("Register Now");
+		btnRegisterNow.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				CardLayout cl = (CardLayout) customerOperations.getLayout();
+				cl.show(customerOperations,"name_1452390541607518");
+			}
+		});
 		GridBagConstraints gbc_btnRegisterNow = new GridBagConstraints();
 		gbc_btnRegisterNow.insets = new Insets(0, 0, 5, 0);
 		gbc_btnRegisterNow.gridx = 6;
@@ -785,6 +798,20 @@ public class MainFrame extends JFrame {
 		custPNum.setColumns(10);
 		
 		JButton btnRegisterNow_1 = new JButton("Register Now");
+		btnRegisterNow_1.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				CustomerOperations c = new CustomerOperations();
+				if (c.insert(custRegId.getText(), custRegPW.getText(), custRegName.getText(), custRegAddr.getText(), custPNum.getText())){
+					goToOnlinePurchase();
+				}
+			}
+
+			private void goToOnlinePurchase() {
+				// TODO Auto-generated method stub
+				CardLayout cl = (CardLayout) customerOperations.getLayout();
+				 cl.show(customerOperations, "name_1452390541607518");
+			}
+		});
 		GridBagConstraints gbc_btnRegisterNow_1 = new GridBagConstraints();
 		gbc_btnRegisterNow_1.insets = new Insets(0, 0, 0, 5);
 		gbc_btnRegisterNow_1.gridx = 2;
