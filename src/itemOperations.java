@@ -102,6 +102,7 @@ public class itemOperations {
 		}
 	}
 	boolean delete(){
+		return false;
 		
 	}
 	

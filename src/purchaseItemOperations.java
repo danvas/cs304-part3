@@ -59,10 +59,11 @@ public class purchaseItemOperations {
 	}
 
 	boolean delete(){
+		return false;
 		
 	}
 	
 	boolean display(){
-		
+		return false;
 	}
 }
