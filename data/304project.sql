@@ -44,7 +44,7 @@ drop table Purchase;
 create table Purchase
 (receiptId integer not null,
 pdate date,
-cid varchar(10) not null,
+cid varchar(10),
 cardno varchar(16),
 expirydate char(4),
 expecteddate date,
@@ -70,7 +70,7 @@ foreign key (upc)
 drop table Return;
 
 create table Return
-(retid varchar(10) not null,
+(retid integer not null,
 receiptId integer not null,
 rdate date null,
 PRIMARY KEY (retid),
@@ -137,11 +137,11 @@ insert into HasSong
 	values('1111111111111115', 'Symphony');
 
 insert into Purchase
-	values(11, '2001-01-01', '1234', '4444555566667777', '0101', null, null); 
+	values(purchase_receiptId.nextval, '2001-01-01', '1234', '4444555566667777', '0101', null, null); 
 insert into Purchase
-	values(12, '2002-02-21', '5678', '4444555566667778', '0101', '2012-01-01', '2012-01-05' );
+	values(purchase_receiptId.nextval, '2002-02-21', '5678', '4444555566667778', '0101', '2012-01-01', '2012-01-05' );
 insert into Purchase
-	values(13, '2003-03-18', '3456', null, null, null, null);
+	values(purchase_receiptId.nextval, '2003-03-18', '3456', null, null, null, null);
 
 insert into PurchaseItem
 	values(11, '1111111111111111', 1);
