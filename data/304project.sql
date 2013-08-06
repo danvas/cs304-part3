@@ -52,6 +52,8 @@ delivereddate date,
 PRIMARY KEY (receiptId),
 foreign key (cid) 
 	references Customer);
+	
+create SEQUENCE purchase_receiptId;
 
 drop table PurchaseItem;
 
@@ -74,6 +76,8 @@ rdate date null,
 PRIMARY KEY (retid),
 foreign key (receiptId) 
 	references Purchase);
+
+create SEQUENCE return_retid;
 
 drop table ReturnItem;
 
