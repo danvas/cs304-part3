@@ -5,7 +5,7 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import javax.swing.event.EventListenerList;
 
-public class itemOperations {
+public class itemOperations extends TableOperations{
 	
 	protected PreparedStatement ps = null;
 	protected Connection con = null;
@@ -110,21 +110,5 @@ public class itemOperations {
 		
 	}
 	
-	 public void fireExceptionGenerated(ExceptionEvent ex) 
-	    {
-		// Guaranteed to return a non-null array
-		Object[] listeners = listenerList.getListenerList();
-
-		// Process the listeners last to first, notifying
-		// those that are interested in this event.
-		// I have no idea why the for loop counts backwards by 2
-		// and the array indices are the way they are.
-		for (int i = listeners.length-2; i>=0; i-=2) 
-		{
-		    if (listeners[i]==ExceptionListener.class) 
-		    {
-			((ExceptionListener)listeners[i+1]).exceptionGenerated(ex);
-		    }
-	         }
-	     }
+	 
 }
