@@ -1,3 +1,4 @@
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -41,28 +42,29 @@ public class CustomerOperations extends AbstractTableOperations{
 	
 	//TODO finish 
 	boolean login(String cid, String pw){
-		Statement stmt;
+		
 		ResultSet rs;
 		
 		try {
-			stmt = con.prepareStatement("SELECT * FROM customer WHERE cid = ? AND password = ?"); 
+			ps = con.prepareStatement("SELECT * FROM customer WHERE cid = ? AND password = ?"); 
 				
 			ps.setString(1, cid);
 			ps.setString(2, pw);
 			
 			rs = ps.executeQuery();
-					
-			ResultSetMetaData rsmd = rs.getMetaData();
+			System.out.println("Just executed query")	;	
+
+if (rs.next()) return true;
+else return false;
 			
-			int result = rsmd.
-			return rs; 
+			
 		}
 		catch (SQLException ex) {
 			ExceptionEvent event = new ExceptionEvent(this, ex.getMessage());
 			fireExceptionGenerated(event);
 			// no need to commit or rollback since it is only a query
 
-			return null; 
+			return false; 
 		}
 	}
 	
