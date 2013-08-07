@@ -37,6 +37,9 @@ public class CustomerOperations extends AbstractTableOperations{
 		}
 	}
 	
+	/*
+	 * Login to AMS database if customer is registered
+	 */
 	//TODO finish 
 	public boolean login(String cid, String pw){
 		
@@ -86,12 +89,6 @@ public class CustomerOperations extends AbstractTableOperations{
 //			System.out.println("exiting CustomerOperations.login()..."); //debugging printout
 //
 //			return true;
-//		}
-//		catch (SQLException ex) {
-//			ExceptionEvent event = new ExceptionEvent(this, ex.getMessage());
-//			fireExceptionGenerated(event);
-//			// no need to commit or rollback since it is only a query
-//			return false; 
 //		}
 //	}
 	

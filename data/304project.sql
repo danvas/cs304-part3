@@ -82,7 +82,7 @@ create SEQUENCE return_retid;
 drop table ReturnItem;
 
 create table ReturnItem
-(retid varchar(10) not null,
+(retid integer not null,
 upc char(6) not null,
 quantity integer null,
 PRIMARY KEY (retid, upc),
@@ -105,13 +105,13 @@ insert into Item
 insert into LeadSinger
 	values ('111111', 'Michael Jackson');
 insert into LeadSinger
-	values ('1111112', 'Michael Jackson');
+	values ('111112', 'Michael Jackson');
 insert into LeadSinger
-	values ('1111113', 'Metallica');
+	values ('111113', 'Metallica');
 insert into LeadSinger
-	values ('1111114', 'NWA');
+	values ('111114', 'NWA');
 insert into LeadSinger
-	values ('1111115', 'Mozart');
+	values ('111115', 'Mozart');
 
 insert into HasSong
 	values('111111', 'Beat it');
@@ -137,6 +137,7 @@ insert into HasSong
 	values('111115', 'Symphony');
 
 insert into Purchase
+	(receiptid, pdate, cid, cardno, expirydate, expecteddate, delivereddate)
 	values(purchase_receiptId.nextval, '2001-01-01', '1234', '4444555566667777', '0101', null, null); 
 insert into Purchase
 	values(purchase_receiptId.nextval, '2002-02-21', '5678', '4444555566667778', '0101', '2012-01-01', '2012-01-05' );
@@ -144,13 +145,13 @@ insert into Purchase
 	values(purchase_receiptId.nextval, '2003-03-18', '3456', null, null, null, null);
 
 insert into PurchaseItem
-	values(11, '111111', 1);
+	values(purchase_receiptId.currval, '111111', 1);
 insert into PurchaseItem
-	values(11, '111112', 1);
+	values(purchase_receiptId.currval, '111112', 1);
 insert into PurchaseItem
-	values(12, '111113', 1);
+	values(purchase_receiptId.currval, '111113', 1);
 insert into PurchaseItem
-	values(13, '111114', 1);
+	values(purchase_receiptId.currval, '111114', 1);
 
 insert into Customer
 	values('1234', null, null, null, null);
@@ -160,14 +161,10 @@ insert into Customer
 	values('5678', 'pass', 'John Smith', '101 university Blvd, Vancouver, BC', '6049999999');
 
 insert into Return
-	values('12345', 13, '2003-03-23');
+	values(return_retid.nextval, purchase_receiptId.currval, '2003-03-23');
 
 insert into ReturnItem
-	values('12345', '111114', 1);
-
-
-
-
+	values(return_retid.currval, '111114', 1);
 
 
 

@@ -70,6 +70,9 @@ public class PurchaseOperations extends AbstractTableOperations {
 		}
 	}
 	//TODO: PLEASE TEST THIS IN GUI via display in SQL+. - Ian
+	// tried this in GUI under Manager -> SetDeliveryDate and didn't work. 
+	// The Query below is correct in SQLPlus - Allan
+	
 	boolean updateDeliveryDate(Integer receiptId,String stringdate){
 		try{
 			ps = con.prepareStatement("UPDATE purchase SET delivereddate = ? WHERE receiptId = ?");
@@ -91,22 +94,19 @@ public class PurchaseOperations extends AbstractTableOperations {
 			return true;
 		}
 		catch(SQLException | ParseException ex){
-			 ExceptionEvent event = new ExceptionEvent(this, ex.getMessage());
-			    fireExceptionGenerated(event);
-			    
-			    try
-			    {
+			ExceptionEvent event = new ExceptionEvent(this, ex.getMessage());
+			fireExceptionGenerated(event);
+
+			try {
 				con.rollback();
 				return false; 
-			    }
-			    catch (SQLException ex2)
-			    {
-				 event = new ExceptionEvent(this, ex2.getMessage());
-				 fireExceptionGenerated(event);
-				 return false; 
-			    }
+			}
+			catch (SQLException ex2) {
+				event = new ExceptionEvent(this, ex2.getMessage());
+				fireExceptionGenerated(event);
+				return false; 
+			}
 		}
-		
 	}
 	
 	
