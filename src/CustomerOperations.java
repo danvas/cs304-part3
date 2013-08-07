@@ -1,14 +1,11 @@
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 
 
 
 public class CustomerOperations extends AbstractTableOperations{
 
 	//REGISTER CUSTOMER
-	boolean insert(String cid, String pw,String cname, String address, String phoneno){
+	public boolean insert(String cid, String pw,String cname, String address, String phoneno){
 		try{
 			ps = con.prepareStatement("INSERT INTO Customer VALUES (?,?,?,?,?)");
 			
@@ -41,23 +38,23 @@ public class CustomerOperations extends AbstractTableOperations{
 	}
 	
 	//TODO finish 
-	boolean login(String cid, String pw){
+	public boolean login(String cid, String pw){
 		
 		ResultSet rs;
-		
+
 		try {
 			ps = con.prepareStatement("SELECT * FROM customer WHERE cid = ? AND password = ?"); 
-				
+
 			ps.setString(1, cid);
 			ps.setString(2, pw);
-			
+
 			rs = ps.executeQuery();
 			System.out.println("Just executed query")	;	
 
-if (rs.next()) return true;
-else return false;
-			
-			
+			if (rs.next()) return true;
+			else return false;
+
+
 		}
 		catch (SQLException ex) {
 			ExceptionEvent event = new ExceptionEvent(this, ex.getMessage());
@@ -67,16 +64,89 @@ else return false;
 			return false; 
 		}
 	}
+
+	//	/*
+//	 * Deletes a tuple from Customer table by specifying cid and password
+//	 */
+//	public boolean login(String cid, String pw){
+//		//Statement stmt;
+//		ResultSet rs;
+//		
+//		try {
+//			System.out.println("in CustomerOperations.login()..."); //debugging printout
+//
+//			ps = con.prepareStatement("SELECT * FROM customer WHERE cid = ? AND password = ?"); 
+//				
+//			ps.setString(1, cid);
+//			ps.setString(2, pw);
+//			
+//			rs = ps.executeQuery();
+//			System.out.println("rs = "+ rs); //debugging printout
+//					
+//			System.out.println("exiting CustomerOperations.login()..."); //debugging printout
+//
+//			return true;
+//		}
+//		catch (SQLException ex) {
+//			ExceptionEvent event = new ExceptionEvent(this, ex.getMessage());
+//			fireExceptionGenerated(event);
+//			// no need to commit or rollback since it is only a query
+//			return false; 
+//		}
+//	}
 	
-	//TODO
-	boolean delete(){
+	/*
+	 * Deletes a tuple from Customer table by specifying the cid
+	 */
+	public boolean delete(String cid){
 	
-		return false;
+		try {
+			ps = con.prepareStatement("DELETE FROM customer WHERE cid = ?");
+			ps.setString(1, cid);
+			ps.executeUpdate();
+			con.commit();
+			return true;
+		}
+		catch (SQLException ex) {
+			ExceptionEvent event = new ExceptionEvent(this, ex.getMessage());
+			fireExceptionGenerated(event);
+
+			try {
+				con.rollback();
+				return false;
+			}
+			catch (SQLException ex2) {
+				event = new ExceptionEvent(this, ex2.getMessage());
+				fireExceptionGenerated(event);
+				return false;
+			}
+		}
+
 	}
 	
-	//TODO
-	boolean display(){
-		
-		return false;
+	/*
+	 * Display Customer table tuples
+	 */
+	public ResultSet display(){
+
+		try {
+			ps = con.prepareStatement("SELECT * FROM leadsinger", 
+					ResultSet.TYPE_SCROLL_INSENSITIVE,
+					ResultSet.CONCUR_READ_ONLY);
+
+			ResultSet rs = ps.executeQuery();
+
+			return rs; 
+		}
+		catch (SQLException ex) {
+			ExceptionEvent event = new ExceptionEvent(this, ex.getMessage());
+			fireExceptionGenerated(event);
+			// no need to commit or rollback since it is only a query
+
+			return null; 
+		}
+	
 	}
 }
+
+
