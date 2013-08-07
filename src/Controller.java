@@ -38,8 +38,26 @@ public class Controller implements ExceptionListener{
 	public PurchaseOperations getPurchaseOps(){
 		return this.p;
 	}
+	public PurchaseItemOperations getPurchaseItemOps(){
+		return this.pi;
+	}
 	public CustomerOperations getCustomerOps(){
 		return this.co;
+	}
+	public ItemOperations getItemOps(){
+		return this. io;
+	}
+	public ReturnOperations getReturnOps(){
+		return this.ro;
+	}
+	public ReturnItemOperations getReturnItemOps(){
+		return this.rio;
+	}
+	public HasSongOperations getHasSongOps(){
+		return this.hso;
+	}
+	public LeadSingerOperations getLeadSingerOps(){
+		return this.lso;
 	}
 	
 }
