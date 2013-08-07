@@ -1,7 +1,7 @@
 drop table Item;
 
 create table Item
-(upc char(16) not null,
+(upc char(6) not null,
 ititle varchar(30),
 type varchar(3),
 category varchar(12),
@@ -14,7 +14,7 @@ PRIMARY KEY (upc));
 drop table LeadSinger;
 
 create table LeadSinger
-(upc char(16) not null,
+(upc char(6) not null,
 sname varchar(20) not null,
 PRIMARY KEY (upc, sname),
 foreign key (upc) 
@@ -23,7 +23,7 @@ foreign key (upc)
 drop table HasSong;
 
 create table HasSong
-(upc char(16) not null,
+(upc char(6) not null,
 stitle varchar(30) not null,
 PRIMARY KEY (upc, stitle),
 foreign key (upc) 
@@ -59,7 +59,7 @@ drop table PurchaseItem;
 
 create table PurchaseItem
 (receiptId integer not null,
-upc char(16) not null,
+upc char(6) not null,
 quantity integer not null,
 PRIMARY KEY(receiptId, upc),
 foreign key (receiptId) 
@@ -83,7 +83,7 @@ drop table ReturnItem;
 
 create table ReturnItem
 (retid varchar(10) not null,
-upc char(16) not null,
+upc char(6) not null,
 quantity integer null,
 PRIMARY KEY (retid, upc),
 foreign key (retid) 
@@ -92,49 +92,49 @@ foreign key (upc)
 	references Item);
 
 insert into Item
-	values('1111111111111111', 'Thriller', 'CD', 'POP','Sony', '1983',9.99, 20);
+	values('111111', 'Thriller', 'CD', 'POP','Sony', '1983',9.99, 20);
 insert into Item
-	values('1111111111111112', 'Bad', 'CD', 'POP','Sony', '1987',8.99, 10);
+	values('111112', 'Bad', 'CD', 'POP','Sony', '1987',8.99, 10);
 insert into Item
-	values('1111111111111113', 'Metallica', 'CD', 'Metal','Elektra', '1991',1.99, 25);
+	values('111113', 'Metallica', 'CD', 'Metal','Elektra', '1991',1.99, 25);
 insert into Item
-	values('1111111111111114', 'Straight outa Compton', 'DVD', 'RAP','Sony', '1989',12.99, 5);
+	values('111114', 'Straight outa Compton', 'DVD', 'RAP','Sony', '1989',12.99, 5);
 insert into Item
-	values('1111111111111115', 'Mozart', 'CD', 'Classical','BMG', '1656',9.99, 20);
+	values('111115', 'Mozart', 'CD', 'Classical','BMG', '1656',9.99, 20);
 
 insert into LeadSinger
-	values ('1111111111111111', 'Michael Jackson');
+	values ('111111', 'Michael Jackson');
 insert into LeadSinger
-	values ('1111111111111112', 'Michael Jackson');
+	values ('1111112', 'Michael Jackson');
 insert into LeadSinger
-	values ('1111111111111113', 'Metallica');
+	values ('1111113', 'Metallica');
 insert into LeadSinger
-	values ('1111111111111114', 'NWA');
+	values ('1111114', 'NWA');
 insert into LeadSinger
-	values ('1111111111111115', 'Mozart');
+	values ('1111115', 'Mozart');
 
 insert into HasSong
-	values('1111111111111111', 'Beat it');
+	values('111111', 'Beat it');
 insert into HasSong
-	values('1111111111111111', 'Thriller');
+	values('111111', 'Thriller');
 insert into HasSong
-	values('1111111111111111', 'Baby be mine');
+	values('111111', 'Baby be mine');
 insert into HasSong
-	values('1111111111111112', 'Smooth criminal');
+	values('111112', 'Smooth criminal');
 insert into HasSong
-	values('1111111111111112', 'Man in the mirror');
+	values('111112', 'Man in the mirror');
 insert into HasSong
-	values('1111111111111113', 'Enter sandman');
+	values('111113', 'Enter sandman');
 insert into HasSong
-	values('1111111111111113', 'Sad but true');
+	values('111113', 'Sad but true');
 insert into HasSong
-	values('1111111111111113', 'Unforgiven');
+	values('111113', 'Unforgiven');
 insert into HasSong
-	values('1111111111111114', 'Straight outa Compton');
+	values('111114', 'Straight outa Compton');
 insert into HasSong
-	values('1111111111111114', 'F*** the Police');
+	values('111114', 'F*** the Police');
 insert into HasSong
-	values('1111111111111115', 'Symphony');
+	values('111115', 'Symphony');
 
 insert into Purchase
 	values(purchase_receiptId.nextval, '2001-01-01', '1234', '4444555566667777', '0101', null, null); 
@@ -144,13 +144,13 @@ insert into Purchase
 	values(purchase_receiptId.nextval, '2003-03-18', '3456', null, null, null, null);
 
 insert into PurchaseItem
-	values(11, '1111111111111111', 1);
+	values(11, '111111', 1);
 insert into PurchaseItem
-	values(11, '1111111111111112', 1);
+	values(11, '111112', 1);
 insert into PurchaseItem
-	values(12, '1111111111111113', 1);
+	values(12, '111113', 1);
 insert into PurchaseItem
-	values(13, '1111111111111114', 1);
+	values(13, '111114', 1);
 
 insert into Customer
 	values('1234', null, null, null, null);
@@ -163,7 +163,7 @@ insert into Return
 	values('12345', 13, '2003-03-23');
 
 insert into ReturnItem
-	values('12345', '1111111111111114', 1);
+	values('12345', '111114', 1);
 
 
 
