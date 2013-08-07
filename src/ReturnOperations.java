@@ -1,4 +1,5 @@
 import java.sql.Date;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Types;
 
@@ -43,12 +44,51 @@ public class ReturnOperations extends AbstractTableOperations {
 		
 		
 	}
-	//TODO
-	void delete(){
-		
+	/*
+	 * Deletes a tuple from return table by specifying the retid
+	 */
+	Boolean delete(String retid){
+		try {
+			ps = con.prepareStatement("DELETE FROM return WHERE retid = ?");
+			ps.setString(1, retid);
+			ps.executeUpdate();
+			con.commit();
+			return true;
+		}
+		catch (SQLException ex) {
+			ExceptionEvent event = new ExceptionEvent(this, ex.getMessage());
+			fireExceptionGenerated(event);
+
+			try {
+				con.rollback();
+				return false;
+			}
+			catch (SQLException ex2) {
+				event = new ExceptionEvent(this, ex2.getMessage());
+				fireExceptionGenerated(event);
+				return false;
+			}
+		}
 	}
-	//TODO
-	void display(){
-		
-	}
+
+//	public ResultSet display(){
+//		try {
+//			ps = con.prepareStatement("SELECT * FROM return", 
+//					ResultSet.TYPE_SCROLL_INSENSITIVE,
+//					ResultSet.CONCUR_READ_ONLY);
+//
+//			ResultSet rs = ps.executeQuery();
+//
+//			return rs; 
+//		}
+//		catch (SQLException ex) {
+//			ExceptionEvent event = new ExceptionEvent(this, ex.getMessage());
+//			fireExceptionGenerated(event);
+//			// no need to commit or rollback since it is only a query
+//
+//			return null; 
+//		}
+//	}
+
 }
+

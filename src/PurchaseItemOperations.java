@@ -1,13 +1,20 @@
 import java.sql.SQLException;
+import java.sql.Types;
 
 public class PurchaseItemOperations extends AbstractTableOperations{
  
-	boolean insert(String receiptId, String upc, int qty){
+	boolean insert(String receiptId, String upc, Integer qty){
 		try{
 			ps = con.prepareStatement("INSERT INTO PurchaseItem VALUES (?,?,?)");
 			ps.setString(1, receiptId);
 			ps.setString(2, upc);
-			ps.setInt(3, qty);
+			
+			if(qty!= null){
+				ps.setInt(3, qty);
+			}
+			else{
+				ps.setNull(3, Types.INTEGER);
+			}
 			ps.executeUpdate();
 			con.commit();
 			return true;
@@ -36,8 +43,19 @@ public class PurchaseItemOperations extends AbstractTableOperations{
 		
 		try{
 			ps=con.prepareStatement("DELETE PurchaseItem WHERE receiptId = ?, upc = ?");
-			ps.setString(1,receiptId);
-			ps.setString(2,upc);
+			if (receiptId != null){
+				ps.setString(1,receiptId);
+			}
+			else {
+				ps.setString(1,null);
+			}
+			
+			if (upc != null){
+				ps.setString(2,upc);
+			}
+			else {
+				ps.setString(2,null);
+			}
 			ps.executeUpdate();
 			con.commit();
 			return true;
