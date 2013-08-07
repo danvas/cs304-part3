@@ -130,7 +130,7 @@ public class CustomerOperations extends AbstractTableOperations{
 	public ResultSet display(){
 
 		try {
-			ps = con.prepareStatement("SELECT * FROM leadsinger", 
+			ps = con.prepareStatement("SELECT * FROM customer", 
 					ResultSet.TYPE_SCROLL_INSENSITIVE,
 					ResultSet.CONCUR_READ_ONLY);
 
