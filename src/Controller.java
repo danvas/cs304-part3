@@ -1,3 +1,5 @@
+import java.awt.Toolkit;
+
 
 public class Controller implements ExceptionListener{
 
@@ -10,11 +12,7 @@ public class Controller implements ExceptionListener{
 	private ReturnOperations ro = null;
 	private ReturnItemOperations rio = null;
 	
-	@Override
-	public void exceptionGenerated(ExceptionEvent ex) {
-		// TODO Auto-generated method stub
-		
-	}
+
 	public Controller(){
 		this.hso = new HasSongOperations();
 		this.co = new CustomerOperations();
@@ -60,4 +58,13 @@ public class Controller implements ExceptionListener{
 		return this.lso;
 	}
 	
+	//TODO: create dialog GUI and print errors to it
+	@Override
+	public void exceptionGenerated(ExceptionEvent ex) {
+		String message = ex.getMessage();
+		
+		// annoying beep sound
+		Toolkit.getDefaultToolkit().beep();
+		
+	}
 }
