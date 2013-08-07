@@ -50,7 +50,6 @@ public class MainFrame extends JFrame {
 	private JPasswordField passwordField;
 	private JTable table;
 	private JTextField instorepurchqty;
-	private JTextField instorecardno;
 	private JTextField instorecardexpd;
 	private JTextField textField_4;
 	private JTextField textField_5;
@@ -71,6 +70,7 @@ public class MainFrame extends JFrame {
 	private JTextField custRegAddr;
 	private JTextField custPNum;
 	private JTable table_3;
+	private JTextField instPurchUPC;
 	private JTextField textField;
 
 	/**
@@ -165,7 +165,6 @@ public class MainFrame extends JFrame {
 		gbc_AccessLevel.gridy = 6;
 		login.add(AccessLevel, gbc_AccessLevel);
 		
-		//TODO: use access level as card specifier if connect successful
 		JButton btnSubmit = new JButton("Submit");
 		btnSubmit.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
@@ -200,9 +199,9 @@ public class MainFrame extends JFrame {
 		JPanel processReturn = new JPanel();
 		clerkOperations.addTab("Return", null, processReturn, null);
 		GridBagLayout gbl_processReturn = new GridBagLayout();
-		gbl_processReturn.columnWidths = new int[]{0, 0, 0, 0};
+		gbl_processReturn.columnWidths = new int[]{0, 0, 0, 0, 0};
 		gbl_processReturn.rowHeights = new int[]{0, 0, 0, 0, 0, 0, 0};
-		gbl_processReturn.columnWeights = new double[]{0.0, 0.0, 1.0, Double.MIN_VALUE};
+		gbl_processReturn.columnWeights = new double[]{0.0, 0.0, 0.0, 1.0, Double.MIN_VALUE};
 		gbl_processReturn.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 1.0, Double.MIN_VALUE};
 		processReturn.setLayout(gbl_processReturn);
 		
@@ -216,7 +215,7 @@ public class MainFrame extends JFrame {
 		
 		textField_4 = new JTextField();
 		GridBagConstraints gbc_textField_4 = new GridBagConstraints();
-		gbc_textField_4.insets = new Insets(0, 0, 5, 0);
+		gbc_textField_4.insets = new Insets(0, 0, 5, 5);
 		gbc_textField_4.fill = GridBagConstraints.HORIZONTAL;
 		gbc_textField_4.gridx = 2;
 		gbc_textField_4.gridy = 1;
@@ -234,7 +233,7 @@ public class MainFrame extends JFrame {
 		textField_5 = new JTextField();
 		textField_5.setColumns(10);
 		GridBagConstraints gbc_textField_5 = new GridBagConstraints();
-		gbc_textField_5.insets = new Insets(0, 0, 5, 0);
+		gbc_textField_5.insets = new Insets(0, 0, 5, 5);
 		gbc_textField_5.fill = GridBagConstraints.HORIZONTAL;
 		gbc_textField_5.gridx = 2;
 		gbc_textField_5.gridy = 2;
@@ -247,9 +246,9 @@ public class MainFrame extends JFrame {
 		gbc_lblQuantity_3.gridy = 3;
 		processReturn.add(lblQuantity_3, gbc_lblQuantity_3);
 		
-		JTextPane textPane_1 = new JTextPane();
+		JTextField textPane_1 = new JTextField();
 		GridBagConstraints gbc_textPane_1 = new GridBagConstraints();
-		gbc_textPane_1.insets = new Insets(0, 0, 5, 0);
+		gbc_textPane_1.insets = new Insets(0, 0, 5, 5);
 		gbc_textPane_1.fill = GridBagConstraints.BOTH;
 		gbc_textPane_1.gridx = 2;
 		gbc_textPane_1.gridy = 3;
@@ -266,7 +265,7 @@ public class MainFrame extends JFrame {
 		textField_6 = new JTextField();
 		textField_6.setColumns(10);
 		GridBagConstraints gbc_textField_6 = new GridBagConstraints();
-		gbc_textField_6.insets = new Insets(0, 0, 5, 0);
+		gbc_textField_6.insets = new Insets(0, 0, 5, 5);
 		gbc_textField_6.fill = GridBagConstraints.HORIZONTAL;
 		gbc_textField_6.gridx = 2;
 		gbc_textField_6.gridy = 4;
@@ -274,6 +273,7 @@ public class MainFrame extends JFrame {
 		
 		JButton btnProcessReturn = new JButton("Process Return");
 		GridBagConstraints gbc_btnProcessReturn = new GridBagConstraints();
+		gbc_btnProcessReturn.insets = new Insets(0, 0, 0, 5);
 		gbc_btnProcessReturn.gridx = 2;
 		gbc_btnProcessReturn.gridy = 5;
 		processReturn.add(btnProcessReturn, gbc_btnProcessReturn);
@@ -282,10 +282,10 @@ public class MainFrame extends JFrame {
 		processPurchase.setBorder(new EmptyBorder(10, 10, 10, 10));
 		clerkOperations.addTab("Purchase", null, processPurchase, null);
 		GridBagLayout gbl_processPurchase = new GridBagLayout();
-		gbl_processPurchase.columnWidths = new int[]{32, 99, 82, 0, 0, 0, 0, 0, 0, 0, 105, 0, 0, 0, 125, 0};
-		gbl_processPurchase.rowHeights = new int[]{20, 35, 0, 0, 0, 0, 0, 0, 0, 0, 20, 0, 0, 0, 0, 0, 0, 27, 20, 0, 0, 35, 23, 35, 0, 0, 23, 0};
-		gbl_processPurchase.columnWeights = new double[]{0.0, 1.0, 1.0, 0.0, 0.0, 1.0, 1.0, 0.0, 0.0, 1.0, 1.0, 0.0, 0.0, 0.0, 1.0, Double.MIN_VALUE};
-		gbl_processPurchase.rowWeights = new double[]{1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 0.0, 0.0, Double.MIN_VALUE};
+		gbl_processPurchase.columnWidths = new int[]{32, 99, 82, 0, 0, 0, 0, 0, 0, 0, 0, 105, 0, 0, 0, 0, 125, 0};
+		gbl_processPurchase.rowHeights = new int[]{20, 35, 0, 0, 0, 0, 0, 0, 0, 0, 0, 20, 0, 0, 0, 0, 0, 0, 27, 20, 0, 0, 35, 23, 35, 0, 0, 23, 0};
+		gbl_processPurchase.columnWeights = new double[]{0.0, 1.0, 1.0, 0.0, 0.0, 0.0, 1.0, 1.0, 0.0, 1.0, 1.0, 1.0, 0.0, 1.0, 0.0, 0.0, 1.0, Double.MIN_VALUE};
+		gbl_processPurchase.rowWeights = new double[]{1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 0.0, 0.0, Double.MIN_VALUE};
 		processPurchase.setLayout(gbl_processPurchase);
 		
 		JLabel label = new JLabel("UPC:");
@@ -293,52 +293,53 @@ public class MainFrame extends JFrame {
 		gbc_label.gridwidth = 2;
 		gbc_label.insets = new Insets(0, 0, 5, 5);
 		gbc_label.gridx = 4;
-		gbc_label.gridy = 7;
+		gbc_label.gridy = 8;
 		processPurchase.add(label, gbc_label);
 		
-		textField = new JTextField();
-		GridBagConstraints gbc_textField = new GridBagConstraints();
-		gbc_textField.gridwidth = 7;
-		gbc_textField.insets = new Insets(0, 0, 5, 5);
-		gbc_textField.fill = GridBagConstraints.HORIZONTAL;
-		gbc_textField.gridx = 5;
-		gbc_textField.gridy = 7;
-		processPurchase.add(textField, gbc_textField);
+		instPurchUPC = new JTextField();
+		GridBagConstraints gbc_instPurchUPC = new GridBagConstraints();
+		gbc_instPurchUPC.gridwidth = 8;
+		gbc_instPurchUPC.insets = new Insets(0, 0, 5, 5);
+		gbc_instPurchUPC.fill = GridBagConstraints.HORIZONTAL;
+		gbc_instPurchUPC.gridx = 8;
+		gbc_instPurchUPC.gridy = 8;
+		processPurchase.add(instPurchUPC, gbc_instPurchUPC);
 		
 		JButton addpurchitem = new JButton("Add Item");
 		GridBagConstraints gbc_addpurchitem = new GridBagConstraints();
-		gbc_addpurchitem.gridwidth = 8;
+		gbc_addpurchitem.gridwidth = 6;
 		gbc_addpurchitem.insets = new Insets(0, 0, 5, 0);
-		gbc_addpurchitem.gridx = 12;
-		gbc_addpurchitem.gridy = 7;
+		gbc_addpurchitem.gridx = 16;
+		gbc_addpurchitem.gridy = 8;
 		processPurchase.add(addpurchitem, gbc_addpurchitem);
 		
 		JLabel lblQuantity_5 = new JLabel("Quantity:");
 		GridBagConstraints gbc_lblQuantity_5 = new GridBagConstraints();
-		gbc_lblQuantity_5.gridwidth = 3;
+		gbc_lblQuantity_5.gridwidth = 4;
 		gbc_lblQuantity_5.anchor = GridBagConstraints.EAST;
 		gbc_lblQuantity_5.insets = new Insets(0, 0, 5, 5);
-		gbc_lblQuantity_5.gridx = 2;
-		gbc_lblQuantity_5.gridy = 8;
+		gbc_lblQuantity_5.gridx = 4;
+		gbc_lblQuantity_5.gridy = 9;
 		processPurchase.add(lblQuantity_5, gbc_lblQuantity_5);
 		
 		instorepurchqty = new JTextField();
 		GridBagConstraints gbc_instorepurchqty = new GridBagConstraints();
-		gbc_instorepurchqty.gridwidth = 7;
+		gbc_instorepurchqty.gridwidth = 8;
 		gbc_instorepurchqty.insets = new Insets(0, 0, 5, 5);
 		gbc_instorepurchqty.fill = GridBagConstraints.HORIZONTAL;
-		gbc_instorepurchqty.gridx = 5;
-		gbc_instorepurchqty.gridy = 8;
+		gbc_instorepurchqty.gridx = 8;
+		gbc_instorepurchqty.gridy = 9;
 		processPurchase.add(instorepurchqty, gbc_instorepurchqty);
 		instorepurchqty.setColumns(10);
 		
 		JScrollPane scrollPane_4 = new JScrollPane();
 		GridBagConstraints gbc_scrollPane_4 = new GridBagConstraints();
-		gbc_scrollPane_4.gridwidth = 9;
+		gbc_scrollPane_4.gridheight = 2;
+		gbc_scrollPane_4.gridwidth = 13;
 		gbc_scrollPane_4.insets = new Insets(0, 0, 5, 5);
 		gbc_scrollPane_4.fill = GridBagConstraints.BOTH;
-		gbc_scrollPane_4.gridx = 2;
-		gbc_scrollPane_4.gridy = 9;
+		gbc_scrollPane_4.gridx = 4;
+		gbc_scrollPane_4.gridy = 10;
 		processPurchase.add(scrollPane_4, gbc_scrollPane_4);
 		
 		table_3 = new JTable();
@@ -346,51 +347,51 @@ public class MainFrame extends JFrame {
 		
 		JLabel lblCreditCardNumber = new JLabel("Credit Card Number:");
 		GridBagConstraints gbc_lblCreditCardNumber = new GridBagConstraints();
-		gbc_lblCreditCardNumber.gridwidth = 3;
+		gbc_lblCreditCardNumber.gridwidth = 5;
 		gbc_lblCreditCardNumber.anchor = GridBagConstraints.EAST;
 		gbc_lblCreditCardNumber.fill = GridBagConstraints.VERTICAL;
 		gbc_lblCreditCardNumber.insets = new Insets(0, 0, 5, 5);
-		gbc_lblCreditCardNumber.gridx = 1;
-		gbc_lblCreditCardNumber.gridy = 11;
+		gbc_lblCreditCardNumber.gridx = 4;
+		gbc_lblCreditCardNumber.gridy = 12;
 		processPurchase.add(lblCreditCardNumber, gbc_lblCreditCardNumber);
 		
-		instorecardno = new JTextField();
-		instorecardno.setColumns(10);
-		GridBagConstraints gbc_instorecardno = new GridBagConstraints();
-		gbc_instorecardno.gridwidth = 7;
-		gbc_instorecardno.insets = new Insets(0, 0, 5, 5);
-		gbc_instorecardno.fill = GridBagConstraints.HORIZONTAL;
-		gbc_instorecardno.gridx = 4;
-		gbc_instorecardno.gridy = 11;
-		processPurchase.add(instorecardno, gbc_instorecardno);
-		
-		JLabel lblCardExpiryDate = new JLabel("Card Expiry Date");
-		GridBagConstraints gbc_lblCardExpiryDate = new GridBagConstraints();
-		gbc_lblCardExpiryDate.gridwidth = 3;
-		gbc_lblCardExpiryDate.anchor = GridBagConstraints.EAST;
-		gbc_lblCardExpiryDate.fill = GridBagConstraints.VERTICAL;
-		gbc_lblCardExpiryDate.insets = new Insets(0, 0, 5, 5);
-		gbc_lblCardExpiryDate.gridx = 1;
-		gbc_lblCardExpiryDate.gridy = 12;
-		processPurchase.add(lblCardExpiryDate, gbc_lblCardExpiryDate);
-		
-		instorecardexpd = new JTextField();
-		instorecardexpd.setColumns(10);
-		GridBagConstraints gbc_instorecardexpd = new GridBagConstraints();
-		gbc_instorecardexpd.gridwidth = 7;
-		gbc_instorecardexpd.insets = new Insets(0, 0, 5, 5);
-		gbc_instorecardexpd.fill = GridBagConstraints.HORIZONTAL;
-		gbc_instorecardexpd.gridx = 4;
-		gbc_instorecardexpd.gridy = 12;
-		processPurchase.add(instorecardexpd, gbc_instorecardexpd);
+		textField = new JTextField();
+		textField.setColumns(10);
+		GridBagConstraints gbc_textField = new GridBagConstraints();
+		gbc_textField.gridwidth = 2;
+		gbc_textField.insets = new Insets(0, 0, 5, 5);
+		gbc_textField.fill = GridBagConstraints.HORIZONTAL;
+		gbc_textField.gridx = 11;
+		gbc_textField.gridy = 12;
+		processPurchase.add(textField, gbc_textField);
 		
 		JButton btnCompletePurchase = new JButton("Complete Purchase");
 		GridBagConstraints gbc_btnCompletePurchase = new GridBagConstraints();
 		gbc_btnCompletePurchase.insets = new Insets(0, 0, 5, 0);
 		gbc_btnCompletePurchase.gridwidth = 8;
-		gbc_btnCompletePurchase.gridx = 8;
-		gbc_btnCompletePurchase.gridy = 14;
+		gbc_btnCompletePurchase.gridx = 14;
+		gbc_btnCompletePurchase.gridy = 12;
 		processPurchase.add(btnCompletePurchase, gbc_btnCompletePurchase);
+		
+		JLabel lblCardExpiryDate = new JLabel("Card Expiry Date");
+		GridBagConstraints gbc_lblCardExpiryDate = new GridBagConstraints();
+		gbc_lblCardExpiryDate.gridwidth = 5;
+		gbc_lblCardExpiryDate.anchor = GridBagConstraints.EAST;
+		gbc_lblCardExpiryDate.fill = GridBagConstraints.VERTICAL;
+		gbc_lblCardExpiryDate.insets = new Insets(0, 0, 5, 5);
+		gbc_lblCardExpiryDate.gridx = 4;
+		gbc_lblCardExpiryDate.gridy = 13;
+		processPurchase.add(lblCardExpiryDate, gbc_lblCardExpiryDate);
+		
+		instorecardexpd = new JTextField();
+		instorecardexpd.setColumns(10);
+		GridBagConstraints gbc_instorecardexpd = new GridBagConstraints();
+		gbc_instorecardexpd.gridwidth = 5;
+		gbc_instorecardexpd.insets = new Insets(0, 0, 5, 5);
+		gbc_instorecardexpd.fill = GridBagConstraints.HORIZONTAL;
+		gbc_instorecardexpd.gridx = 9;
+		gbc_instorecardexpd.gridy = 13;
+		processPurchase.add(instorecardexpd, gbc_instorecardexpd);
 		
 		JTabbedPane managerOperations = new JTabbedPane(JTabbedPane.TOP);
 		contentPane.add(managerOperations, "name_1449473464875310");
@@ -451,6 +452,11 @@ public class MainFrame extends JFrame {
 		addItem.add(additemprice, gbc_additemprice);
 		
 		JButton btnAddItem = new JButton("Add Item");
+		//TODO: Manager AddItem button
+		btnAddItem.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+			}
+		});
 		GridBagConstraints gbc_btnAddItem = new GridBagConstraints();
 		gbc_btnAddItem.insets = new Insets(0, 0, 5, 0);
 		gbc_btnAddItem.gridx = 1;
@@ -686,7 +692,7 @@ public class MainFrame extends JFrame {
 		btnRegisterNow.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				CardLayout cl = (CardLayout) customerOperations.getLayout();
-				cl.show(customerOperations,"name_1452390541607518");
+				cl.show(customerOperations,"name_1452387567243092");
 			}
 		});
 		GridBagConstraints gbc_btnRegisterNow = new GridBagConstraints();
@@ -802,6 +808,7 @@ public class MainFrame extends JFrame {
 			public void actionPerformed(ActionEvent arg0) {
 				CustomerOperations c = new CustomerOperations();
 				if (c.insert(custRegId.getText(), custRegPW.getText(), custRegName.getText(), custRegAddr.getText(), custPNum.getText())){
+					System.out.println("Insert attempted");
 					goToOnlinePurchase();
 				}
 			}
@@ -981,6 +988,12 @@ public class MainFrame extends JFrame {
 		textField_12.setColumns(10);
 		
 		JButton btnSubmitOrder = new JButton("Submit Order");
+		
+		//TODO: Submit Online Purchase Button
+		btnSubmitOrder.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+			}
+		});
 		GridBagConstraints gbc_btnSubmitOrder = new GridBagConstraints();
 		gbc_btnSubmitOrder.gridwidth = 2;
 		gbc_btnSubmitOrder.insets = new Insets(0, 0, 0, 5);

@@ -1,6 +1,6 @@
 
 
-public class ReturnItemOperations {
+public class ReturnItemOperations extends AbstractTableOperations {
 
 	
 	void insert(){

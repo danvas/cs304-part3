@@ -7,14 +7,6 @@ import javax.swing.event.EventListenerList;
 
 public class ItemOperations extends AbstractTableOperations{
 	
-	protected PreparedStatement ps = null;
-	protected Connection con = null;
-	protected EventListenerList listenerList = new EventListenerList();
-	
-	ItemOperations(){
-		con = AMSOracleConnection.getInstance().getConnection();
-	}
-	
 	boolean insert(Integer upc, String title, String type, String category, String company, String year, Double price, Integer stock){
 		try {
 			ps = con.prepareStatement("INSERT INTO item VALUES (?,?,?,?,?,?,?,?)");

@@ -7,7 +7,7 @@ import java.sql.Types;
 public class ReturnOperations extends AbstractTableOperations {
 	boolean insert(Integer receiptId,Date rdate){
 		try {
-			ps = con.prepareStatement("INSERT INTO return VALUES receipt_retid.nextval,?,?");
+			ps = con.prepareStatement("INSERT INTO return VALUES (receipt_retid.nextval,?,?)");
 			if(receiptId!=null){
 				ps.setInt(1, receiptId);
 			}

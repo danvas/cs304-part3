@@ -4,12 +4,17 @@ import java.sql.SQLException;
 
 public class CustomerOperations extends AbstractTableOperations{
 
+	//REGISTER CUSTOMER
 	boolean insert(String cid, String pw,String cname, String address, String phoneno){
 		try{
-			ps = con.prepareStatement("INSERT INTO customer VALUES ?,?,?,?,?");
-			if(cid!=null){
-				ps.setString(1, cid);
-			}
+			ps = con.prepareStatement("INSERT INTO Customer VALUES (?,?,?,?,?)");
+			
+			ps.setString(1, cid);
+			ps.setString(2,pw);
+			ps.setString(3,cname);
+			ps.setString(4,address);
+			ps.setString(5,phoneno);
+
 			ps.executeUpdate();
 			con.commit();
 			return true;

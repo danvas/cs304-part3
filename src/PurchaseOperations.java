@@ -8,7 +8,7 @@ public class PurchaseOperations extends AbstractTableOperations {
 	
 	boolean insert(Date date,String cid,String cardno, String expdate, Date expected,Date delivered){
 		try{
-			ps=con.prepareStatement("INSERT INTO purchase VALUES purchase_receiptId.nextval,?,?,?,?,?,?");
+			ps=con.prepareStatement("INSERT INTO purchase VALUES (purchase_receiptId.nextval,?,?,?,?,?,?)");
 			if (date!=null){
 				ps.setDate(1, date);
 			}
