@@ -6,6 +6,7 @@ import java.sql.Types;
 
 public class PurchaseOperations extends AbstractTableOperations {
 	
+	//TODO test 
 	boolean insert(Date date,String cid,String cardno, String expdate, Date expected,Date delivered){
 		try{
 			ps=con.prepareStatement("INSERT INTO purchase VALUES (purchase_receiptId.nextval,?,?,?,?,?,?)");
@@ -103,13 +104,38 @@ public class PurchaseOperations extends AbstractTableOperations {
 		
 	}
 	
-	//TODO
-	void delete(){
-		
+	
+	//TODO test 
+	boolean delete(Integer receiptId, Integer upc){
+		try {
+			ps = con.prepareStatement("DELETE FROM purchase WHERE receiptId = ? AND upc = ?");
+			ps.setInt(1, receiptId);
+			ps.setInt(2, upc);
+			ps.executeUpdate();
+			con.commit();
+			return true;
+		}
+		catch (SQLException ex) {
+			ExceptionEvent event = new ExceptionEvent(this, ex.getMessage());
+			fireExceptionGenerated(event);
+
+			try {
+				con.rollback();
+				return false;
+			}
+			catch (SQLException ex2) {
+				event = new ExceptionEvent(this, ex2.getMessage());
+				fireExceptionGenerated(event);
+				return false;
+			}
+		}
 	}
 	
 	//TODO
 	void display(){
 		
 	}
+	
+
+
 }
