@@ -1,6 +1,8 @@
 import java.sql.Date;
 import java.sql.SQLException;
 import java.sql.Types;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 
 
 
@@ -67,16 +69,19 @@ public class PurchaseOperations extends AbstractTableOperations {
 		    }
 		}
 	}
-	
-	boolean updateDeliveryDate(Integer receiptId,Date ddate){
+	//TODO: PLEASE TEST THIS IN GUI via display in SQL+. - Ian
+	boolean updateDeliveryDate(Integer receiptId,String stringdate){
 		try{
 			ps = con.prepareStatement("UPDATE purchase SET delivereddate = ? WHERE receiptId = ?");
 			if(receiptId!=null){
 				ps.setInt(2, receiptId);
 			}
 			else ps.setNull(2,Types.INTEGER);
-			if(ddate!=null){
-				ps.setDate(1,ddate);
+			if(stringdate!=null){
+				SimpleDateFormat fm = new SimpleDateFormat("dd/MM/yy");
+				java.util.Date utilDate = fm.parse(stringdate);
+				java.sql.Date sqldate = new java.sql.Date(utilDate.getTime());
+				ps.setDate(1,sqldate);
 			}
 			else{
 				ps.setDate(1,null);
@@ -85,7 +90,7 @@ public class PurchaseOperations extends AbstractTableOperations {
 			con.commit();
 			return true;
 		}
-		catch(SQLException ex){
+		catch(SQLException | ParseException ex){
 			 ExceptionEvent event = new ExceptionEvent(this, ex.getMessage());
 			    fireExceptionGenerated(event);
 			    
