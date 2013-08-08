@@ -137,9 +137,26 @@ public class PurchaseOperations extends AbstractTableOperations {
 		}
 	}
 
-	//TODO
-	void display(){
+	/*
+	 * Display a read-only set of tuples from ReturnItem table
+	 */
+	public ResultSet display(){
+		try {
+			ps = con.prepareStatement("SELECT * FROM purchase", 
+					ResultSet.TYPE_SCROLL_INSENSITIVE,
+					ResultSet.CONCUR_READ_ONLY);
 
+			ResultSet rs = ps.executeQuery();
+
+			return rs; 
+		}
+		catch (SQLException ex) {
+			ExceptionEvent event = new ExceptionEvent(this, ex.getMessage());
+			fireExceptionGenerated(event);
+			// no need to commit or rollback since it is only a query
+
+			return null; 
+		}
 	}
 
 	boolean isInStock (String upc, Integer qty){
