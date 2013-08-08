@@ -33,7 +33,6 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
 public class MainFrame extends JFrame {
-
 	private AMSOracleConnection con = null;
 	private JPanel contentPane;
 	private JPasswordField passwordField;
@@ -84,7 +83,6 @@ public class MainFrame extends JFrame {
 	 */
 	public MainFrame() {
 		con = AMSOracleConnection.getInstance();
-		final Controller c = new Controller();
 		setTitle("AMS Database");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 450, 300);
@@ -506,11 +504,11 @@ public class MainFrame extends JFrame {
 		JButton setdelivdate = new JButton("Set Delivery Date");
 		setdelivdate.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				
+				PurchaseOperations p = new PurchaseOperations();
 				String stringdate = delivDate.getText().trim();
 				String ridstring = delivReceiptId.getText();
 				int ridint = Integer.parseInt(ridstring);
-				c.getPurchaseOps().updateDeliveryDate(ridint, stringdate);
+				p.updateDeliveryDate(ridint, stringdate);
 			}
 		});
 		
@@ -682,8 +680,8 @@ public class MainFrame extends JFrame {
 			btnSubmit_1.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					System.out.println("Submit was pressed")	;	
-					
-					if (c.getCustomerOps().login(custUName.getText().trim(), custPW.getText().trim())){
+					CustomerOperations c = new CustomerOperations();
+					if (c.login(custUName.getText().trim(), custPW.getText().trim())){
 						CardLayout cl = (CardLayout) customerOperations.getLayout();
 						 cl.show(customerOperations, "name_1452390541607518");
 					}
@@ -820,11 +818,13 @@ public class MainFrame extends JFrame {
 		JButton btnRegisterNow_1 = new JButton("Register Now");
 		btnRegisterNow_1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				
-				if (c.getCustomerOps().insert(custRegId.getText(), custRegPW.getText(), custRegName.getText(), custRegAddr.getText(), custPNum.getText())){
+				CustomerOperations c = new CustomerOperations();
+				if (c.insert(custRegId.getText(), custRegPW.getText(), custRegName.getText(), custRegAddr.getText(), custPNum.getText())){
 					System.out.println("Insert attempted");
 					goToOnlinePurchase();
+					System.out.println("Customer Insertion Successful");
 				}
+				else System.out.println("Customer Insertion Error");
 			}
 
 			private void goToOnlinePurchase() {

@@ -9,12 +9,28 @@ public class CustomerOperations extends AbstractTableOperations{
 		try{
 			ps = con.prepareStatement("INSERT INTO Customer VALUES (?,?,?,?,?)");
 			
+			if (cid==null) return false;
 			ps.setString(1, cid);
+			
+			if (pw!=null){
 			ps.setString(2,pw);
-			ps.setString(3,cname);
-			ps.setString(4,address);
+			}
+			else ps.setString(2,null);
+			
+			if (cname!=null){
+				ps.setString(3,cname);
+			}
+			else ps.setString(3,null);
+			
+			if (address!=null){
+				ps.setString(4,address);
+			}
+			else ps.setString(4,null);
+			if (phoneno!=null){
 			ps.setString(5,phoneno);
-
+			}
+			else ps.setString(5,null);
+			
 			ps.executeUpdate();
 			con.commit();
 			return true;
@@ -61,7 +77,7 @@ public class CustomerOperations extends AbstractTableOperations{
 			rs = ps.executeQuery();
 			System.out.println("Just executed query")	;	
 
-			if (rs.next()) return true;
+			if (rs.next()) {return true;}
 			else return false;
 
 
