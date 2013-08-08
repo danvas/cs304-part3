@@ -1,16 +1,6 @@
 import java.sql.*;
-import javax.swing.event.EventListenerList;
-
 
 public class LeadSingerOperations extends AbstractTableOperations {
-
-	protected PreparedStatement ps = null;
-	protected Connection con = null;
-	protected EventListenerList listenerList = new EventListenerList();
-	
-	LeadSingerOperations(){
-		con = AMSOracleConnection.getInstance().getConnection();
-	}
 	
 	/* Insert tuple into LeadSinger Table
 	 * Attributes upc and sname must be NOT NULL

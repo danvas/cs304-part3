@@ -1,15 +1,7 @@
 import java.sql.*;
-import javax.swing.event.EventListenerList;
 
 public class ReturnItemOperations extends AbstractTableOperations {
 
-	protected PreparedStatement ps = null;
-	protected Connection con = null;
-	protected EventListenerList listenerList = new EventListenerList();
-
-	ReturnItemOperations(){
-		con = AMSOracleConnection.getInstance().getConnection();
-	}
 	/* Insert tuple into Return Table
 	 * Attributes retid and upc must be NOT NULL
 	 */

@@ -1,15 +1,6 @@
 import java.sql.*;
-import javax.swing.event.EventListenerList;
 
 public class HasSongOperations extends AbstractTableOperations {
-
-	protected PreparedStatement ps = null;
-	protected Connection con = null;
-	protected EventListenerList listenerList = new EventListenerList();
-
-	HasSongOperations(){
-		con = AMSOracleConnection.getInstance().getConnection();
-	}
 
 	/* Insert tuple into HasSong Table
 	 * Attributes upc and stitle must be not null
