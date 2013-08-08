@@ -253,7 +253,6 @@ public class PurchaseOperations extends AbstractTableOperations {
 			}
 		}
 	}
-<<<<<<< HEAD
 	
 	public boolean addItemToVirtualBasket(String title, String category,String leadsinger, Integer qty){
 		try {
@@ -294,9 +293,6 @@ public class PurchaseOperations extends AbstractTableOperations {
 		return true;
 	}
 	
-=======
-
->>>>>>> f8cce7d048c860535ac9f743dead05c675b1db57
 
 
 }
