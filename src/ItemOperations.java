@@ -7,11 +7,11 @@ import javax.swing.event.EventListenerList;
 
 public class ItemOperations extends AbstractTableOperations{
 
-	boolean insert(Integer upc, String title, String type, String category, String company, String year, Double price, Integer stock){
+	boolean insert(String upc, String title, String type, String category, String company, String year, Double price, Integer stock){
 		try {
 			ps = con.prepareStatement("INSERT INTO item VALUES (?,?,?,?,?,?,?,?)");
-			ps.setInt(1,upc.intValue());
-			
+			ps.setString(1, upc);
+
 			if (title != null){
 				ps.setString(2,title);
 			}
@@ -122,35 +122,35 @@ public class ItemOperations extends AbstractTableOperations{
 	void display(){
 
 	}
-//TODO: Fairly straightforward ManagerAddItem, see comment below. 
+	//TODO: Fairly straightforward ManagerAddItem, see comment below. 
 	//if upc null, return false
 	//check if upc exists in item, if it does, add quantity to current (modify price if input)
 	//if upc doesn't exist, insert all fields to Item
 	boolean managerAddItem(String upc,Integer qty,Double price ){
-		
+
 		return true;
 	}
-	
-//	public static void main(String args[])
-//	{
-//
-//		System.out.println("test");
-//
-//		AMSOracleConnection oCon = AMSOracleConnection.getInstance();
-//		oCon.connect("ora_o0g6", "a40493058");
-//		//		oCon.connect("ora_h5n8", "a44140028");
-//
-//		ItemOperations item = new ItemOperations();
-//
-//
-//
-//		//		item.insertItem("9999999999999999", "test", "CD", "test", "test", "test", 999.99, 99);
-////		item.insert(123456, "cpsc", "CD", "instrumental", "company", "year", 111.12, 27);
-//		
-//		//item.displayItem();
-//		item.delete(123456);
-//
-//	} 
+
+	//	public static void main(String args[])
+	//	{
+	//
+	//		System.out.println("test");
+	//
+	//		AMSOracleConnection oCon = AMSOracleConnection.getInstance();
+	//		//		oCon.connect("ora_o0g6", "a40493058");
+	//		oCon.connect("ora_h5n8", "a44140028");
+	//
+	//		ItemOperations item = new ItemOperations();
+	//
+	//
+	//
+	//		item.insert(999999, "test", "CD", "test", "test", "test", 999.99, 99);
+	//		item.insert(123456, "cpsc", "CD", "instrumental", "company", "year", 111.12, 27);
+	//
+	//		//item.displayItem();
+	//		item.delete(123456);
+	//
+	//	} 
 
 
 }

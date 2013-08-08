@@ -8,7 +8,7 @@ import java.text.SimpleDateFormat;
 
 
 public class PurchaseOperations extends AbstractTableOperations {
-	
+
 	//TODO test 
 	boolean insert(Date date,String cid,String cardno, String expdate, Date expected,Date delivered){
 		try{
@@ -55,25 +55,25 @@ public class PurchaseOperations extends AbstractTableOperations {
 		}
 		catch (SQLException ex){
 			ExceptionEvent event = new ExceptionEvent(this, ex.getMessage());
-		    fireExceptionGenerated(event);
-		    
-		    try
-		    {
-			con.rollback();
-			return false; 
-		    }
-		    catch (SQLException ex2)
-		    {
-			event = new ExceptionEvent(this, ex2.getMessage());
 			fireExceptionGenerated(event);
-			return false; 
-		    }
+
+			try
+			{
+				con.rollback();
+				return false; 
+			}
+			catch (SQLException ex2)
+			{
+				event = new ExceptionEvent(this, ex2.getMessage());
+				fireExceptionGenerated(event);
+				return false; 
+			}
 		}
 	}
 	//TODO: PLEASE TEST THIS IN GUI via display in SQL+. - Ian
 	// tried this in GUI under Manager -> SetDeliveryDate and didn't work. 
 	// The Query below is correct in SQLPlus - Allan
-	
+
 	boolean updateDeliveryDate(Integer receiptId,String stringdate){
 		try{
 			ps = con.prepareStatement("UPDATE purchase SET delivereddate = ? WHERE receiptId = ?");
@@ -110,8 +110,8 @@ public class PurchaseOperations extends AbstractTableOperations {
 			}
 		}
 	}
-	
-	
+
+
 	//TODO test 
 	boolean delete(Integer receiptId, Integer upc){
 		try {
@@ -137,11 +137,75 @@ public class PurchaseOperations extends AbstractTableOperations {
 			}
 		}
 	}
-	
-	//TODO
-	void display(){
-		
+
+	/*
+	 * Display a read-only set of tuples from ReturnItem table
+	 */
+	public ResultSet display(){
+		try {
+			ps = con.prepareStatement("SELECT * FROM purchase", 
+					ResultSet.TYPE_SCROLL_INSENSITIVE,
+					ResultSet.CONCUR_READ_ONLY);
+
+			ResultSet rs = ps.executeQuery();
+
+			return rs; 
+		}
+		catch (SQLException ex) {
+			ExceptionEvent event = new ExceptionEvent(this, ex.getMessage());
+			fireExceptionGenerated(event);
+			// no need to commit or rollback since it is only a query
+
+			return null; 
+		}
 	}
+
+	boolean isInStock (String upc, Integer qty){
+		try{
+
+			ps = con.prepareStatement("SELECT * FROM item where upc = ? AND stock >= ?");
+
+			if (upc != null)
+			{
+				ps.setString(1, upc);
+			}
+			else
+			{
+				ps.setString(1, null);
+			}
+
+			if(qty!=null){
+				ps.setInt(2, qty);
+			}
+			else ps.setNull(2,Types.INTEGER);
+
+			ResultSet rs = ps.executeQuery();
+
+			if (rs.next())
+			{
+				return true; 
+			}
+			else
+			{
+				return false; 
+			}
+		}
+		catch(SQLException ex){
+			ExceptionEvent event = new ExceptionEvent(this, ex.getMessage());
+			fireExceptionGenerated(event);
+
+			try {
+				con.rollback();
+				return false; 
+			}
+			catch (SQLException ex2) {
+				event = new ExceptionEvent(this, ex2.getMessage());
+				fireExceptionGenerated(event);
+				return false; 
+			}
+		}
+	}
+<<<<<<< HEAD
 	
 	public boolean addItemToVirtualBasket(String title, String category,String leadsinger, Integer qty){
 		try {
@@ -182,6 +246,9 @@ public class PurchaseOperations extends AbstractTableOperations {
 		return true;
 	}
 	
+=======
+
+>>>>>>> f8cce7d048c860535ac9f743dead05c675b1db57
 
 
 }
