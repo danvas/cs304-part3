@@ -101,6 +101,7 @@ public class PurchaseOperations extends AbstractTableOperations {
 			}
 			ps.executeUpdate();
 			con.commit();
+			System.out.println("Delivery Date Set");
 			return true;
 		}
 		catch(SQLException | ParseException ex){
@@ -252,7 +253,50 @@ public class PurchaseOperations extends AbstractTableOperations {
 			}
 		}
 	}
+<<<<<<< HEAD
+	
+	public boolean addItemToVirtualBasket(String title, String category,String leadsinger, Integer qty){
+		try {
+			String rsupc;
+			String rstitle;
+			String rscategory;
+			String rsleadsinger;
+			Integer rsprice;
+						
+			ps=con.prepareStatement("Select upc, ititle, category, leadsinger, price FROM item i, leadsinger l WHERE i.upc = l.upc AND ititle = ? AND category = ? AND leadsinger = ? AND stock>= ?");
+			if(title!=null){
+			ps.setString(1, title);
+			}
+			else ps.setString(1, "*" );
+			if(category!=null){
+				ps.setString(2, category);
+			}
+			else ps.setString(2,"*");
+			if (leadsinger!=null){
+				ps.setString(3,leadsinger);
+			}
+			else ps.setString(3,"*");
+			if (qty!=null){
+				ps.setInt(4, qty);
+			}
+			else return false;
+			ResultSet rs = ps.executeQuery();
+			
+			while(rs.next()){
+				
+			}
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return true;
+	}
+	
+=======
 
+>>>>>>> f8cce7d048c860535ac9f743dead05c675b1db57
 
 
 }
