@@ -4,10 +4,19 @@ import java.sql.SQLException;
 import java.sql.Types;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.*;
 
 
 
 public class PurchaseOperations extends AbstractTableOperations {
+	
+	private int receiptID;					// receipt id
+	private String pdate; 					// date of purchase
+	private String cardno; 					// card number
+	private HashMap<String, Integer> items;
+	private int quantities;
+	private int total;
+	
 
 	//TODO test 
 	boolean insert(Date date,String cid,String cardno, String expdate, Date expected,Date delivered){
@@ -159,6 +168,45 @@ public class PurchaseOperations extends AbstractTableOperations {
 		}
 	}
 
+/*	Method to generate a receipt at the end of a purchase that shows, a receipt number, the date, 
+	a list with the items purchased, their quantities and their prices, and the total 
+	amount for the purchase.  If the customer pays by a credit card, the receipt should 
+	show the last 5 digits of the card's number.
+*/	
+	
+	
+	public void printReceipt(int receiptId){
+		System.out.println("in printReceipt(int)...");
+		receiptID =receiptId;
+		pdate = "aug.3,2013";				// date of purchase
+		cardno = "45674"; 					// card number
+		total = 0;
+		try{
+
+			ps = con.prepareStatement("SELECT * FROM purchase where receiptId = ?");
+			ps.setInt(1, receiptId);
+			ResultSet rs = ps.executeQuery();
+			System.out.println("receiptID = " + receiptId);
+
+
+		}
+		catch(SQLException ex){
+			ExceptionEvent event = new ExceptionEvent(this, ex.getMessage());
+			fireExceptionGenerated(event);
+
+			try {
+				con.rollback();
+				//return false; 
+			}
+			catch (SQLException ex2) {
+				event = new ExceptionEvent(this, ex2.getMessage());
+				fireExceptionGenerated(event);
+				//return false; 
+			}
+		}
+		
+	}
+	
 	boolean isInStock (String upc, Integer qty){
 		try{
 
