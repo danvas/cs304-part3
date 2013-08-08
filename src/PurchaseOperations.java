@@ -1,4 +1,5 @@
 import java.sql.Date;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Types;
 import java.text.ParseException;
@@ -7,7 +8,7 @@ import java.text.SimpleDateFormat;
 
 
 public class PurchaseOperations extends AbstractTableOperations {
-	
+
 	//TODO test 
 	boolean insert(Date date,String cid,String cardno, String expdate, Date expected,Date delivered){
 		try{
@@ -54,25 +55,25 @@ public class PurchaseOperations extends AbstractTableOperations {
 		}
 		catch (SQLException ex){
 			ExceptionEvent event = new ExceptionEvent(this, ex.getMessage());
-		    fireExceptionGenerated(event);
-		    
-		    try
-		    {
-			con.rollback();
-			return false; 
-		    }
-		    catch (SQLException ex2)
-		    {
-			event = new ExceptionEvent(this, ex2.getMessage());
 			fireExceptionGenerated(event);
-			return false; 
-		    }
+
+			try
+			{
+				con.rollback();
+				return false; 
+			}
+			catch (SQLException ex2)
+			{
+				event = new ExceptionEvent(this, ex2.getMessage());
+				fireExceptionGenerated(event);
+				return false; 
+			}
 		}
 	}
 	//TODO: PLEASE TEST THIS IN GUI via display in SQL+. - Ian
 	// tried this in GUI under Manager -> SetDeliveryDate and didn't work. 
 	// The Query below is correct in SQLPlus - Allan
-	
+
 	boolean updateDeliveryDate(Integer receiptId,String stringdate){
 		try{
 			ps = con.prepareStatement("UPDATE purchase SET delivereddate = ? WHERE receiptId = ?");
@@ -108,8 +109,8 @@ public class PurchaseOperations extends AbstractTableOperations {
 			}
 		}
 	}
-	
-	
+
+
 	//TODO test 
 	boolean delete(Integer receiptId, Integer upc){
 		try {
@@ -135,12 +136,58 @@ public class PurchaseOperations extends AbstractTableOperations {
 			}
 		}
 	}
-	
+
 	//TODO
 	void display(){
-		
+
 	}
-	
+
+	boolean isInStock (String upc, Integer qty){
+		try{
+
+			ps = con.prepareStatement("SELECT * FROM item where upc = ? AND stock >= ?");
+
+			if (upc != null)
+			{
+				ps.setString(1, upc);
+			}
+			else
+			{
+				ps.setString(1, null);
+			}
+
+			if(qty!=null){
+				ps.setInt(2, qty);
+			}
+			else ps.setNull(2,Types.INTEGER);
+
+			ResultSet rs = ps.executeQuery();
+
+			if (rs.next())
+			{
+				return true; 
+			}
+			else
+			{
+				return false; 
+			}
+		}
+		catch(SQLException ex){
+			ExceptionEvent event = new ExceptionEvent(this, ex.getMessage());
+			fireExceptionGenerated(event);
+
+			try {
+				con.rollback();
+				return false; 
+			}
+			catch (SQLException ex2) {
+				event = new ExceptionEvent(this, ex2.getMessage());
+				fireExceptionGenerated(event);
+				return false; 
+			}
+		}
+	}
+
 
 
 }
