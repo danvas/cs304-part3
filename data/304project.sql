@@ -52,8 +52,11 @@ delivereddate date,
 PRIMARY KEY (receiptId),
 foreign key (cid) 
 	references Customer);
-	
-create SEQUENCE purchase_receiptId;
+
+DROP SEQUENCE purchase_receiptId;	
+CREATE SEQUENCE purchase_receiptId
+START WITH 1000
+INCREMENT BY 1;
 
 drop table PurchaseItem;
 
@@ -77,7 +80,8 @@ PRIMARY KEY (retid),
 foreign key (receiptId) 
 	references Purchase);
 
-create SEQUENCE return_retid;
+DROP SEQUENCE return_retid;
+CREATE SEQUENCE return_retid;
 
 drop table ReturnItem;
 
@@ -136,35 +140,38 @@ insert into HasSong
 insert into HasSong
 	values('111115', 'Symphony');
 
+insert into Customer
+	values(joe123, null, null, null, null);
 insert into Purchase
 	(receiptid, pdate, cid, cardno, expirydate, expecteddate, delivereddate)
-	values(purchase_receiptId.nextval, '2001-01-01', '1234', '4444555566667777', '0101', null, null); 
-insert into Purchase
-	values(purchase_receiptId.nextval, '2002-02-21', '5678', '4444555566667778', '0101', '2012-01-01', '2012-01-05' );
-insert into Purchase
-	values(purchase_receiptId.nextval, '2003-03-18', '3456', null, null, null, null);
-
+	values(purchase_receiptId.nextval, '2001-01-01', joe123, '4444555566667777', '0101', null, null); 
 insert into PurchaseItem
 	values(purchase_receiptId.currval, '111111', 1);
 insert into PurchaseItem
 	values(purchase_receiptId.currval, '111112', 1);
+
+insert into Customer
+	values(john123, 'pass', 'John Smith', '101 university Blvd, Vancouver, BC', '6049999999');
+insert into Purchase
+	values(purchase_receiptId.nextval, '2002-02-21', john123, '4444555566667778', '0101', '2012-01-01', '2012-01-05' );
 insert into PurchaseItem
 	values(purchase_receiptId.currval, '111113', 1);
+
+insert into Customer
+	values(jim123, null, null, null, null);
+insert into Purchase
+	values(purchase_receiptId.nextval, '2003-03-18', null, null, null, null, null);
 insert into PurchaseItem
 	values(purchase_receiptId.currval, '111114', 1);
 
-insert into Customer
-	values('1234', null, null, null, null);
-insert into Customer
-	values('3456', null, null, null, null);
-insert into Customer
-	values('5678', 'pass', 'John Smith', '101 university Blvd, Vancouver, BC', '6049999999');
-
 insert into Return
-	values(return_retid.nextval, purchase_receiptId.currval, '2003-03-23');
-
+	values(return_retid.nextval, 1000, '2003-03-23');
 insert into ReturnItem
 	values(return_retid.currval, '111114', 1);
+
+
+
+
 
 
 
