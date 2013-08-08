@@ -10,11 +10,11 @@ import javax.swing.event.EventListenerList;
 
 public class ItemOperations extends AbstractTableOperations{
 
-	boolean insert(Integer upc, String title, String type, String category, String company, String year, Double price, Integer stock){
+	boolean insert(String upc, String title, String type, String category, String company, String year, Double price, Integer stock){
 		try {
 			ps = con.prepareStatement("INSERT INTO item VALUES (?,?,?,?,?,?,?,?)");
 			
-			ps.setInt(1,upc.intValue());
+			ps.setString(1,upc);
 			
 			if (title != null){
 				ps.setString(2,title);
@@ -99,10 +99,10 @@ public class ItemOperations extends AbstractTableOperations{
 		}
 	}
 
-	boolean delete(Integer upc){
+	boolean delete(String upc){
 		try {
 			ps = con.prepareStatement("DELETE FROM item WHERE upc = ?");
-			ps.setInt(1, upc);
+			ps.setString(1, upc);
 			ps.executeUpdate();
 			con.commit();
 			return true;
@@ -190,22 +190,24 @@ public class ItemOperations extends AbstractTableOperations{
 	
 //	public static void main(String args[])
 //	{
-//
+
 //		System.out.println("test");
 //
 //		AMSOracleConnection oCon = AMSOracleConnection.getInstance();
 //		oCon.connect("ora_o0g6", "a40493058");
-//		//		oCon.connect("ora_h5n8", "a44140028");
+//		oCon.connect("ora_h5n8", "a44140028");
 //
 //		ItemOperations item = new ItemOperations();
-//
-//
-//
-//		//		item.insertItem("9999999999999999", "test", "CD", "test", "test", "test", 999.99, 99);
-////		item.insert(123456, "cpsc", "CD", "instrumental", "company", "year", 111.12, 27);
-//		
+
+
+
+//		item.insert("999888", "test", "CD", "test", "test", "test", 999.99, 99);
+//		item.insert("123457", "cpsc", "CD", "instrumental", "company", "year", 111.12, 27);
+		
 //		//item.displayItem();
-//		item.delete(123456);
+//		item.delete("999888");
+//		item.delete("999999");
+//		item.delete("123457");
 //
 //	} 
 
