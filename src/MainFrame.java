@@ -404,7 +404,7 @@ public class MainFrame extends JFrame {
 		gbc_lblUpc_1.gridy = 0;
 		addItem.add(lblUpc_1, gbc_lblUpc_1);
 		
-		JTextField additemupc = new JTextField();
+		final JTextField additemupc = new JTextField();
 		GridBagConstraints gbc_additemupc = new GridBagConstraints();
 		gbc_additemupc.insets = new Insets(0, 0, 5, 0);
 		gbc_additemupc.fill = GridBagConstraints.BOTH;
@@ -419,7 +419,7 @@ public class MainFrame extends JFrame {
 		gbc_lblQuantity_1.gridy = 1;
 		addItem.add(lblQuantity_1, gbc_lblQuantity_1);
 		
-		JTextField additemqty = new JTextField();
+		final JTextField additemqty = new JTextField();
 		GridBagConstraints gbc_additemqty = new GridBagConstraints();
 		gbc_additemqty.insets = new Insets(0, 0, 5, 0);
 		gbc_additemqty.fill = GridBagConstraints.BOTH;
@@ -434,7 +434,7 @@ public class MainFrame extends JFrame {
 		gbc_lblPrice.gridy = 2;
 		addItem.add(lblPrice, gbc_lblPrice);
 		
-		JTextField additemprice = new JTextField();
+		final JTextField additemprice = new JTextField();
 		GridBagConstraints gbc_additemprice = new GridBagConstraints();
 		gbc_additemprice.insets = new Insets(0, 0, 5, 0);
 		gbc_additemprice.fill = GridBagConstraints.BOTH;
@@ -446,8 +446,11 @@ public class MainFrame extends JFrame {
 		//TODO: Manager AddItem button
 		btnAddItem.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				
-				
+				ItemOperations i = new ItemOperations();
+				String upcString = additemupc.getText();
+				Integer qtyString = Integer.parseInt(additemqty.getText());
+				Double priceDouble = Double.parseDouble(additemprice.getText());
+				i.managerAddItem(upcString, qtyString, priceDouble);
 			}
 		});
 		GridBagConstraints gbc_btnAddItem = new GridBagConstraints();
