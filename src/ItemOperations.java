@@ -122,7 +122,15 @@ public class ItemOperations extends AbstractTableOperations{
 	void display(){
 
 	}
-
+//TODO: Fairly straightforward ManagerAddItem, see comment below. 
+	//if upc null, return false
+	//check if upc exists in item, if it does, add quantity to current (modify price if input)
+	//if upc doesn't exist, insert all fields to Item
+	boolean managerAddItem(String upc,Integer qty,Double price ){
+		
+		return true;
+	}
+	
 //	public static void main(String args[])
 //	{
 //
