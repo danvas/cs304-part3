@@ -191,15 +191,15 @@ public class Item {
 		System.out.println("test");
 		
 		AMSOracleConnection oCon = AMSOracleConnection.getInstance();
-		oCon.connect("ora_o0g6", "a40493058");
-//		oCon.connect("ora_h5n8", "a44140028");
+//		oCon.connect("ora_o0g6", "a40493058");
+		oCon.connect("ora_h5n8", "a44140028");
 		
 		Item item = new Item();
 		
 		item.displayItem();
 		
 		item.insertItem("9999999999999999", "test", "CD", "test", "test", "test", 999.99, 99);
-		item.insertItem("12345678901", "iTitle", "CD", "instrumental", "company", "year", 111.12, 27);
+		item.insertItem("12345678888", "iTitle", "CD", "instrumental", "company", "year", 111.12, 27);
 		//item.displayItem();
 
 	} 
