@@ -48,9 +48,16 @@ public class CustomerOperations extends AbstractTableOperations{
 		try {
 			ps = con.prepareStatement("SELECT * FROM customer WHERE cid = ? AND password = ?"); 
 
-			ps.setString(1, cid);
+			if(cid!=null){
+				ps.setString(1, cid);
+			}
+			else ps.setString(1,null);
+			
+			if(pw!=null){
 			ps.setString(2, pw);
-
+			}
+			else ps.setString(2,null);
+			
 			rs = ps.executeQuery();
 			System.out.println("Just executed query")	;	
 

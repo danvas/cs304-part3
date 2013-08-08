@@ -141,7 +141,7 @@ insert into HasSong
 	values('111115', 'Symphony');
 
 insert into Customer
-	values(joe123, null, null, null, null);
+	values('joe123', null, null, null, null);
 insert into Purchase
 	(receiptid, pdate, cid, cardno, expirydate, expecteddate, delivereddate)
 	values(purchase_receiptId.nextval, '2001-01-01', joe123, '4444555566667777', '0101', null, null); 
@@ -151,14 +151,14 @@ insert into PurchaseItem
 	values(purchase_receiptId.currval, '111112', 1);
 
 insert into Customer
-	values(john123, 'pass', 'John Smith', '101 university Blvd, Vancouver, BC', '6049999999');
+	values('john123', 'pass', 'John Smith', '101 university Blvd, Vancouver, BC', '6049999999');
 insert into Purchase
 	values(purchase_receiptId.nextval, '2002-02-21', john123, '4444555566667778', '0101', '2012-01-01', '2012-01-05' );
 insert into PurchaseItem
 	values(purchase_receiptId.currval, '111113', 1);
 
 insert into Customer
-	values(jim123, null, null, null, null);
+	values('jim123', null, null, null, null);
 insert into Purchase
 	values(purchase_receiptId.nextval, '2003-03-18', null, null, null, null, null);
 insert into PurchaseItem
