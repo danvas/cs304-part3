@@ -61,12 +61,12 @@ sq1 AS
 	(select * 
 		from (select upc,  sum(quantity) as Sold 
 			from purchaseitem pi, purchase p  
-			where p.receiptid = pi.receiptid and pdate >= "date" and pdate <= "date" 
+			where p.receiptid = pi.receiptid and pdate >= '13-05-25' and pdate <= '13-05-25' 
 			group by upc 
 			order by sold desc) 
-		where rownum <= n), 
+		where rownum <= 4), 
 sq2 AS 
-	(select pi.upc, ititle, stock, company 
+	(select distinct (pi.upc), ititle, stock, company 
 		from item i, purchase p, purchaseitem pi 
 		where i.upc = pi.upc and pi.receiptid = p.receiptid)
 	SELECT ititle as Title, company, stock, Sold 
