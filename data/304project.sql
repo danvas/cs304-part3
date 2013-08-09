@@ -54,7 +54,7 @@ foreign key (cid)
 	references Customer);
 
 DROP SEQUENCE purchase_receiptId;	
-CREATE SEQUENCE purchase_receiptId
+CREATE SEQUENCE purchase_receiptId	
 START WITH 1000
 INCREMENT BY 1;
 
@@ -64,7 +64,7 @@ create table PurchaseItem
 (receiptId integer not null,
 upc char(6) not null,
 quantity integer not null,
-PRIMARY KEY(receiptId, upc),
+PRIMARY KEY(receiptId, upc)
 foreign key (receiptId) 
 	references Purchase,
 foreign key (upc) 
@@ -144,7 +144,7 @@ insert into Customer
 	values('joe123', null, null, null, null);
 insert into Purchase
 	(receiptid, pdate, cid, cardno, expirydate, expecteddate, delivereddate)
-	values(purchase_receiptId.nextval, '2001-01-01', joe123, '4444555566667777', '0101', null, null); 
+	values(purchase_receiptId.nextval, '2001-01-01', 'joe123', '4444555566667777', '0101', null, null); 
 insert into PurchaseItem
 	values(purchase_receiptId.currval, '111111', 1);
 insert into PurchaseItem
@@ -153,21 +153,29 @@ insert into PurchaseItem
 insert into Customer
 	values('john123', 'pass', 'John Smith', '101 university Blvd, Vancouver, BC', '6049999999');
 insert into Purchase
-	values(purchase_receiptId.nextval, '2002-02-21', john123, '4444555566667778', '0101', '2012-01-01', '2012-01-05' );
+	values(purchase_receiptId.nextval, '2002-02-21', 'john123', '4444555566667778', '0101', '2012-01-01', '2012-01-05' );
 insert into PurchaseItem
 	values(purchase_receiptId.currval, '111113', 1);
+
+insert into Customer
+	values('rog12', 'passw', 'Roger Boyle', '141 Vine Blvd, Vancouver, BC', '7789998899');
+insert into Purchase
+	values(purchase_receiptId.nextval, '2003-02-21', 'rog12', '4444555566667778', '0101', '2012-06-01', '2012-06-05' );
+insert into PurchaseItem
+	values(purchase_receiptId.currval, '111114', 1);
+
 
 insert into Customer
 	values('jim123', null, null, null, null);
 insert into Purchase
 	values(purchase_receiptId.nextval, '2003-03-18', null, null, null, null, null);
 insert into PurchaseItem
-	values(purchase_receiptId.currval, '111114', 1);
+	values(purchase_receiptId.currval, '111115', 1);
 
 insert into Return
 	values(return_retid.nextval, 1000, '2003-03-23');
 insert into ReturnItem
-	values(return_retid.currval, '111114', 1);
+	values(return_retid.currval, '111115', 1);
 
 
 
