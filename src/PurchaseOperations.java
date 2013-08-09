@@ -309,12 +309,14 @@ public class PurchaseOperations extends AbstractTableOperations {
 		
 
 		@SuppressWarnings("deprecation")
-		java.sql.Date date = new java.sql.Date(2013, 7, 1);
+		java.sql.Date date = new java.sql.Date(2013, 10, 10);
 
 		
 
 		
-		po.insert(date, "joe123", "666", "555", null, null);
+//		po.insert(date, "joe123", "666", "555", null, null);
+//		po.insert(date, "joe123", "667", "555", null, null);
+		po.insert(date, "joe123", "test", "test", null, null);
 		
 		
 

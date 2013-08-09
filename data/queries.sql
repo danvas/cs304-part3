@@ -77,7 +77,27 @@ WITH sq1 AS (select * from (select upc,  sum(quantity) from purchaseitem group b
 
 -- Q8)
 prompt ****************************************************  Q8;
-WITH sq1 AS (select * from (select upc,  sum(quantity) from purchaseitem group by upc order by sum(quantity) desc) where rownum <= 5), sq2 AS (select upc, ititle, stock, company from item) SELECT sq1.upc, ititle, company, stock FROM sq1, sq2 WHERE  sq1.upc = sq2.upc;
+WITH 
+sq1 AS 
+	(select * 
+		from (select upc,  sum(quantity) as Sold 
+			from purchaseitem pi, purchase p  
+			where p.receiptid = pi.receiptid and pdate >= "date" and pdate <= "date" 
+			group by upc 
+			order by sold desc) 
+		where rownum <= n), 
+sq2 AS 
+	(select pi.upc, ititle, stock, company 
+		from item i, purchase p, purchaseitem pi 
+		where i.upc = pi.upc and pi.receiptid = p.receiptid)
+	SELECT ititle as Title, company, stock, Sold 
+ 	FROM sq1, sq2 
+ 	WHERE  sq1.upc = sq2.upc
+ 	ORDER BY Sold desc; -- FINAAAALLLLLLLLL
+
+
+ 	-- n is integer, top n items
+ 	-- date is string, date in 'YY-MM-DD' format
 
 -- Q9) query daily sales report (currently can't specify date)
 prompt ****************************************************  Q9;
