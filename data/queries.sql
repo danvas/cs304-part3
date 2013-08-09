@@ -14,3 +14,6 @@ SELECT ititle
 FROM Item I
 WHERE I.upc IN (SELECT PI.upc
 FROM PurchaseItem PI WHERE receiptId=?)
+
+-- Q8)
+WITH sq1 AS (select * from (select upc,  sum(quantity) from purchaseitem group by upc order by sum(quantity) desc) where rownum <= 5), sq2 AS (select upc, ititle, stock, company from item) SELECT sq1.upc, ititle, company, stock FROM sq1, sq2 WHERE  sq1.upc = sq2.upc;

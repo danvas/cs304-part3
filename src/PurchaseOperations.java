@@ -293,6 +293,30 @@ public class PurchaseOperations extends AbstractTableOperations {
 		return true;
 	}
 	
+	public static void main(String args[])
+	{
+		
+		System.out.println("test");
+		
+		AMSOracleConnection oCon = AMSOracleConnection.getInstance();
+//		oCon.connect("ora_o0g6", "a40493058");
+		oCon.connect("ora_h5n8", "a44140028");
+		
+		PurchaseOperations po = new PurchaseOperations();
+		
 
+		@SuppressWarnings("deprecation")
+		java.sql.Date date = new java.sql.Date(2013, 7, 1);
 
+		
+
+		
+		po.insert(date, "joe123", "666", "555", null, null);
+		
+		
+
+	} 
+	
 }
+
+
