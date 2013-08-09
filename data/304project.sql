@@ -1,5 +1,5 @@
-drop table Item;
 prompt **************************************************** Creating tables...;
+drop table Item;
 create table Item
 (upc char(6) not null,
 ititle varchar(30),
@@ -29,7 +29,7 @@ PRIMARY KEY (upc, stitle),
 foreign key (upc) 
 	references Item);
 
-delete table Customer;
+drop table Customer;
 
 create table Customer
 (cid varchar(10) not null,
@@ -64,7 +64,7 @@ create table PurchaseItem
 (receiptId integer not null,
 upc char(6) not null,
 quantity integer not null,
-PRIMARY KEY(receiptId, upc)
+PRIMARY KEY(receiptId, upc),
 foreign key (receiptId) 
 	references Purchase,
 foreign key (upc) 
@@ -175,7 +175,7 @@ insert into PurchaseItem
 	values(purchase_receiptId.currval, '111115', 1);
 prompt **************************************************** Inserting into Return and ReturnItem;
 insert into Return
-	values(return_retid.nextval, 1000, '2003-03-23');
+	values(return_retid.nextval, 1001, '2003-03-23');
 insert into ReturnItem
 	values(return_retid.currval, '111115', 1);
 
