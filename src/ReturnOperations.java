@@ -1,5 +1,6 @@
 import java.sql.Date;
 import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Time;
 import java.sql.Types;
@@ -77,9 +78,15 @@ public class ReturnOperations extends AbstractTableOperations {
 	}
 
 	boolean checkValidDate (Integer receiptId){
-		int year;
-		int month;
-		int day;
+		
+		Date pdate;
+		String cid;
+		String cardno;
+		String expDate;
+		String eDate;
+		String dDate;
+		
+		
 		
 		try{
 
@@ -94,26 +101,90 @@ public class ReturnOperations extends AbstractTableOperations {
 
 
 			ResultSet rs = ps.executeQuery();
-			if (rs != null)
-				System.out.println("not null");
-			
-			
-			
-			
+			// get info on ResultSet
+			  ResultSetMetaData rsmd = rs.getMetaData();
+
+			  // get number of columns
+			  int numCols = rsmd.getColumnCount();
+
+			  System.out.println(" ");
+			  
+			  // display column names;
+			  for (int i = 1; i < numCols; i++)
+			  {
+			      // get column name and print it
+
+			      System.out.printf("%-15s", rsmd.getColumnName(i+1));    
+			  }
+
+			  System.out.println(" ");
+
+			  while(rs.next())
+			  {
+			      // for display purposes get everything from Oracle 
+			      // as a string
+
+			      // simplified output formatting; truncation may occur
+
+			      pdate = rs.getDate("pdate");
+			      System.out.printf("%-15.15s", pdate);
+
+			      cid = rs.getString("cid");
+			      System.out.printf("%-15.15s", cid);
+
+			      cardno = rs.getString("cardno");
+			      if (rs.wasNull())
+			      {
+			    	  System.out.printf("%-15.15s", " ");
+		              }
+			      else
+			      {
+			    	  System.out.printf("%-15.15s", cardno);
+			      }
+
+			      expDate = rs.getString("EXPIRYDATE");
+			      System.out.printf("%-15.15s", expDate);
+
+			      eDate = rs.getString("EXPECTEDDATE");
+			      if (rs.wasNull())
+			      {
+			    	  System.out.printf("%-15.15s\n", " ");
+		              }
+			      else
+			      {
+			    	  System.out.printf("%-15.15s\n", eDate);
+			      } 
+			      dDate = rs.getString("DELIVEREDDATE");
+			      if (rs.wasNull())
+			      {
+			    	  System.out.printf("%-15.15s\n", " ");
+		              }
+			      else
+			      {
+			    	  System.out.printf("%-15.15s\n", dDate);
+			      } 
+			      
+			  }
+//		 
+//			  // close the statement; 
+//			  // the ResultSet will also be closed
+//			  stmt.close();
+//			}
+//			
 			
 //			Date utilDate = new Date(sqlDate.getTime());
 			
-			DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
+//			DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
 			   //get current date time with Date()
 //			   Date date = new Date();
 //			   System.out.println(dateFormat.format(date));
 		 
 			   //get current date time with Calendar()
-			   Calendar cal = Calendar.getInstance();
+//			   Calendar cal = Calendar.getInstance();
 			   
-			   System.out.println(dateFormat.format(cal.getTime()));
+//			   System.out.println(dateFormat.format(cal.getTime()));
 			   
-			   System.out.println(dateFormat.format(rs.getDate("pdate")));
+//			   System.out.println(dateFormat.format(rs.getDate("pdate")));
 //			   java.sql.Date sqlDate = dateFormat.format(rs.getTime(2));
 			   
 //			if (utilDate.before(cal.getTime()));
