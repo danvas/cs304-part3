@@ -50,12 +50,13 @@ public class ItemOperations extends AbstractTableOperations{
 				ps.setDouble(7,price);
 			}
 			else {
-				ps.setInt(7,-1);
+				ps.setNull(7, Types.INTEGER);
 			}
 
 			ps.setInt(8, stock.intValue());
 			ps.executeUpdate();
 			con.commit();
+			System.out.println("New Item added");
 			return true;
 		}
 		catch (SQLException ex){
@@ -75,23 +76,33 @@ public class ItemOperations extends AbstractTableOperations{
 			}
 		}
 	}
-	boolean updateItem(int upc,int qty, double price){
+	boolean updateItem(String upc, Integer stock, Double price){	
 		try{
-			ps = con.prepareStatement("UPDATE item SET  ");
-
+			ps = con.prepareStatement("UPDATE item SET price = ?, stock = stock + ? WHERE upc = ?");
+			
+			if (price != null) {
+				ps.setDouble(1, price);
+			}
+			else {
+				ps.setNull(1, Types.INTEGER);
+			}
+			ps.setInt(2, stock);
+			ps.setString(3, upc);
+			
+			ps.executeUpdate();
+			con.commit();
+			System.out.println("item updated");
 			return true;
 		}
 		catch(SQLException ex){
 			ExceptionEvent event = new ExceptionEvent(this, ex.getMessage());
 			fireExceptionGenerated(event);
 
-			try
-			{
+			try	{
 				con.rollback();
 				return false; 
 			}
-			catch (SQLException ex2)
-			{
+			catch (SQLException ex2){
 				event = new ExceptionEvent(this, ex2.getMessage());
 				fireExceptionGenerated(event);
 				return false; 
@@ -130,61 +141,40 @@ public class ItemOperations extends AbstractTableOperations{
 	//if upc null, return false
 	//check if upc exists in item, if it does, add quantity to current (modify price if input)
 	//if upc doesn't exist, insert all fields to Item
-	void managerAddItem(String upc,Integer qty,Double price ){
+	public boolean managerAddItem(String upc, Integer stock, Double price ){
 		ResultSet rs;
+		
 		try {
 			// finds tuple with given upc
 			ps = con.prepareStatement("SELECT * FROM ITEM WHERE upc = ?");
-
 			ps.setString(1, upc);
-			//ps.setInt(2, qty);
-			//			//if (price != null) {
-			//				ps.setDouble(3, price);
-			//			}
-			//			else {
-			//				ps.setNull(3, Types.DOUBLE);
-			//			}		
 			rs = ps.executeQuery();
-
-			if (!rs.next()) {
-				ps = con.prepareStatement("INSERT INTO items VALUES (?,?,?)");
-				ps.setString(1, upc);
-				ps.setInt(2, qty);
-				if (price != null) {
-					ps.setDouble(3, price);
-				}
-				else {
-					ps.setNull(3, Types.DOUBLE);
-				}
-
-				rs = ps.executeQuery();
-				con.commit();
-
-				System.out.println("New Item added");
-				//return false;
+			
+			if (rs.next()) {
+				System.out.println("upc exists. now updating");
+				//rs.getString()
+				updateItem(upc, stock, price);
+				return true;
 			}
-			else {
-				if (rs.next()) {
-					ps = con.prepareStatement("UPDATE item SET price = ?, qty = qty + ? where upc = ?");
-					ps.setString(3, upc);
-					ps.setInt(2, qty);
-					if (price != null) {
-						ps.setDouble(1, price);
-					}
-					else {
-						ps.setNull(1, Types.DOUBLE);
-					}
-					
-					rs = ps.executeQuery();
-					con.commit();
-					//return true;
-				}
-			}	
+			else if (!rs.next()) {
+				insert(upc, "", "", "", "", "", price, stock );
+				return true;
+			}
+			else return false;
 		}
 		catch (SQLException ex) {
 			ExceptionEvent event = new ExceptionEvent(this, ex.getMessage());
 			fireExceptionGenerated(event);
-			//return false; 
+
+			try {
+				con.rollback();
+				return false;
+			}
+			catch (SQLException ex2) {
+				event = new ExceptionEvent(this, ex2.getMessage());
+				fireExceptionGenerated(event);
+				return false;
+			}
 		}
 	}
 	
