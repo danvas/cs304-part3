@@ -12,13 +12,12 @@
 -- Q1) query Item to find names of titles that were purchased in given receiptId
 SELECT ititle
 FROM Item I
-<<<<<<< HEAD
 WHERE I.upc IN (SELECT PI.upc
 FROM PurchaseItem PI WHERE receiptId=?)
 
 -- Q8)
 WITH sq1 AS (select * from (select upc,  sum(quantity) from purchaseitem group by upc order by sum(quantity) desc) where rownum <= 5), sq2 AS (select upc, ititle, stock, company from item) SELECT sq1.upc, ititle, company, stock FROM sq1, sq2 WHERE  sq1.upc = sq2.upc;
-=======
+
 WHERE I.upc IN (SELECT upc
 FROM PurchaseItem WHERE receiptId=?)
 
@@ -38,4 +37,3 @@ FROM PurchaseItem WHERE receiptId=?)
 	-- (purchase_receiptId.nextval, system date, null for cid, null or val for card#, null or val for cardexpdate, null forexpectd, null for delivd)
 -- Q6) insert into PurchaseItem (receiptId, upc,qty)
 -- Q7) update stock in Item by corresponding amount for each item purchased
->>>>>>> branch 'master' of https://github.com/danvas/cs304-part3.git
