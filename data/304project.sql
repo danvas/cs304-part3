@@ -172,13 +172,8 @@ insert into Customer
 insert into Purchase
 	values(purchase_receiptId.nextval, '2003-03-18', null, null, null, null, null);
 insert into PurchaseItem
-<<<<<<< HEAD
 	values(purchase_receiptId.currval, '111115', 1);
-
-=======
-	values(purchase_receiptId.currval, '111114', 1);
 prompt **************************************************** Inserting into Return and ReturnItem;
->>>>>>> 6d6dc3b12fc610617b40be06ef50c704f6755e7c
 insert into Return
 	values(return_retid.nextval, 1000, '2003-03-23');
 insert into ReturnItem
