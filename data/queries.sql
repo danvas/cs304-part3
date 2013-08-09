@@ -2,30 +2,23 @@
 -------------------------------
 
 
--- For printing out receipt
--- When the payment is completed the system prints a receipt that shows 
--- a receipt number, the date, a list with the items purchased, their 
--- quantities and their prices, and the total amount for the purchase. 
--- If the customer pays by a credit card, the receipt should show the last 
--- 5 digits of the card's number.
+-- For printing out receipt: Q1 and Q2
 
--- Q1) query Item to find names of titles that were purchased in given receiptId
-SELECT ititle
-FROM Item I
-WHERE I.upc IN (SELECT PI.upc
-FROM PurchaseItem PI WHERE receiptId=?)
+-- Q1) Given a receipt number, this query lists all the items purchased, their 
+-- quantities and their prices. Total amount for the purchase to be calculated in Java code.
+prompt ****************************************************  Q1;
+SELECT ititle as Title, I.upc, quantity, price
+FROM Item I, PurchaseItem PI
+WHERE I.upc=PI.upc AND receiptId=1001;
 
--- Q8)
-WITH sq1 AS (select * from (select upc,  sum(quantity) from purchaseitem group by upc order by sum(quantity) desc) where rownum <= 5), sq2 AS (select upc, ititle, stock, company from item) SELECT sq1.upc, ititle, company, stock FROM sq1, sq2 WHERE  sq1.upc = sq2.upc;
+--  Q2) Given a receipt number, finds purchase date, and last 5 digits of the card's number
+prompt ****************************************************  Q2;
+SELECT receiptId, pdate as PurchaseDate, 'xxxxxxxxxxx' || SUBSTR(cardno, 12,5) as CardNumber
+FROM Purchase
+WHERE receiptId=1001;
 
-WHERE I.upc IN (SELECT upc
-FROM PurchaseItem WHERE receiptId=?)
 
--- Q2) query Item to find number of titles that were purchased in given receiptId
-SELECT ititle
-FROM Item I
-WHERE I.upc IN (SELECT upc, 
-FROM PurchaseItem WHERE receiptId=?)
+
 
 -- Q3) query Item to see if there is sufficient stock for given UPC and quantity
 
@@ -38,6 +31,11 @@ FROM PurchaseItem WHERE receiptId=?)
 -- Q6) insert into PurchaseItem (receiptId, upc,qty)
 -- Q7) update stock in Item by corresponding amount for each item purchased
 
+-- Q8)
+prompt ****************************************************  Q8;
+WITH sq1 AS (select * from (select upc,  sum(quantity) from purchaseitem group by upc order by sum(quantity) desc) where rownum <= 5), sq2 AS (select upc, ititle, stock, company from item) SELECT sq1.upc, ititle, company, stock FROM sq1, sq2 WHERE  sq1.upc = sq2.upc;
+
 -- Q9) query daily sales report (currently can't specify date)
+prompt ****************************************************  Q9;
 WITH sq1 AS (select * from (SELECT upc, category, price FROM item ORDER BY category)), sq2 AS (SELECT upc, sum(quantity) AS units FROM purchaseitem GROUP BY upc ORDER BY units) SELECT sq1.upc, category, sq1.price, sq2.units, (sq1.price * sq2.units) AS total_value FROM sq1, sq2 WHERE sq1.upc = sq2.upc ORDER BY category;
 
