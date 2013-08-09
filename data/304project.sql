@@ -1,5 +1,5 @@
 drop table Item;
-
+prompt **************************************************** Creating tables...;
 create table Item
 (upc char(6) not null,
 ititle varchar(30),
@@ -69,6 +69,7 @@ foreign key (receiptId)
 	references Purchase,
 foreign key (upc) 
 	references Item);
+
 	
 drop table Return;
 
@@ -94,7 +95,7 @@ foreign key (retid)
 	references Return,
 foreign key (upc) 
 	references Item);
-
+prompt **************************************************** Inserting into Item;
 insert into Item
 	values('111111', 'Thriller', 'CD', 'POP','Sony', '1983',9.99, 20);
 insert into Item
@@ -105,7 +106,8 @@ insert into Item
 	values('111114', 'Straight outa Compton', 'DVD', 'RAP','Sony', '1989',12.99, 5);
 insert into Item
 	values('111115', 'Mozart', 'CD', 'Classical','BMG', '1656',9.99, 20);
-
+	
+prompt **************************************************** Inserting into LeadSinger;
 insert into LeadSinger
 	values ('111111', 'Michael Jackson');
 insert into LeadSinger
@@ -116,7 +118,7 @@ insert into LeadSinger
 	values ('111114', 'NWA');
 insert into LeadSinger
 	values ('111115', 'Mozart');
-
+prompt **************************************************** Inserting into LeadSinger;
 insert into HasSong
 	values('111111', 'Beat it');
 insert into HasSong
@@ -139,7 +141,7 @@ insert into HasSong
 	values('111114', 'F*** the Police');
 insert into HasSong
 	values('111115', 'Symphony');
-
+prompt **************************************************** Inserting into Customer, Purchase and PurchaseItem;
 insert into Customer
 	values('joe123', null, null, null, null);
 insert into Purchase
@@ -149,21 +151,21 @@ insert into PurchaseItem
 	values(purchase_receiptId.currval, '111111', 1);
 insert into PurchaseItem
 	values(purchase_receiptId.currval, '111112', 1);
-
+prompt **************************************************** Inserting into Customer, Purchase and PurchaseItem;
 insert into Customer
 	values('john123', 'pass', 'John Smith', '101 university Blvd, Vancouver, BC', '6049999999');
 insert into Purchase
 	values(purchase_receiptId.nextval, '2002-02-21', john123, '4444555566667778', '0101', '2012-01-01', '2012-01-05' );
 insert into PurchaseItem
 	values(purchase_receiptId.currval, '111113', 1);
-
+prompt **************************************************** Inserting into Customer, Purchase and PurchaseItem;
 insert into Customer
 	values('jim123', null, null, null, null);
 insert into Purchase
 	values(purchase_receiptId.nextval, '2003-03-18', null, null, null, null, null);
 insert into PurchaseItem
 	values(purchase_receiptId.currval, '111114', 1);
-
+prompt **************************************************** Inserting into Return and ReturnItem;
 insert into Return
 	values(return_retid.nextval, 1000, '2003-03-23');
 insert into ReturnItem
