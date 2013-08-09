@@ -37,3 +37,7 @@ FROM PurchaseItem WHERE receiptId=?)
 	-- (purchase_receiptId.nextval, system date, null for cid, null or val for card#, null or val for cardexpdate, null forexpectd, null for delivd)
 -- Q6) insert into PurchaseItem (receiptId, upc,qty)
 -- Q7) update stock in Item by corresponding amount for each item purchased
+
+-- Q9) query daily sales report (currently can't specify date)
+WITH sq1 AS (select * from (SELECT upc, category, price FROM item ORDER BY category)), sq2 AS (SELECT upc, sum(quantity) AS units FROM purchaseitem GROUP BY upc ORDER BY units) SELECT sq1.upc, category, sq1.price, sq2.units, (sq1.price * sq2.units) AS total_value FROM sq1, sq2 WHERE sq1.upc = sq2.upc ORDER BY category;
+

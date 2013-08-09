@@ -47,10 +47,10 @@ public class ItemOperations extends AbstractTableOperations{
 				ps.setString(6,null);
 			}
 			if (price!=null){
-				ps.setDouble(7,price);
+				ps.setDouble(7,price.doubleValue());
 			}
 			else {
-				ps.setNull(7, Types.INTEGER);
+				ps.setNull(7, Types.DOUBLE);
 			}
 
 			ps.setInt(8, stock.intValue());
@@ -81,12 +81,12 @@ public class ItemOperations extends AbstractTableOperations{
 			ps = con.prepareStatement("UPDATE item SET price = ?, stock = stock + ? WHERE upc = ?");
 			
 			if (price != null) {
-				ps.setDouble(1, price);
+				ps.setDouble(1, price.doubleValue());
 			}
 			else {
-				ps.setNull(1, Types.INTEGER);
+				ps.setNull(1, Types.DOUBLE);
 			}
-			ps.setInt(2, stock);
+			ps.setInt(2, stock.intValue());
 			ps.setString(3, upc);
 			
 			ps.executeUpdate();
