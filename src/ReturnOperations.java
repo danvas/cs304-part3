@@ -76,7 +76,73 @@ public class ReturnOperations extends AbstractTableOperations {
 			}
 		}
 	}
+	
+	/*
+	 * Process a return for an item.
+	 */
+	public boolean returnItem(Integer receiptId, String upc) {
+		ResultSet rs;
 
+		try {
+			// check if the item has already been returned
+			ps = con.prepareStatement("SELECT r.retid, r.receiptid, rdate FROM return r, returnitem ri WHERE r.receiptId = ? AND ri.upc = ?");
+			ps.setInt(1, receiptId);
+			ps.setString(2, upc);
+			System.out.println("Executing Query");
+			
+			rs = ps.executeQuery();
+			System.out.println("Query Executed");
+			ps.close();
+
+			if (rs.next()) {
+				System.out.println("Return already made");
+				return true;
+			}
+			else {
+				//TODO: fix date
+				Date currdate = null;
+				// If return made within 15 days, update tables below
+				if (checkValidDate (receiptId)) {
+					
+					// Insert new tuple into Return table
+					insert(receiptId, currdate);
+					System.out.println("Inserted into Return");
+					
+					// Insert new tuple into ReturnItem table
+					ReturnItemOperations rio = new ReturnItemOperations();
+					rio.insert(upc, 1);
+					System.out.println("Inserted into ReturnItem");
+					
+					// Increment stock with given upc in Item table
+					ItemOperations io = new ItemOperations();
+					io.updateItem(upc, 1, null);
+					System.out.println("Updated stock on item");
+					return true;
+				}
+				System.out.println("Return greater than 15 days");
+				return false;
+			}
+		}
+		catch (SQLException ex) {
+			ExceptionEvent event = new ExceptionEvent(this, ex.getMessage());
+			fireExceptionGenerated(event);
+			System.out.println(ex.getMessage());
+			try {
+				con.rollback();
+				return false;
+			}
+			catch (SQLException ex2) {
+				event = new ExceptionEvent(this, ex2.getMessage());
+				fireExceptionGenerated(event);
+				return false;
+			}
+		}  
+
+	}
+	/*
+	 * Checks if return date is within 15 days
+	 * TODO: does this work?
+	 */
 	boolean checkValidDate (Integer receiptId){
 		
 		Date pdate;
@@ -110,7 +176,7 @@ public class ReturnOperations extends AbstractTableOperations {
 			  System.out.println(" ");
 			  
 			  // display column names;
-			  for (int i = 1; i < numCols; i++)
+			  for (int i = 0; i < numCols; i++)
 			  {
 			      // get column name and print it
 
@@ -165,6 +231,8 @@ public class ReturnOperations extends AbstractTableOperations {
 			      } 
 			      
 			  }
+			  
+			  
 //		 
 //			  // close the statement; 
 //			  // the ResultSet will also be closed
@@ -189,17 +257,7 @@ public class ReturnOperations extends AbstractTableOperations {
 			   
 //			if (utilDate.before(cal.getTime()));
 //				System.out.println("before");
-			
-			
 
-//			
-
-			
-			
-			
-			
-			
-					
 //			SimpleDateFormat fm = new SimpleDateFormat("dd/MM/yy");
 //			java.util.Date utilDate = fm.parse(stringdate);
 //			java.sql.Date sqldate = new java.sql.Date(utilDate.getTime());
@@ -251,11 +309,11 @@ public class ReturnOperations extends AbstractTableOperations {
 		System.out.println("test");
 		
 		AMSOracleConnection oCon = AMSOracleConnection.getInstance();
-//		oCon.connect("ora_o0g6", "a40493058");
-		oCon.connect("ora_h5n8", "a44140028");
+		oCon.connect("ora_o0g6", "a40493058");
+//		oCon.connect("ora_h5n8", "a44140028");
 		
 		ReturnOperations ro = new ReturnOperations();
-		
+		//ro.insert(1007, rdate)
 		ro.checkValidDate(1005);
 		
 
