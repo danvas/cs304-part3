@@ -7,6 +7,9 @@ import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Types;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
 import javax.swing.event.EventListenerList;
@@ -341,7 +344,7 @@ public class ItemOperations extends AbstractTableOperations{
 //		}
 //	}
 
-	public boolean dailySalesReportGUI (String date) {
+	public boolean dailySalesReportGUI (String date)  {
 		String upc;
 		String category;
 		Double price;
@@ -362,9 +365,11 @@ public class ItemOperations extends AbstractTableOperations{
 			ps = con.prepareStatement("WITH sq1 AS (SELECT * FROM 	(SELECT DISTINCT(i.upc), category, price FROM item i, purchase p, purchaseitem pi WHERE i.upc = pi.upc AND pi.receiptid = p.receiptid ORDER BY category)), sq2 AS (SELECT upc, sum(quantity) AS units FROM purchase p, purchaseitem pi WHERE p.receiptid = pi.receiptid AND pdate >= ? and pdate <= ? GROUP BY upc ORDER BY units) SELECT sq1.upc, category, sq1.price, sq2.units, (sq1.price * sq2.units) AS total_value FROM sq1, sq2 WHERE sq1.upc = sq2.upc ORDER BY category",
 					ResultSet.TYPE_SCROLL_INSENSITIVE,
 					ResultSet.CONCUR_READ_ONLY);
-
-			ps.setString(1, date);
-			ps.setString(2, date);
+			DateFormat formatter = new SimpleDateFormat("dd-MM-yy");
+			java.util.Date jdate = formatter.parse(date);
+			java.sql.Date sqldate = new java.sql.Date(jdate.getTime());
+			ps.setDate(1, sqldate);
+			ps.setDate(2, sqldate);
 			rs = ps.executeQuery();
 
 			System.out.println("Query executed");
@@ -519,6 +524,10 @@ public class ItemOperations extends AbstractTableOperations{
 				fireExceptionGenerated(event);
 				return false;
 			}
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return false;
 		}
 	}
 
@@ -705,15 +714,15 @@ public class ItemOperations extends AbstractTableOperations{
 		//		item.delete("999999");
 		//		item.delete("123457");
 		//
-//		item.dailySalesReport("18-mar-03");
-		item.topItems("2003-03-18", 3);
+		item.dailySalesReportGUI("25-05-13");
+		//item.topItems("03-03-18", 3);
 		System.out.println("test done");
 
 
 		
-		
-
-		//item.topItems("25-may-13", 4);
+//		
+//
+//		item.topItems("25-05-13", 4);
 
 	} 
 
