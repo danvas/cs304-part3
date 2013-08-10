@@ -90,6 +90,8 @@ public class MainFrame extends JFrame {
 	 * Create the frame.
 	 */
 	public MainFrame() {
+		final ArrayList<String> stockUpdate  = new ArrayList<String>();
+
 		savedInstoreItems = new ArrayList<String>();
 		con = AMSOracleConnection.getInstance();
 		setTitle("AMS Database");
@@ -230,6 +232,8 @@ public class MainFrame extends JFrame {
 				PurchaseOperations p = new PurchaseOperations();
 				if(p.isInStock(upc,q)){
 					System.out.println("Item is in stock!");
+					stockUpdate.add(upc);
+					stockUpdate.add(q.toString());
 					numberOfItems++;
 					//ensure items are added to table
 				}
@@ -317,12 +321,17 @@ public class MainFrame extends JFrame {
 		btnCompletePurchase.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				PurchaseOperations p = new PurchaseOperations();
+				ItemOperations i = new ItemOperations();
+			
 				String expd = instorecardexpd.getText().trim();
 				String cno = ccno.getText().trim();
 				
 				if (p.completePurchase(cno, expd)){
 					System.out.println("Items Purchased!");
 				clearPurchaseList();
+				}
+				if (i.reduceStockForPurchase(stockUpdate)){
+					System.out.println("Stock has been adjusted to reflect purchase");
 				}
 			}
 		});

@@ -1,6 +1,7 @@
 import java.util.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.sql.Types;
 import java.text.DecimalFormat;
 import java.text.ParseException;
@@ -456,6 +457,7 @@ public class PurchaseOperations extends AbstractTableOperations {
 	// expected date not null for online purchases
 	//for purchase, require receiptid.nextval, upc, cardno, expdate
 	// for purchaseitem inserts, require receiptid.currentval,upc,qty
+	
 	public boolean completePurchase(String cardno, String cardexpdate){
 		String upc;
 		Integer qty;
@@ -514,8 +516,24 @@ public class PurchaseOperations extends AbstractTableOperations {
 				return false; 
 			}
 		}
-	
+	}
+	//TODO Figure out how to get most recent receiptId in order to print receipt via Daniel's methods
+	public int getReceiptId(){
+		int receiptId = -1;
 		
+		try {
+			Statement st = con.createStatement();
+			ResultSet rs = st.executeQuery("SELECT purchase_receiptId.currval FROM purchase_receiptId");
+			while(rs.next()){
+				receiptId = rs.getInt(1);
+			}
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return 0;
 		
 	}
 //	public static void main(String args[])

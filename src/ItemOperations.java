@@ -7,6 +7,7 @@ import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Types;
+import java.util.ArrayList;
 
 import javax.swing.event.EventListenerList;
 
@@ -462,6 +463,54 @@ public class ItemOperations extends AbstractTableOperations{
 
 	}
 
+	public boolean reduceStockForPurchase(ArrayList<String> items){
+		try {
+			ps = con.prepareStatement("UPDATE item SET stock = stock - ? WHERE upc = ?");
+			String upc;
+			Integer qty;
+			for (int i = 0; i<MainFrame.getNumberInstorePurchaseItems();i++){
+				upc = items.get(0);
+				qty = Integer.parseInt(items.get(1));
+				
+				if (upc!=null){
+					ps.setString(2, upc);
+				}
+				else return false;
+				if (qty!=null&&qty!=0){
+					ps.setInt(1,qty);
+				}
+				else return false;
+				ps.executeUpdate();
+				items.remove(0);
+				items.remove(0);
+			}
+			
+			
+			
+			
+			
+			
+			
+			con.commit();
+			System.out.println("Stocked reduced by purchase quantity");
+			return true;
+		} catch (SQLException ex) {
+			ExceptionEvent event = new ExceptionEvent(this, ex.getMessage());
+			fireExceptionGenerated(event);
+
+			try {
+				con.rollback();
+				return false; 
+			}
+			catch (SQLException ex2) {
+				event = new ExceptionEvent(this, ex2.getMessage());
+				fireExceptionGenerated(event);
+				return false; 
+			}
+		}
+		
+	}
+	
 	public static void main(String args[])
 	{
 
