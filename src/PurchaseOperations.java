@@ -1,30 +1,16 @@
-import java.sql.Date;
+import java.util.Date;
 import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.sql.Types;
 import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
-import javax.swing.table.DefaultTableModel;
-
-
-
 public class PurchaseOperations extends AbstractTableOperations {
 	
-	private int receiptID;					// receipt id
-	private String pdate; 					// date of purchase
-	private String cardno; 					// card number
-	private HashMap<String, Integer> items;
-	private int quantities;
-	private int total;
-	
-
 	//TODO test 
-	boolean insert(Date date,String cid,String cardno, String expdate, Date expected,Date delivered){
+	boolean insert(java.sql.Date date,String cid,String cardno, String expdate, java.sql.Date expected,java.sql.Date delivered){
 		try{
 			ps=con.prepareStatement("INSERT INTO purchase VALUES (purchase_receiptId.nextval,?,?,?,?,?,?)");
 			if (date!=null){
@@ -84,7 +70,6 @@ public class PurchaseOperations extends AbstractTableOperations {
 			}
 		}
 	}
-
 
 	boolean updateDeliveryDate(Integer receiptId,String stringdate){
 		try{
@@ -286,10 +271,12 @@ public class PurchaseOperations extends AbstractTableOperations {
 		listItems(receiptId);
 	}
 	
+	//This method checks whether the items requested for purchase
+	//also adds it to the array list in mainframe
 	boolean isInStock (String upc, Integer qty){
 		
 		try{
-			//TODO: make resultset added to instore purchase table in GUI - IAN
+			
 			ps = con.prepareStatement("SELECT upc, price  FROM item where upc = ? AND stock >= ?");
 			String rsupc;
 			Double rsprice;
@@ -316,18 +303,16 @@ public class PurchaseOperations extends AbstractTableOperations {
 		
 			while (rs.next())
 			{
-				
 				rsupc = rs.getString(1);
 				System.out.println(rsupc);
 				rsprice = rs.getDouble(2);
 				System.out.println(rsprice);
-				displayItem = rsupc+rsprice.toString();
-				MainFrame.setInstoreItems(displayItem);
+				displayItem = "                    "+rsupc+"               "+rsprice.toString()+"               "+qty.toString();
+				MainFrame.addInstoreItemToPurchase(displayItem);
+				MainFrame.savePurchaseItem(rsupc);
+				MainFrame.savePurchaseItem(qty.toString());
 			}
-			
-		
 			return true;
-			
 		}
 		catch(SQLException ex){
 			ExceptionEvent event = new ExceptionEvent(this, ex.getMessage());
@@ -448,8 +433,7 @@ public class PurchaseOperations extends AbstractTableOperations {
 				i++;
 				j=0;
 			}
-			DefaultTableModel dtm = (DefaultTableModel)MainFrame.table_1.getModel();	
-			dtm.fireTableDataChanged();
+			
 			return true;
 			
 		} catch (SQLException ex) {
@@ -469,10 +453,65 @@ public class PurchaseOperations extends AbstractTableOperations {
 	
 
 }
+	// expected date not null for online purchases
+	//for purchase, require receiptid.nextval, upc, cardno, expdate
+	// for purchaseitem inserts, require receiptid.currentval,upc,qty
+	public boolean completePurchase(String cardno, String cardexpdate){
+		String upc;
+		Integer qty;
+		ArrayList<String> items = MainFrame.getPurchaseItems();
+		java.util.Date pdate = new Date();
+		java.sql.Date sqlpdate = new java.sql.Date(pdate.getTime());
+			
+		try {
+			
+			ps = con.prepareStatement("INSERT INTO purchase VALUES (purchase_receiptId.nextval, ?, ?, ?, ?, ? ,?)");
+			ps.setDate(1, sqlpdate);
+			ps.setString(2,null);
+			if (cardno!=null&&!cardno.isEmpty()&&cardexpdate!=null&&!cardexpdate.isEmpty()){
+				ps.setString(3,cardno);  //this is a card purchase
+				ps.setString(4,cardexpdate);
+			}
+			else{
+				ps.setString(3, null);  //this means this is a cash purchase
+				ps.setString(4,null);
+			}
+			ps.setDate(5, null); // expecteddate
+			ps.setDate(6,null); // deliverydate
 
-	
+			ps.executeUpdate();
+			
+			for(int i=0; i<MainFrame.getNumberInstorePurchaseItems();i++){
+				upc = items.get(0);
+				qty = Integer.parseInt(items.get(1));
+				ps = con.prepareStatement("INSERT INTO PurchaseItem VALUES (purchase_receiptId.currval,?,?)");
+				
+				ps.setString(1,upc);
+				ps.setInt(2,qty);
+				
+				ps.executeUpdate();
+			}
+						con.commit();
+			return true;
+			
+		} catch (SQLException ex) {
+			ExceptionEvent event = new ExceptionEvent(this, ex.getMessage());
+			fireExceptionGenerated(event);
 
+			try {
+				con.rollback();
+				return false; 
+			}
+			catch (SQLException ex2) {
+				event = new ExceptionEvent(this, ex2.getMessage());
+				fireExceptionGenerated(event);
+				return false; 
+			}
+		}
 	
+		
+		
+	}
 //	public static void main(String args[])
 //	{
 //		
@@ -510,6 +549,8 @@ public class PurchaseOperations extends AbstractTableOperations {
 //		
 //
 //	} 
+	
+	
 	
 }
 
