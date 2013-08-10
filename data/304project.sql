@@ -97,15 +97,26 @@ foreign key (upc)
 	references Item);
 prompt **************************************************** Inserting into Item;
 insert into Item
-	values('111111', 'Thriller', 'CD', 'POP','Sony', '1983',9.99, 20);
+	values('111111', 'Thriller', 'CD', 'Pop','Sony', '1983',9.99, 20);
 insert into Item
-	values('111112', 'Bad', 'CD', 'POP','Sony', '1987',8.99, 10);
+	values('111112', 'Bad', 'CD', 'Pop','Sony', '1987',8.99, 10);
 insert into Item
-	values('111113', 'Metallica', 'CD', 'Metal','Elektra', '1991',1.99, 25);
+	values('111113', 'Metallica', 'CD', 'Metal','Elektra', '1991',8.99, 25);
 insert into Item
-	values('111114', 'Straight outa Compton', 'DVD', 'RAP','Sony', '1989',12.99, 5);
+	values('111114', 'Straight outa Compton', 'DVD', 'Rap','Sony', '1989',12.99, 5);
 insert into Item
 	values('111115', 'Mozart', 'CD', 'Classical','BMG', '1656',9.99, 20);
+insert into Item
+	values('111116', 'Yeezus', 'CD', 'Rap','Sony', '2013', 11.99, 100);
+insert into Item
+	values('111117', 'Beethoven', 'DVD', 'Classical', 'Warner', '1834', 14.99, 34);
+insert into Item
+	values('111118', 'Star Wars Soundtrack', 'CD', 'Instrumental','LucasArts', '1983',9.99, 40);
+insert into Item
+	values('111119', 'Best of Johnny Cash', 'CD', 'Country','Columbia', '2007',12.99, 25);
+insert into Item
+	values('111120', 'Songs from the Big Chair Live', 'DVD', 'New Wave','Phonogram Records', '1685',9.99, 12);
+	
 	
 prompt **************************************************** Inserting into LeadSinger;
 insert into LeadSinger
@@ -118,7 +129,17 @@ insert into LeadSinger
 	values ('111114', 'NWA');
 insert into LeadSinger
 	values ('111115', 'Mozart');
-prompt **************************************************** Inserting into LeadSinger;
+insert into LeadSinger
+	values ('111116', 'Kanye West');
+insert into LeadSinger
+	values ('111117', 'Ludwig van Beethoven');
+insert into LeadSinger
+	values ('111118', 'John Williams');
+insert into LeadSinger
+	values ('111119', 'Johnny Cash');
+insert into LeadSinger
+	values ('111120', 'Tears for Fears');
+prompt **************************************************** Inserting into HasSong;
 insert into HasSong
 	values('111111', 'Beat it');
 insert into HasSong
@@ -141,44 +162,129 @@ insert into HasSong
 	values('111114', 'F*** the Police');
 insert into HasSong
 	values('111115', 'Symphony');
+insert into HasSong
+	values('111116', 'Black Skinhead');
+insert into HasSong
+	values('111116', 'I am a God');
+insert into HasSong
+	values('111117', '9th Symphony');
+insert into HasSong
+	values('111118', 'Star Wars Theme');
+insert into HasSong
+	values('111118', 'Return of the Empire');
+insert into HasSong
+	values('111119', 'I Walk the Line');
+insert into HasSong
+	values('111119', 'Hurt');
+insert into HasSong
+	values('111120', 'Mad World');
+insert into HasSong
+	values('111120', 'Shout');
 prompt **************************************************** Inserting into Customer, Purchase and PurchaseItem;
 insert into Customer
-	values('joe123', null, null, null, null);
+	values('jeff123', 'pass', 'Jeff Son', '12 Electric Ave', 6049992222);
+insert into Customer
+	values('jack123', 'jackpass', 'Jack Son', '12 Thunder Ave', 6049991111);
+insert into Customer
+	values('josh123', 'josh123', 'Josh Son', '13 Lightning Lane', 6049993333);
+insert into Customer
+	values('joe123', 'joe123', 'Joe Son', '11 Electric Ave', 6049991111);
 insert into Purchase
-	(receiptid, pdate, cid, cardno, expirydate, expecteddate, delivereddate)
-	values(purchase_receiptId.nextval, '2001-01-01', 'joe123', '4444555566667777', '0101', null, null); 
+	values(purchase_receiptId.nextval, '2013-03-22', 'joe123', '4444555566667777', '0101', null, null); 
 insert into PurchaseItem
 	values(purchase_receiptId.currval, '111111', 1);
 insert into PurchaseItem
 	values(purchase_receiptId.currval, '111112', 1);
+insert into PurchaseItem
+	values(purchase_receiptId.currval, '111113', 4);
+insert into Purchase 
+	values (purchase_receiptId.nextval, '03-03-19', 'joe123', '0000999988887777', '0101', '02-02-12', null);
+insert into PurchaseItem
+	values(purchase_receiptId.currval, '111115', 1);
+insert into PurchaseItem
+	values(purchase_receiptId.currval, '111116', 4);
+insert into PurchaseItem
+	values(purchase_receiptId.currval, '111117', 5);
 prompt **************************************************** Inserting into Customer, Purchase and PurchaseItem;
 insert into Customer
 	values('john123', 'pass', 'John Smith', '101 university Blvd, Vancouver, BC', '6049999999');
 insert into Purchase
-	values(purchase_receiptId.nextval, '2002-02-21', 'john123', '4444555566667778', '0101', '2012-01-01', '2012-01-05' );
+	values(purchase_receiptId.nextval, '2013-03-20', 'john123', '4444555566667778', '0101', '2012-01-01', '2012-01-05' );
+insert into PurchaseItem
+	values(purchase_receiptId.currval, '111114', 6);
 insert into PurchaseItem
 	values(purchase_receiptId.currval, '111113', 1);
 prompt **************************************************** Inserting into Customer, Purchase and PurchaseItem;
 insert into Customer
 	values('rog12', 'passw', 'Roger Boyle', '141 Vine Blvd, Vancouver, BC', '7789998899');
 insert into Purchase
-	values(purchase_receiptId.nextval, '2003-02-21', 'rog12', '4444555566667778', '0101', '2012-06-01', '2012-06-05' );
+	values(purchase_receiptId.nextval, '2013-03-21', 'rog12', '4444555566667778', '0101', '2012-06-01', '2012-06-05' );
 insert into PurchaseItem
 	values(purchase_receiptId.currval, '111114', 1);
-
+insert into PurchaseItem
+	values(purchase_receiptId.currval, '111111', 2);
 
 insert into Customer
 	values('jim123', null, null, null, null);
 insert into Purchase
 	values(purchase_receiptId.nextval, '2003-03-18', null, null, null, null, null);
 insert into PurchaseItem
+	values(purchase_receiptId.currval, '111113', 2);
+insert into PurchaseItem
 	values(purchase_receiptId.currval, '111115', 1);
-prompt **************************************************** Inserting into Return and ReturnItem;
-insert into Return
-	values(return_retid.nextval, 1001, '2003-03-23');
-insert into ReturnItem
-	values(return_retid.currval, '111115', 1);
+insert into PurchaseItem
+	values(purchase_receiptId.currval, '111116', 7);
+insert into PurchaseItem
+	values(purchase_receiptId.currval, '111117', 12);
 
+insert into Purchase
+	values(purchase_receiptId.nextval, '2003-03-18', 'jim123', '1234123412341234', 0404, null, null);
+insert into PurchaseItem
+	values(purchase_receiptId.currval, '111118', 9);
+insert into PurchaseItem
+	values(purchase_receiptId.currval, '111119', 3);
+insert into PurchaseItem
+	values(purchase_receiptId.currval, '111120', 11);
+
+insert into Purchase
+	values(purchase_receiptId.nextval, '2013-05-25', null, null, null, null, null);
+insert into PurchaseItem
+	values(purchase_receiptID.currval, '111111', 2);
+insert into PurchaseItem
+	values(purchase_receiptId.currval, '111113', 8);
+insert into PurchaseItem
+	values(purchase_receiptId.currval, '111115', 3);
+insert into PurchaseItem
+	values(purchase_receiptId.currval, '111118', 13);
+insert into PurchaseItem
+	values(purchase_receiptId.currval, '111120', 7);
+
+insert into Purchase
+	values(purchase_receiptId.nextval, '2013-05-25', null, null, null, null, null);
+insert into PurchaseItem
+	values(purchase_receiptId.currval, '111115', 1);
+insert into PurchaseItem
+	values(purchase_receiptId.currval, '111112', 3);
+insert into PurchaseItem
+	values(purchase_receiptId.currval, '111119', 3);
+insert into PurchaseItem
+	values(purchase_receiptId.currval, '111120', 5);
+insert into PurchaseItem
+	values(purchase_receiptId.currval, '111116', 7);
+prompt **************************************************** Inserting into Return and ReturnItem;
+
+insert into Return
+	values(return_retid.nextval, '1006', '2003-03-23');
+insert into ReturnItem
+	values(return_retid.currval, '111118', 1);
+insert into Return
+	values(return_retid.nextval, '1008', '2013-05-29');
+insert into ReturnItem
+	values(return_retid.currval, '111116', 2);
+insert into Return
+	values(return_retid.nextval, '1006', '2003-04-02');
+insert into ReturnItem
+	values(return_retid.currval, '111120', 3);
 
 
 
