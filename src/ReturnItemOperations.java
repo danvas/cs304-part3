@@ -2,24 +2,25 @@ import java.sql.*;
 
 public class ReturnItemOperations extends AbstractTableOperations {
 
-	/* Insert tuple into Return Table
+	/* Insert tuple into ReturnItem Table
 	 * Attributes retid and upc must be NOT NULL
 	 */
-	void insert(String retid, String upc, int quantity){
+	boolean insert(String upc, int quantity){
 		try {
-			ps = con.prepareStatement("INSERT INTO returnitem VALUES (?,?,?)");
-			ps.setString(1, retid);
-			ps.setString(2, upc);
+			ps = con.prepareStatement("INSERT INTO returnitem VALUES (return_retid.currentval,?,?)");
+			
+			ps.setString(1, upc);
 
 			if (quantity != 0) {
-				ps.setInt (3, quantity);
+				ps.setInt (2, quantity);
 			}
 			else {
-				ps.setInt(3, 0);
+				ps.setInt(2, 0);
 			}
 
 			ps.executeUpdate();
 			con.commit();
+			return true;
 		}
 
 		catch (SQLException ex)  {
@@ -33,6 +34,7 @@ public class ReturnItemOperations extends AbstractTableOperations {
 				event = new ExceptionEvent(this, ex2.getMessage());
 				fireExceptionGenerated(event);
 			}
+			return false;
 		}
 	}
 
