@@ -484,15 +484,9 @@ public class ItemOperations extends AbstractTableOperations{
 				items.remove(0);
 				items.remove(0);
 			}
-			
-			
-			
-			
-			
-			
-			
+						
 			con.commit();
-			System.out.println("Stocked reduced by purchase quantity");
+			System.out.println("Stock reduced by purchase quantity");
 			return true;
 		} catch (SQLException ex) {
 			ExceptionEvent event = new ExceptionEvent(this, ex.getMessage());

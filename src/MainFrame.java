@@ -69,6 +69,7 @@ public class MainFrame extends JFrame {
 	private static String cardNumber = null;
 	private static String cardExpDate = null;
 	private static Integer numberOfItems = 0;
+	private static ArrayList<String> instorePurchaseItems;
 	/**
 	 * Launch the application.
 	 */
@@ -91,7 +92,7 @@ public class MainFrame extends JFrame {
 	 */
 	public MainFrame() {
 		final ArrayList<String> stockUpdate  = new ArrayList<String>();
-
+		instorePurchaseItems = new ArrayList<String>();
 		savedInstoreItems = new ArrayList<String>();
 		con = AMSOracleConnection.getInstance();
 		setTitle("AMS Database");
@@ -232,8 +233,8 @@ public class MainFrame extends JFrame {
 				PurchaseOperations p = new PurchaseOperations();
 				if(p.isInStock(upc,q)){
 					System.out.println("Item is in stock!");
-					stockUpdate.add(upc);
-					stockUpdate.add(q.toString());
+					instorePurchaseItems.add(upc);
+					instorePurchaseItems.add(q.toString());
 					numberOfItems++;
 					//ensure items are added to table
 				}
@@ -330,7 +331,7 @@ public class MainFrame extends JFrame {
 					System.out.println("Items Purchased!");
 				clearPurchaseList();
 				}
-				if (i.reduceStockForPurchase(stockUpdate)){
+				if (i.reduceStockForPurchase(instorePurchaseItems)){
 					System.out.println("Stock has been adjusted to reflect purchase");
 				}
 			}
