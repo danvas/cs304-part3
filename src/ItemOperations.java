@@ -3,6 +3,7 @@
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Types;
 
@@ -13,9 +14,9 @@ public class ItemOperations extends AbstractTableOperations{
 	boolean insert(String upc, String title, String type, String category, String company, String year, Double price, Integer stock){
 		try {
 			ps = con.prepareStatement("INSERT INTO item VALUES (?,?,?,?,?,?,?,?)");
-			
+
 			ps.setString(1,upc);
-			
+
 			if (title != null){
 				ps.setString(2,title);
 			}
@@ -79,7 +80,7 @@ public class ItemOperations extends AbstractTableOperations{
 	boolean updateItem(String upc, Integer stock, Double price){	
 		try{
 			ps = con.prepareStatement("UPDATE item SET price = ?, stock = stock + ? WHERE upc = ?");
-			
+
 			if (price != null) {
 				ps.setDouble(1, price.doubleValue());
 			}
@@ -88,7 +89,7 @@ public class ItemOperations extends AbstractTableOperations{
 			}
 			ps.setInt(2, stock.intValue());
 			ps.setString(3, upc);
-			
+
 			ps.executeUpdate();
 			con.commit();
 			System.out.println("item updated");
@@ -137,19 +138,19 @@ public class ItemOperations extends AbstractTableOperations{
 	void display(){
 
 	}
-//TODO: Fairly straightforward ManagerAddItem, see comment below. 
+	//TODO: Fairly straightforward ManagerAddItem, see comment below. 
 	//if upc null, return false
 	//check if upc exists in item, if it does, add quantity to current (modify price if input)
 	//if upc doesn't exist, insert all fields to Item
 	public boolean managerAddItem(String upc, Integer stock, Double price ){
 		ResultSet rs;
-		
+
 		try {
 			// finds tuple with given upc
 			ps = con.prepareStatement("SELECT * FROM ITEM WHERE upc = ?");
 			ps.setString(1, upc);
 			rs = ps.executeQuery();
-			
+
 			if (rs.next()) {
 				System.out.println("upc exists. now updating");
 				//rs.getString()
@@ -177,29 +178,106 @@ public class ItemOperations extends AbstractTableOperations{
 			}
 		}
 	}
-	
-//	public static void main(String args[])
-//	{
 
-//		System.out.println("test");
-//
-//		AMSOracleConnection oCon = AMSOracleConnection.getInstance();
-//		oCon.connect("ora_o0g6", "a40493058");
-//		oCon.connect("ora_h5n8", "a44140028");
-//
-//		ItemOperations item = new ItemOperations();
-
-
-
-//		item.insert("999888", "test", "CD", "test", "test", "test", 999.99, 99);
-//		item.insert("123457", "cpsc", "CD", "instrumental", "company", "year", 111.12, 27);
+	public boolean dailySalesReport (String date) {
+		String upc;
+		String category;
+		Double price;
+		Integer units;
+		Double tValue;
+		ResultSet rs;
 		
-//		//item.displayItem();
-//		item.delete("999888");
-//		item.delete("999999");
-//		item.delete("123457");
-//
-//	} 
+		System.out.println("Executing query");
+		try {
+			
+			ps = con.prepareStatement("WITH sq1 AS (SELECT * FROM (SELECT DISTINCT(i.upc), category, price FROM item i, purchase p, purchaseitem pi WHERE i.upc = pi.upc AND pi.receiptid = p.receiptid ORDER BY category)), sq2 AS (SELECT upc, sum(quantity) AS units FROM purchase p, purchaseitem pi WHERE p.receiptid = pi.receiptid AND pdate >= ? and pdate <= ? GROUP BY upc ORDER BY units) SELECT sq1.upc, category, sq1.price, sq2.units, (sq1.price * sq2.units) AS total_value FROM sq1, sq2 WHERE sq1.upc = sq2.upc ORDER BY category",
+					ResultSet.TYPE_SCROLL_INSENSITIVE,
+					ResultSet.CONCUR_READ_ONLY);
+			
+			ps.setString(1, date);
+			ps.setString(2, date);
+			rs = ps.executeQuery();
+			
+			System.out.println("query executed");
+			
+			// get info on ResultSet
+			ResultSetMetaData rsmd = rs.getMetaData();
+			
+			// get number of columns
+			int numCols = rsmd.getColumnCount();
+			
+			System.out.println(" ");
+			// print the names of each column
+			for (int i = 0; i < numCols; i++) {
+				System.out.printf("%-10s", rsmd.getColumnName(i+1));
+			}
+			
+			System.out.println(" ");
+
+			while (rs.next()) {
+				
+				upc = rs.getString("upc");
+				System.out.printf("%-10.10s", upc);
+				
+				category = rs.getString("category");
+				System.out.printf("%-10.10s", category);
+				
+				price = rs.getDouble("price");
+				System.out.printf("%-10.10s", price);
+				
+				units = rs.getInt("units");
+				System.out.printf("%-10.10s", units);
+				
+				tValue = rs.getDouble("total values");
+				System.out.printf("%-10.10s", tValue);
+				
+			}
+			ps.close();
+			
+			return true;
+		}
+		catch (SQLException ex) {
+			ExceptionEvent event = new ExceptionEvent(this, ex.getMessage());
+			fireExceptionGenerated(event);
+
+			try {
+				con.rollback();
+				return false;
+			}
+			catch (SQLException ex2) {
+				event = new ExceptionEvent(this, ex2.getMessage());
+				fireExceptionGenerated(event);
+				return false;
+			}
+		}
+		
+	}
+	
+		public static void main(String args[])
+		{
+
+			System.out.println("test");
+	//
+			AMSOracleConnection oCon = AMSOracleConnection.getInstance();
+			oCon.connect("ora_o0g6", "a40493058");
+	//		oCon.connect("ora_h5n8", "a44140028");
+	//
+			ItemOperations item = new ItemOperations();
+
+
+
+	//		item.insert("999888", "test", "CD", "test", "test", "test", 999.99, 99);
+	//		item.insert("123457", "cpsc", "CD", "instrumental", "company", "year", 111.12, 27);
+
+	//		//item.displayItem();
+	//		item.delete("999888");
+	//		item.delete("999999");
+	//		item.delete("123457");
+			
+			item.dailySalesReport("03/03/18");
+			System.out.println("test done");
+	
+		} 
 
 
 }
