@@ -56,7 +56,7 @@ public class MainFrame extends JFrame {
 	private JTextField custRegAddr;
 	private JTextField custPNum;
 	private JTextField inpupc;
-	private JTextField textField;
+	private JTextField ccno;
 	private String[] opColumnNames = {"UPC","Title", "Category","Leading Singer", "Price"};
 	private JTextField opCategory;
 	private JTextField optitle;
@@ -284,14 +284,14 @@ public class MainFrame extends JFrame {
 		gbc_lblCreditCardNumber.gridy = 4;
 		processPurchase.add(lblCreditCardNumber, gbc_lblCreditCardNumber);
 		
-		textField = new JTextField();
-		textField.setColumns(10);
-		GridBagConstraints gbc_textField = new GridBagConstraints();
-		gbc_textField.insets = new Insets(0, 0, 5, 5);
-		gbc_textField.fill = GridBagConstraints.HORIZONTAL;
-		gbc_textField.gridx = 4;
-		gbc_textField.gridy = 4;
-		processPurchase.add(textField, gbc_textField);
+		ccno = new JTextField();
+		ccno.setColumns(10);
+		GridBagConstraints gbc_ccno = new GridBagConstraints();
+		gbc_ccno.insets = new Insets(0, 0, 5, 5);
+		gbc_ccno.fill = GridBagConstraints.HORIZONTAL;
+		gbc_ccno.gridx = 4;
+		gbc_ccno.gridy = 4;
+		processPurchase.add(ccno, gbc_ccno);
 		
 		JLabel lblCardExpiryDate = new JLabel("Card Expiry Date:");
 		GridBagConstraints gbc_lblCardExpiryDate = new GridBagConstraints();
@@ -312,7 +312,20 @@ public class MainFrame extends JFrame {
 		gbc_instorecardexpd.gridy = 5;
 		processPurchase.add(instorecardexpd, gbc_instorecardexpd);
 		
+		//TODO: INSTORE PURCHASE COMPLETE BUTTON
 		JButton btnCompletePurchase = new JButton("Complete Purchase");
+		btnCompletePurchase.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				PurchaseOperations p = new PurchaseOperations();
+				String expd = instorecardexpd.getText().trim();
+				String cno = ccno.getText().trim();
+				
+				if (p.completePurchase(cno, expd)){
+					System.out.println("Items Purchased!");
+				clearPurchaseList();
+				}
+			}
+		});
 		GridBagConstraints gbc_btnCompletePurchase = new GridBagConstraints();
 		gbc_btnCompletePurchase.gridx = 5;
 		gbc_btnCompletePurchase.gridy = 5;

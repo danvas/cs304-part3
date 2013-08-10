@@ -480,16 +480,22 @@ public class PurchaseOperations extends AbstractTableOperations {
 			ps.setDate(6,null); // deliverydate
 
 			ps.executeUpdate();
+			System.out.println("Insertion to Purchase Was Successful");
 			
 			for(int i=0; i<MainFrame.getNumberInstorePurchaseItems();i++){
+				System.out.println("entered for loop");
 				upc = items.get(0);
+				System.out.println("UPC is:" + upc);
 				qty = Integer.parseInt(items.get(1));
+				System.out.println("Quantity is:" + qty.toString() );
 				ps = con.prepareStatement("INSERT INTO PurchaseItem VALUES (purchase_receiptId.currval,?,?)");
-				
+				items.remove(0); 
+				items.remove(0);
 				ps.setString(1,upc);
 				ps.setInt(2,qty);
 				
 				ps.executeUpdate();
+				System.out.println("An Insertion To PurchaseItem Was Successful");
 			}
 						con.commit();
 			return true;
