@@ -4,6 +4,7 @@ import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Types;
+import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -170,44 +171,119 @@ public class PurchaseOperations extends AbstractTableOperations {
 			return null; 
 		}
 	}
+	/*	
+	 * Given a receipt number, this query lists all the items purchased, their 
+	 * quantities and their prices. Total amount for the purchase to be calculated in Java code.
+	 * */
+	public void listItems(int receiptId){
+		String q = "SELECT ititle as Title, I.upc, quantity, price FROM Item I, PurchaseItem PI WHERE I.upc=PI.upc AND receiptId=?";
+//		int totalQty = 0; //uncomment for other uses
+		double subtotal = 0.0;
+		double totalPrice;
+		double tax = 1.12;
+		try {
+			ps = con.prepareStatement(q);
 
-/*	Method to generate a receipt at the end of a purchase that shows, a receipt number, the date, 
+			ps.setInt(1, receiptId);
+
+			ResultSet rs = ps.executeQuery();
+			System.out.println("Item    " + "\t" + "Quantity" + "\t" + "Price");
+			System.out.println("-----------" + "\t" + "--------" + "\t" + "-----");
+			while (rs.next()) {
+
+				String item = rs.getString("Title");
+				int qty = rs.getInt("quantity");
+//				totalQty += qty; //uncomment for other uses
+				double price = rs.getDouble("price");
+				subtotal += price;
+				System.out.printf(item + "%-12.12s" +  qty + "%-6.6s" + price + "\n", " ", " " );
+				//System.out.println(item + "\t" + qty + "\t" + price);          // ************ item, qty, price OUTPUT TO GUI
+			}
+			System.out.println("\n\nSubtotal: "  + subtotal);                      // ************ subtotal OUTPUT TO GUI
+			totalPrice = subtotal*tax; 
+			DecimalFormat twoDForm = new DecimalFormat("#.##");
+			totalPrice = (double) Double.valueOf(twoDForm.format(totalPrice)); // ************ totalPrice OUTPUT TO GUI
+			System.out.println("Total: "  + totalPrice + "\n");
+			System.out.println("Thank you for shoopping at AMS!\n");
+
+		}
+		catch (SQLException ex) {
+			System.out.println("exception");
+			ExceptionEvent event = new ExceptionEvent(this, ex.getMessage());
+			fireExceptionGenerated(event);
+			// no need to commit or rollback since it is only a query
+
+
+		}
+	}
+	
+	/*	
+	 * Given a receipt number, finds purchase date, and last 5 digits of the card's number if exists
+	 */	
+	public void getDateCard(int receiptId){
+		String cardno;
+		String q =  "SELECT pdate as PurchaseDate, 'xxxxxxxxxxx' || SUBSTR(cardno, 12,5) as CardNumber " +
+					"FROM Purchase " +
+					"WHERE receiptId = ? AND cardno IS NOT NULL " +
+					"UNION " +
+					"SELECT pdate, cardno " +
+					"FROM Purchase " +
+					"WHERE receiptId = ? AND cardno IS NULL";
+
+		try {
+			ps = con.prepareStatement(q);
+
+			ps.setInt(1, receiptId);
+			ps.setInt(2, receiptId);
+
+			ResultSet rs = ps.executeQuery();
+			
+
+
+			if(rs.next()){ // if cardno is null, don't assign cardno
+				cardno = rs.getString("CardNumber"); // assign cardno string
+			} else {
+				cardno = rs.getString("CardNumber"); // assign cardno string
+				 }
+			
+			
+			Date pdate = rs.getDate("PurchaseDate");
+
+
+			if(cardno == null){
+				System.out.println("Receipt Number" + "\t" + "Purchase Date");
+			System.out.println("--------------" + "\t" + "-------------");
+				System.out.printf(receiptId + "%-12.12s" +  pdate + "\n\n", " " );  // ************ receiptId, pdate, cardno OUTPUT TO GUI
+		}else {
+				System.out.println("Receipt Number" + "\t" + "Purchase Date" + "\t" + "Credit Card");
+			System.out.println("--------------" + "\t" + "-------------" + "\t" + "-----------------");
+				System.out.printf(receiptId + "%-12.12s" +  pdate + "%-6.6s" + cardno + "\n\n", " ", " " );}  // ************ receiptId, pdate, cardno OUTPUT TO GUI
+
+
+			//System.out.println(receiptId + "\t" +  pdate + "\t" + cardno );  // ************ receiptId, pdate, cardno OUTPUT TO GUI
+
+
+
+		}
+		catch (SQLException ex) {
+			System.out.println("exception");
+			System.out.println(ex.getMessage());
+			ExceptionEvent event = new ExceptionEvent(this, ex.getMessage());
+			fireExceptionGenerated(event);
+			// no need to commit or rollback since it is only a query
+
+
+		}
+	}
+	
+	/*	Prints out receipt number, the date, 
 	a list with the items purchased, their quantities and their prices, and the total 
 	amount for the purchase.  If the customer pays by a credit card, the receipt should 
 	show the last 5 digits of the card's number.
-*/	
-	
-	
+	 */	
 	public void printReceipt(int receiptId){
-		System.out.println("in printReceipt(int)...");
-		receiptID =receiptId;
-		pdate = "aug.3,2013";				// date of purchase
-		cardno = "45674"; 					// card number
-		total = 0;
-		try{
-
-			ps = con.prepareStatement("SELECT * FROM purchase where receiptId = ?");
-			ps.setInt(1, receiptId);
-			ResultSet rs = ps.executeQuery();
-			System.out.println("receiptID = " + receiptId);
-
-
-		}
-		catch(SQLException ex){
-			ExceptionEvent event = new ExceptionEvent(this, ex.getMessage());
-			fireExceptionGenerated(event);
-
-			try {
-				con.rollback();
-				//return false; 
-			}
-			catch (SQLException ex2) {
-				event = new ExceptionEvent(this, ex2.getMessage());
-				fireExceptionGenerated(event);
-				//return false; 
-			}
-		}
-		
+		getDateCard(receiptId);
+		listItems(receiptId);
 	}
 	
 	boolean isInStock (String upc, Integer qty){
@@ -400,6 +476,16 @@ public class PurchaseOperations extends AbstractTableOperations {
 //	public static void main(String args[])
 //	{
 //		
+//	// Receipt tests:
+//	AMSOracleConnection oCon = AMSOracleConnection.getInstance();
+//
+//	oCon.connect("ora_n7o8", "a36421089");
+//	PurchaseOperations po = new PurchaseOperations();
+//	System.out.println("test******** receipt w/card");
+//	po.printReceipt(1001);
+//	System.out.println("test******** receipt w/o card");
+//	po.printReceipt(1004);
+	
 //		System.out.println("test");
 //		
 //		AMSOracleConnection oCon = AMSOracleConnection.getInstance();
@@ -413,6 +499,7 @@ public class PurchaseOperations extends AbstractTableOperations {
 //		java.sql.Date date = new java.sql.Date(2013, 10, 10);
 //
 
+	
 //		
 //
 //		
