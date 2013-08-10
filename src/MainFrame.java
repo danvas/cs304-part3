@@ -45,8 +45,6 @@ public class MainFrame extends JFrame {
 	private JTextField instorecardexpd;
 	private JTextField returnReceiptId;
 	private JTextField returnUPC;
-	static JTable table_1;
-	protected JTable table_2;
 	private JTextField custUName;
 	private JTextField custPW;
 	private JTextField custRegId;
@@ -69,6 +67,11 @@ public class MainFrame extends JFrame {
 	private static ArrayList<String> instorePurchaseItems;
 	private JTextField dailySalesDate;
 	private static JTextArea dailySalesReportTextArea;
+	private JTextField textField;
+	private JTextField textField_1;
+	private String customerId = "";
+	private static ArrayList<String> onlineSearchItems;
+	private static ArrayList<String> onlinePurchaseItems;
 	/**
 	 * Launch the application.
 	 */
@@ -93,6 +96,8 @@ public class MainFrame extends JFrame {
 		final ArrayList<String> stockUpdate  = new ArrayList<String>();
 		instorePurchaseItems = new ArrayList<String>();
 		savedInstoreItems = new ArrayList<String>();
+		onlineSearchItems = new ArrayList<String>();
+		onlinePurchaseItems = new ArrayList<String>();
 		con = AMSOracleConnection.getInstance();
 		setTitle("AMS Database");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -635,7 +640,74 @@ public class MainFrame extends JFrame {
 		scrollPane_3.setViewportView(dailySalesReportTextArea);
 		
 		JPanel topSellingItemsTab = new JPanel();
+		topSellingItemsTab.setBorder(new EmptyBorder(10, 10, 10, 10));
 		managerOperations.addTab("Top Selling Items", null, topSellingItemsTab, null);
+		GridBagLayout gbl_topSellingItemsTab = new GridBagLayout();
+		gbl_topSellingItemsTab.columnWidths = new int[]{190, 0, 0, 0, 0, 46, 0};
+		gbl_topSellingItemsTab.rowHeights = new int[]{14, 0, 0, 0};
+		gbl_topSellingItemsTab.columnWeights = new double[]{1.0, 0.0, 0.0, 0.0, 0.0, 1.0, Double.MIN_VALUE};
+		gbl_topSellingItemsTab.rowWeights = new double[]{0.0, 0.0, 1.0, Double.MIN_VALUE};
+		topSellingItemsTab.setLayout(gbl_topSellingItemsTab);
+		
+		JLabel lblNewLabel_3 = new JLabel("Top Selling Items Report");
+		lblNewLabel_3.setFont(new Font("Tahoma", Font.BOLD, 11));
+		GridBagConstraints gbc_lblNewLabel_3 = new GridBagConstraints();
+		gbc_lblNewLabel_3.insets = new Insets(0, 0, 5, 5);
+		gbc_lblNewLabel_3.anchor = GridBagConstraints.NORTHWEST;
+		gbc_lblNewLabel_3.gridx = 0;
+		gbc_lblNewLabel_3.gridy = 0;
+		topSellingItemsTab.add(lblNewLabel_3, gbc_lblNewLabel_3);
+		
+		JLabel lblDate = new JLabel("Date:");
+		GridBagConstraints gbc_lblDate = new GridBagConstraints();
+		gbc_lblDate.anchor = GridBagConstraints.EAST;
+		gbc_lblDate.insets = new Insets(0, 0, 5, 5);
+		gbc_lblDate.gridx = 1;
+		gbc_lblDate.gridy = 0;
+		topSellingItemsTab.add(lblDate, gbc_lblDate);
+		
+		textField = new JTextField();
+		GridBagConstraints gbc_textField = new GridBagConstraints();
+		gbc_textField.gridwidth = 3;
+		gbc_textField.insets = new Insets(0, 0, 5, 5);
+		gbc_textField.fill = GridBagConstraints.HORIZONTAL;
+		gbc_textField.gridx = 2;
+		gbc_textField.gridy = 0;
+		topSellingItemsTab.add(textField, gbc_textField);
+		textField.setColumns(10);
+		
+		JLabel lblNumberOfItems = new JLabel("Number of Items:");
+		GridBagConstraints gbc_lblNumberOfItems = new GridBagConstraints();
+		gbc_lblNumberOfItems.anchor = GridBagConstraints.EAST;
+		gbc_lblNumberOfItems.insets = new Insets(0, 0, 5, 5);
+		gbc_lblNumberOfItems.gridx = 1;
+		gbc_lblNumberOfItems.gridy = 1;
+		topSellingItemsTab.add(lblNumberOfItems, gbc_lblNumberOfItems);
+		
+		textField_1 = new JTextField();
+		GridBagConstraints gbc_textField_1 = new GridBagConstraints();
+		gbc_textField_1.gridwidth = 3;
+		gbc_textField_1.insets = new Insets(0, 0, 5, 5);
+		gbc_textField_1.fill = GridBagConstraints.HORIZONTAL;
+		gbc_textField_1.gridx = 2;
+		gbc_textField_1.gridy = 1;
+		topSellingItemsTab.add(textField_1, gbc_textField_1);
+		textField_1.setColumns(10);
+		
+		JButton btnSubmit_2 = new JButton("Submit");
+		GridBagConstraints gbc_btnSubmit_2 = new GridBagConstraints();
+		gbc_btnSubmit_2.insets = new Insets(0, 0, 5, 0);
+		gbc_btnSubmit_2.gridx = 5;
+		gbc_btnSubmit_2.gridy = 1;
+		topSellingItemsTab.add(btnSubmit_2, gbc_btnSubmit_2);
+		
+		JTextArea textArea = new JTextArea();
+		GridBagConstraints gbc_textArea = new GridBagConstraints();
+		gbc_textArea.gridwidth = 6;
+		gbc_textArea.fill = GridBagConstraints.BOTH;
+		gbc_textArea.gridx = 0;
+		gbc_textArea.gridy = 2;
+		topSellingItemsTab.add(textArea, gbc_textArea);
 		
 		final JPanel customerOperations = new JPanel();
 		contentPane.add(customerOperations, "name_1452058092586835");
@@ -703,6 +775,7 @@ public class MainFrame extends JFrame {
 					System.out.println("Submit was pressed")	;	
 					CustomerOperations c = new CustomerOperations();
 					if (c.login(custUName.getText().trim(), custPW.getText().trim())){
+						setCustomerId(custUName.getText().trim());
 						CardLayout cl = (CardLayout) customerOperations.getLayout();
 						 cl.show(customerOperations, "name_1452390541607518");
 					}
@@ -844,6 +917,7 @@ public class MainFrame extends JFrame {
 					System.out.println("Insert attempted");
 					goToOnlinePurchase();
 					System.out.println("Customer Insertion Successful");
+					setCustomerId(custRegId.getText().trim());
 				}
 				else System.out.println("Customer Insertion Error");
 			}
@@ -987,21 +1061,7 @@ public class MainFrame extends JFrame {
 		gbc_btnSearchItems.gridx = 12;
 		gbc_btnSearchItems.gridy = 3;
 		onlinePurchase.add(btnSearchItems, gbc_btnSearchItems);
-		
-		table_1 = new JTable();
-		table_1.setModel(new DefaultTableModel(
-			new Object[][] {
-				{null, null, null, null, null},
-				{null, null, null, null, null},
-				{null, null, null, null, null},
-				{null, null, null, null, null},
-				{null, null, null, null, null},
-			},
-			new String[] {
-				"UPC", "Title", "Category", "Lead Singer", "Price"
-			}
-		));
-		JScrollPane scrollPane_2 = new JScrollPane(table_1);
+		JScrollPane scrollPane_2 = new JScrollPane();
 		GridBagConstraints gbc_scrollPane_2 = new GridBagConstraints();
 		gbc_scrollPane_2.gridheight = 5;
 		gbc_scrollPane_2.gridwidth = 7;
@@ -1011,20 +1071,9 @@ public class MainFrame extends JFrame {
 		gbc_scrollPane_2.gridy = 4;
 		onlinePurchase.add(scrollPane_2, gbc_scrollPane_2);
 		
-		table_2 = new JTable();	
-		table_2.setModel(new DefaultTableModel(
-			new Object[][] {
-				{null, null, null},
-				{null, null, null},
-				{null, null, null},
-				{null, null, null},
-				{null, null, null},
-			},
-			new String[] {
-				"UPC", "Quantity", "Price"
-			}
-		));
-		JScrollPane scrollPane_1 = new JScrollPane(table_2);
+		JTextArea onlineSearchTextArea = new JTextArea();
+		scrollPane_2.setViewportView(onlineSearchTextArea);
+		JScrollPane scrollPane_1 = new JScrollPane();
 		GridBagConstraints gbc_scrollPane_1 = new GridBagConstraints();
 		gbc_scrollPane_1.insets = new Insets(0, 0, 5, 0);
 		gbc_scrollPane_1.gridheight = 5;
@@ -1033,6 +1082,9 @@ public class MainFrame extends JFrame {
 		gbc_scrollPane_1.gridx = 7;
 		gbc_scrollPane_1.gridy = 4;
 		onlinePurchase.add(scrollPane_1, gbc_scrollPane_1);
+		
+		JTextArea onlinePurchaseCart = new JTextArea();
+		scrollPane_1.setViewportView(onlinePurchaseCart);
 		
 		JButton btnAddItem_2 = new JButton("Add Item");
 		btnAddItem_2.addActionListener(new ActionListener() {
@@ -1134,5 +1186,25 @@ public static Integer getNumberInstorePurchaseItems(){
 }
 public static void setDailySalesReport(String s){
 	dailySalesReport = s;
+}
+
+public String getCustomerId() {
+	return customerId;
+}
+
+public void setCustomerId(String customerId) {
+	this.customerId = customerId;
+}
+public static ArrayList<String> getOnlineSearchItems(){
+	return onlineSearchItems;
+}
+public static ArrayList<String> getOnlinePurchaseItems(){
+	return onlinePurchaseItems;
+}
+public static void saveOnlineItem(String s){
+	onlineSearchItems.add(s);
+}
+public static void saveOnlinePurchaseItem(String s){
+	onlinePurchaseItems.add(s);
 }
 }

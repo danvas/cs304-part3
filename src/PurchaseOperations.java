@@ -517,14 +517,74 @@ public class PurchaseOperations extends AbstractTableOperations {
 			}
 		}
 	}
+	
+	public boolean completeOnlinePurchase(String cardno, String cardexpdate,String cid){
+		String upc;
+		Integer qty;
+		ArrayList<String> items = MainFrame.getPurchaseItems();
+		java.util.Date pdate = new Date();
+		java.sql.Date sqlpdate = new java.sql.Date(pdate.getTime());
+			
+		try {
+			
+			ps = con.prepareStatement("INSERT INTO purchase VALUES (purchase_receiptId.nextval, ?, ?, ?, ?, ? ,?)");
+			ps.setDate(1, sqlpdate);
+			ps.setString(2,cid); //insert customerid
+			if (cardno!=null&&!cardno.isEmpty()&&cardexpdate!=null&&!cardexpdate.isEmpty()){
+				ps.setString(3,cardno);  //this is a card purchase
+				ps.setString(4,cardexpdate);
+			}
+			else{
+			return false;
+			}
+			ps.setDate(5, null); // expecteddate
+			ps.setDate(6,null); // deliverydate
+
+			ps.executeUpdate();
+			System.out.println("Insertion to Purchase Was Successful");
+			
+			for(int i=0; i<MainFrame.getNumberInstorePurchaseItems();i++){
+				System.out.println("entered for loop");
+				upc = items.get(0);
+				System.out.println("UPC is:" + upc);
+				qty = Integer.parseInt(items.get(1));
+				System.out.println("Quantity is:" + qty.toString() );
+				ps = con.prepareStatement("INSERT INTO PurchaseItem VALUES (purchase_receiptId.currval,?,?)");
+				items.remove(0); 
+				items.remove(0);
+				ps.setString(1,upc);
+				ps.setInt(2,qty);
+				
+				ps.executeUpdate();
+				System.out.println("An Insertion To PurchaseItem Was Successful");
+			}
+						con.commit();
+			return true;
+			
+		} catch (SQLException ex) {
+			ExceptionEvent event = new ExceptionEvent(this, ex.getMessage());
+			fireExceptionGenerated(event);
+
+			try {
+				con.rollback();
+				return false; 
+			}
+			catch (SQLException ex2) {
+				event = new ExceptionEvent(this, ex2.getMessage());
+				fireExceptionGenerated(event);
+				return false; 
+			}
+		}
+	}
+	
 	//TODO Figure out how to get most recent receiptId in order to print receipt via Daniel's methods
 	public int getReceiptId(){
 		int receiptId = -1;
 		
 		try {
 			Statement st = con.createStatement();
-			ResultSet rs = st.executeQuery("SELECT purchase_receiptId.currval FROM purchase_receiptId");
-			while(rs.next()){
+			ResultSet rs = st.executeQuery("SELECT purchase_receiptId.currval FROM purchase");
+			if(rs.next()){
 				receiptId = rs.getInt(1);
 			}
 			
@@ -533,7 +593,7 @@ public class PurchaseOperations extends AbstractTableOperations {
 			e.printStackTrace();
 		}
 		
-		return 0;
+		return receiptId;
 		
 	}
 //	public static void main(String args[])
