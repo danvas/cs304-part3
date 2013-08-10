@@ -191,7 +191,7 @@ public class ItemOperations extends AbstractTableOperations{
 		System.out.println("Executing query");
 		try {
 
-			ps = con.prepareStatement("WITH sq1 AS (SELECT * FROM (SELECT DISTINCT(i.upc), category, price FROM item i, purchase p, purchaseitem pi WHERE i.upc = pi.upc AND pi.receiptid = p.receiptid ORDER BY category)), sq2 AS (SELECT upc, sum(quantity) AS units FROM purchase p, purchaseitem pi WHERE p.receiptid = pi.receiptid AND pdate >= ? and pdate <= ? GROUP BY upc ORDER BY units) SELECT sq1.upc, category, sq1.price, sq2.units, (sq1.price * sq2.units) AS total_value FROM sq1, sq2 WHERE sq1.upc = sq2.upc ORDER BY category",
+			ps = con.prepareStatement("WITH sq1 AS (SELECT * FROM 	(SELECT DISTINCT(i.upc), category, price FROM item i, purchase p, purchaseitem pi WHERE i.upc = pi.upc AND pi.receiptid = p.receiptid ORDER BY category)), sq2 AS (SELECT upc, sum(quantity) AS units FROM purchase p, purchaseitem pi WHERE p.receiptid = pi.receiptid AND pdate >= ? and pdate <= ? GROUP BY upc ORDER BY units) SELECT sq1.upc, category, sq1.price, sq2.units, (sq1.price * sq2.units) AS total_value FROM sq1, sq2 WHERE sq1.upc = sq2.upc ORDER BY category",
 					ResultSet.TYPE_SCROLL_INSENSITIVE,
 					ResultSet.CONCUR_READ_ONLY);
 
@@ -216,21 +216,51 @@ public class ItemOperations extends AbstractTableOperations{
 			System.out.println(" ");
 
 			while (rs.next()) {
-
+				
 				upc = rs.getString("upc");
 				System.out.printf("%-10.10s", upc);
 
 				category = rs.getString("category");
-				System.out.printf("%-10.10s", category);
+				if (rs.wasNull())
+				{
+					System.out.printf("%-10.10s", " ");
+				}
+				else
+				{
+					System.out.printf("%-10.10s", category);
+				}
 
 				price = rs.getDouble("price");
-				System.out.printf("%-10.10s", price);
+				if (rs.wasNull())
+				{
+					System.out.printf("%-10.10s", " ");
+				}
+				else
+				{
+					System.out.printf("%-10.10s", price + " ");
+				}
 
 				units = rs.getInt("units");
-				System.out.printf("%-10.10s", units);
-
-				tValue = rs.getDouble("total values");
-				System.out.printf("%-10.10s", tValue);
+				if (rs.wasNull())
+				{
+					System.out.printf("%-10.10s", " ");
+				}
+				else
+				{
+					System.out.printf("%-10.10s", units + " ");
+				} 
+				
+				tValue = rs.getDouble("total_value");
+				if (rs.wasNull())
+				{
+					System.out.printf("%-10.10s\n", " ");
+				}
+				else
+				{
+					System.out.printf("%-10.10s\n", tValue + " ");
+				} 
+				
+			
 
 			}
 			ps.close();
@@ -240,6 +270,7 @@ public class ItemOperations extends AbstractTableOperations{
 		catch (SQLException ex) {
 			ExceptionEvent event = new ExceptionEvent(this, ex.getMessage());
 			fireExceptionGenerated(event);
+			System.out.println(ex.getMessage());
 
 			try {
 				con.rollback();
@@ -382,7 +413,7 @@ public class ItemOperations extends AbstractTableOperations{
 		System.out.println("test");
 		//
 		AMSOracleConnection oCon = AMSOracleConnection.getInstance();
-		//		oCon.connect("ora_o0g6", "a40493058");
+//				oCon.connect("ora_o0g6", "a40493058");
 		oCon.connect("ora_h5n8", "a44140028");
 		//
 		ItemOperations item = new ItemOperations();
@@ -397,14 +428,16 @@ public class ItemOperations extends AbstractTableOperations{
 		//		item.delete("999999");
 		//		item.delete("123457");
 		//
-		//		item.dailySalesReport("13-05-25");
+		item.dailySalesReport("15-may-13");
+		
+		
 		System.out.println("test done");
 
 
 		
 		
 
-		item.topItems("25-may-13", 4);
+//		item.topItems("15-may-13", 4);
 
 	} 
 
