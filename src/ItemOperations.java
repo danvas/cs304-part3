@@ -341,7 +341,186 @@ public class ItemOperations extends AbstractTableOperations{
 		}
 	}
 
+	public boolean dailySalesReportGUI (String date) {
+		String upc;
+		String category;
+		Double price;
+		Integer units;
+		Double tValue;
+		ResultSet rs;
+		String report = "";
 
+		Double totalPrice = 0.0;
+		Integer totalQuantity = 0;
+		int qClassical, qCountry, qInstrumental, qNewAge, qPop, qRap, qRock;
+		qClassical = qCountry = qInstrumental = qNewAge = qPop = qRap = qRock = 0;
+		Double tClassical, tCountry, tInstrumental, tNewAge, tPop, tRap, tRock;
+		tClassical = tCountry = tInstrumental = tNewAge = tPop = tRap = tRock = 0.0;
+		
+		System.out.println("Executing query");
+		try {
+			ps = con.prepareStatement("WITH sq1 AS (SELECT * FROM 	(SELECT DISTINCT(i.upc), category, price FROM item i, purchase p, purchaseitem pi WHERE i.upc = pi.upc AND pi.receiptid = p.receiptid ORDER BY category)), sq2 AS (SELECT upc, sum(quantity) AS units FROM purchase p, purchaseitem pi WHERE p.receiptid = pi.receiptid AND pdate >= ? and pdate <= ? GROUP BY upc ORDER BY units) SELECT sq1.upc, category, sq1.price, sq2.units, (sq1.price * sq2.units) AS total_value FROM sq1, sq2 WHERE sq1.upc = sq2.upc ORDER BY category",
+					ResultSet.TYPE_SCROLL_INSENSITIVE,
+					ResultSet.CONCUR_READ_ONLY);
+
+			ps.setString(1, date);
+			ps.setString(2, date);
+			rs = ps.executeQuery();
+
+			System.out.println("Query executed");
+
+			// get info on ResultSet
+			ResultSetMetaData rsmd = rs.getMetaData();
+
+			// get number of columns
+			int numCols = rsmd.getColumnCount();
+
+			System.out.println(" ");
+			// print the names of each column
+			for (int i = 0; i < numCols; i++) {
+				System.out.printf("%-10s", rsmd.getColumnName(i+1));
+				String s = rsmd.getColumnName(i+1)+"     ";
+				report+=s;
+			}
+			System.out.println(" ");
+			
+			while (rs.next()) {
+
+				upc = rs.getString("upc");
+				System.out.printf("%-10.10s", upc);
+				report+=upc;
+
+				category = rs.getString("category");
+				if (rs.wasNull()) {
+					System.out.printf("%-10.10s", " ");
+					report+=" ";
+				}
+				else {
+					System.out.printf("%-10.10s", category);
+					report+=category;
+					switch (category) {
+					}
+				}
+
+				price = rs.getDouble("price");
+				if (rs.wasNull()){
+					System.out.printf("%-10.10s", " ");
+					report+=" ";
+				}
+				else {
+					System.out.printf("%-10.10s", price + " ");
+					report+= price+" ";
+					totalPrice += price;
+				}
+
+				units = rs.getInt("units");
+				if (rs.wasNull()) {
+					System.out.printf("%-10.10s", " ");
+					report+=" ";
+				}
+				else {
+					System.out.printf("%-10.10s", units + " ");
+					report+=(units+" ");
+			
+				} 
+
+				tValue = rs.getDouble("total_value");
+				if (rs.wasNull()){
+					System.out.printf("%-10.10s\n", " ");
+					report+="\n ";
+				}
+				else {
+					System.out.printf("%-10.10s\n", tValue + " ");
+					report+="\n"+tValue+" ";
+				} 
+				switch (category) {
+					case "Classical":		
+						qClassical += units;
+						tClassical += price;
+						break;
+					case "Country":			
+						qCountry += units;
+						tCountry += price;
+						break;
+					case "Instrumental":	
+						qInstrumental += units;
+						tInstrumental =+ price;
+						break;
+					case "New Age":			
+						qNewAge += units;
+						tNewAge += price;
+						break;
+					case "Pop":				
+						qPop += units;
+						tPop += price;
+						break;
+					case "Rap":				
+						qRap += units;
+						tRap += price;
+						break;
+					case "Rock":			
+						qRock += units;
+						tRock += price;
+						break;
+					default:				
+						break; 
+				}
+				totalQuantity += units;
+				
+			}
+			System.out.println("---------------------------------------------------");
+			report+="\n---------------------------------------------------\n";
+			if (qClassical != 0) {
+				System.out.println("Classical subtotal: " + qClassical + " units $ " + tClassical);
+				report+= "Classical subtotal: " + qClassical + " units $ " + tClassical;
+			}
+			if (qCountry != 0) {
+				System.out.println("Country subtotal: " + qCountry + " units $ " + tCountry);
+				report+="Country subtotal: " + qCountry + " units $ " + tCountry;
+			}
+			if (qInstrumental != 0) {
+				System.out.println("Instrumental subtotal: " + qInstrumental + " units $ " + tInstrumental);
+				report+="Instrumental subtotal: " + qInstrumental + " units $ " + tInstrumental;
+			}
+			if (qNewAge != 0) {
+				System.out.println("New Age subtotal: " + qNewAge + " units $ " + tNewAge);
+				report+="New Age subtotal: " + qNewAge + " units $ " + tNewAge;
+			}
+			if (qPop != 0) {
+				System.out.println("Pop subtotal: " + qPop + " units $ " + tPop);
+				report+="Pop subtotal: " + qPop + " units $ " + tPop;
+			}
+			if (qRap != 0) {
+				System.out.println("Rap subtotal: " + qRap + " units $ " + tRap);
+				report+="Rap subtotal: " + qRap + " units $ " + tRap;
+			}
+			if (qRock != 0) {
+				System.out.println("Rock subtotal: " + qRock + " units $ " + tRock);
+				report+="Rock subtotal: " + qRock + " units $ " + tRock;
+			}
+			System.out.println("Total daily sales: " + totalQuantity + " units $" + totalPrice);
+			report+="\n"+ "Total daily sales: " + totalQuantity + " units $" + totalPrice;
+			
+			ps.close();
+			MainFrame.setDailySalesReport(report);
+			return true;
+		}
+		catch (SQLException ex) {
+			ExceptionEvent event = new ExceptionEvent(this, ex.getMessage());
+			fireExceptionGenerated(event);
+			System.out.println(ex.getMessage());
+
+			try {
+				con.rollback();
+				return false;
+			}
+			catch (SQLException ex2) {
+				event = new ExceptionEvent(this, ex2.getMessage());
+				fireExceptionGenerated(event);
+				return false;
+			}
+		}
+	}
 
 	public boolean topItems(String date, Integer n){
 

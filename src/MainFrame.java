@@ -41,7 +41,6 @@ public class MainFrame extends JFrame {
 	private AMSOracleConnection con = null;
 	private JPanel contentPane;
 	private JPasswordField passwordField;
-	private JTable table;
 	private JTextField inpq;
 	private JTextField instorecardexpd;
 	private JTextField returnReceiptId;
@@ -57,7 +56,6 @@ public class MainFrame extends JFrame {
 	private JTextField custPNum;
 	private JTextField inpupc;
 	private JTextField ccno;
-	private String[] opColumnNames = {"UPC","Title", "Category","Leading Singer", "Price"};
 	private JTextField opCategory;
 	private JTextField optitle;
 	private JTextField opqty;
@@ -66,10 +64,11 @@ public class MainFrame extends JFrame {
 	private JTextField opcardexpd;
 	private static ArrayList<String> savedInstoreItems;
 	private static JTextArea purchaseItems;
-	private static String cardNumber = null;
-	private static String cardExpDate = null;
+	private static String dailySalesReport="";
 	private static Integer numberOfItems = 0;
 	private static ArrayList<String> instorePurchaseItems;
+	private JTextField dailySalesDate;
+	private static JTextArea dailySalesReportTextArea;
 	/**
 	 * Launch the application.
 	 */
@@ -564,96 +563,79 @@ public class MainFrame extends JFrame {
 		gbc_setdelivdate.gridy = 3;
 		processDelivery.add(setdelivdate, gbc_setdelivdate);
 		
-		JPanel dailySalesReport = new JPanel();
-		dailySalesReport.setBorder(new EmptyBorder(15, 15, 15, 15));
-		managerOperations.addTab("Daily Sales Report", null, dailySalesReport, null);
-		GridBagLayout gbl_dailySalesReport = new GridBagLayout();
-		gbl_dailySalesReport.columnWidths = new int[]{0, 54, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-		gbl_dailySalesReport.rowHeights = new int[]{0, 0, 0, 0, 0, 0, 0};
-		gbl_dailySalesReport.columnWeights = new double[]{0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 1.0, 0.0, 0.0, 1.0, 1.0, Double.MIN_VALUE};
-		gbl_dailySalesReport.rowWeights = new double[]{0.0, 0.0, 1.0, 1.0, 1.0, 0.0, Double.MIN_VALUE};
-		dailySalesReport.setLayout(gbl_dailySalesReport);
+		JPanel dailySalesReportTab = new JPanel();
+		managerOperations.addTab("Daily Sales Report", null, dailySalesReportTab, null);
+		GridBagLayout gbl_dailySalesReportTab = new GridBagLayout();
+		gbl_dailySalesReportTab.columnWidths = new int[]{0, 232, 0, 0, 0};
+		gbl_dailySalesReportTab.rowHeights = new int[]{32, 0, 0, 0, 0};
+		gbl_dailySalesReportTab.columnWeights = new double[]{0.0, 1.0, 0.0, 0.0, Double.MIN_VALUE};
+		gbl_dailySalesReportTab.rowWeights = new double[]{0.0, 0.0, 0.0, 1.0, Double.MIN_VALUE};
+		dailySalesReportTab.setLayout(gbl_dailySalesReportTab);
 		
-		JLabel lblEnterDate = new JLabel("Enter Date:");
-		GridBagConstraints gbc_lblEnterDate = new GridBagConstraints();
-		gbc_lblEnterDate.gridwidth = 2;
-		gbc_lblEnterDate.insets = new Insets(0, 0, 5, 5);
-		gbc_lblEnterDate.anchor = GridBagConstraints.EAST;
-		gbc_lblEnterDate.gridx = 0;
-		gbc_lblEnterDate.gridy = 0;
-		dailySalesReport.add(lblEnterDate, gbc_lblEnterDate);
+		JLabel lblDailySalesReport = new JLabel("Daily Sales Report");
+		lblDailySalesReport.setFont(new Font("Tahoma", Font.BOLD, 11));
+		GridBagConstraints gbc_lblDailySalesReport = new GridBagConstraints();
+		gbc_lblDailySalesReport.anchor = GridBagConstraints.WEST;
+		gbc_lblDailySalesReport.insets = new Insets(0, 0, 5, 5);
+		gbc_lblDailySalesReport.gridx = 1;
+		gbc_lblDailySalesReport.gridy = 0;
+		dailySalesReportTab.add(lblDailySalesReport, gbc_lblDailySalesReport);
 		
-		JFormattedTextField dailysalesdate = new JFormattedTextField();
-		GridBagConstraints gbc_dailysalesdate = new GridBagConstraints();
-		gbc_dailysalesdate.gridwidth = 2;
-		gbc_dailysalesdate.insets = new Insets(0, 0, 5, 5);
-		gbc_dailysalesdate.fill = GridBagConstraints.HORIZONTAL;
-		gbc_dailysalesdate.gridx = 2;
-		gbc_dailysalesdate.gridy = 0;
-		dailySalesReport.add(dailysalesdate, gbc_dailysalesdate);
+		JLabel lblDdmmyy = new JLabel("dd/mon/yy");
+		GridBagConstraints gbc_lblDdmmyy = new GridBagConstraints();
+		gbc_lblDdmmyy.insets = new Insets(0, 0, 5, 5);
+		gbc_lblDdmmyy.gridx = 2;
+		gbc_lblDdmmyy.gridy = 0;
+		dailySalesReportTab.add(lblDdmmyy, gbc_lblDdmmyy);
 		
-		JButton btnRetrieveSalesData = new JButton("Retrieve Sales Data");
-		GridBagConstraints gbc_btnRetrieveSalesData = new GridBagConstraints();
-		gbc_btnRetrieveSalesData.insets = new Insets(0, 0, 5, 5);
-		gbc_btnRetrieveSalesData.gridx = 2;
-		gbc_btnRetrieveSalesData.gridy = 1;
-		dailySalesReport.add(btnRetrieveSalesData, gbc_btnRetrieveSalesData);
+		JLabel lblSalesDate = new JLabel("Sales Date:");
+		GridBagConstraints gbc_lblSalesDate = new GridBagConstraints();
+		gbc_lblSalesDate.insets = new Insets(0, 0, 5, 5);
+		gbc_lblSalesDate.anchor = GridBagConstraints.EAST;
+		gbc_lblSalesDate.gridx = 1;
+		gbc_lblSalesDate.gridy = 1;
+		dailySalesReportTab.add(lblSalesDate, gbc_lblSalesDate);
 		
-		JScrollPane scrollPane = new JScrollPane();
-		GridBagConstraints gbc_scrollPane = new GridBagConstraints();
-		gbc_scrollPane.gridheight = 2;
-		gbc_scrollPane.gridwidth = 12;
-		gbc_scrollPane.insets = new Insets(0, 0, 5, 0);
-		gbc_scrollPane.fill = GridBagConstraints.BOTH;
-		gbc_scrollPane.gridx = 0;
-		gbc_scrollPane.gridy = 2;
-		dailySalesReport.add(scrollPane, gbc_scrollPane);
+		dailySalesDate = new JTextField();
+		GridBagConstraints gbc_dailySalesDate = new GridBagConstraints();
+		gbc_dailySalesDate.insets = new Insets(0, 0, 5, 5);
+		gbc_dailySalesDate.fill = GridBagConstraints.HORIZONTAL;
+		gbc_dailySalesDate.gridx = 2;
+		gbc_dailySalesDate.gridy = 1;
+		dailySalesReportTab.add(dailySalesDate, gbc_dailySalesDate);
+		dailySalesDate.setColumns(10);
 		
-		table = new JTable();
-		scrollPane.setRowHeaderView(table);
+		JButton btnDisplayReport = new JButton("Display Report");
+		//TODO: Daily Sales Report Button
+		btnDisplayReport.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				String s = dailySalesDate.getText().trim();
+				ItemOperations i = new ItemOperations();
+				if (i.dailySalesReportGUI(s)){
+					showDailySalesReport(dailySalesReport);
+					System.out.println("Daily Sales Report Should Be Displayed in GUI");
+				}
+			}
+		});
+		GridBagConstraints gbc_btnDisplayReport = new GridBagConstraints();
+		gbc_btnDisplayReport.insets = new Insets(0, 0, 5, 5);
+		gbc_btnDisplayReport.gridx = 2;
+		gbc_btnDisplayReport.gridy = 2;
+		dailySalesReportTab.add(btnDisplayReport, gbc_btnDisplayReport);
 		
-		JLabel lblTotal = new JLabel("Total");
-		GridBagConstraints gbc_lblTotal = new GridBagConstraints();
-		gbc_lblTotal.insets = new Insets(0, 0, 0, 5);
-		gbc_lblTotal.gridx = 1;
-		gbc_lblTotal.gridy = 5;
-		dailySalesReport.add(lblTotal, gbc_lblTotal);
+		JScrollPane scrollPane_3 = new JScrollPane();
+		GridBagConstraints gbc_scrollPane_3 = new GridBagConstraints();
+		gbc_scrollPane_3.fill = GridBagConstraints.BOTH;
+		gbc_scrollPane_3.gridwidth = 4;
+		gbc_scrollPane_3.gridx = 0;
+		gbc_scrollPane_3.gridy = 3;
+		dailySalesReportTab.add(scrollPane_3, gbc_scrollPane_3);
 		
-		JLabel lblQuantity_2 = new JLabel("Quantity");
-		GridBagConstraints gbc_lblQuantity_2 = new GridBagConstraints();
-		gbc_lblQuantity_2.insets = new Insets(0, 0, 0, 5);
-		gbc_lblQuantity_2.gridx = 3;
-		gbc_lblQuantity_2.gridy = 5;
-		dailySalesReport.add(lblQuantity_2, gbc_lblQuantity_2);
+		dailySalesReportTextArea = new JTextArea();
+		scrollPane_3.setViewportView(dailySalesReportTextArea);
 		
-		JTextPane textArea = new JTextPane();
-		GridBagConstraints gbc_textArea = new GridBagConstraints();
-		gbc_textArea.gridwidth = 2;
-		gbc_textArea.insets = new Insets(0, 0, 0, 5);
-		gbc_textArea.fill = GridBagConstraints.BOTH;
-		gbc_textArea.gridx = 4;
-		gbc_textArea.gridy = 5;
-		dailySalesReport.add(textArea, gbc_textArea);
-		
-		JLabel lblSales = new JLabel("Sales");
-		GridBagConstraints gbc_lblSales = new GridBagConstraints();
-		gbc_lblSales.gridwidth = 2;
-		gbc_lblSales.insets = new Insets(0, 0, 0, 5);
-		gbc_lblSales.gridx = 6;
-		gbc_lblSales.gridy = 5;
-		dailySalesReport.add(lblSales, gbc_lblSales);
-		
-		JTextPane textPane_6 = new JTextPane();
-		GridBagConstraints gbc_textPane_6 = new GridBagConstraints();
-		gbc_textPane_6.gridwidth = 2;
-		gbc_textPane_6.insets = new Insets(0, 0, 0, 5);
-		gbc_textPane_6.fill = GridBagConstraints.BOTH;
-		gbc_textPane_6.gridx = 8;
-		gbc_textPane_6.gridy = 5;
-		dailySalesReport.add(textPane_6, gbc_textPane_6);
-		
-		JPanel topSellingItems = new JPanel();
-		managerOperations.addTab("Top Selling Items", null, topSellingItems, null);
+		JPanel topSellingItemsTab = new JPanel();
+		managerOperations.addTab("Top Selling Items", null, topSellingItemsTab, null);
 		
 		final JPanel customerOperations = new JPanel();
 		contentPane.add(customerOperations, "name_1452058092586835");
@@ -1131,6 +1113,10 @@ public class MainFrame extends JFrame {
 				
 		}
 	}
+	
+	public static void showDailySalesReport(String s){
+		dailySalesReportTextArea.append(s);
+	}
 public static void addInstoreItemToPurchase(String item){
 	purchaseItems.append(item+"\n");
 }
@@ -1145,5 +1131,8 @@ public static ArrayList<String> getPurchaseItems(){
 }
 public static Integer getNumberInstorePurchaseItems(){
 	return numberOfItems;
+}
+public static void setDailySalesReport(String s){
+	dailySalesReport = s;
 }
 }
