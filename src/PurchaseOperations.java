@@ -335,16 +335,17 @@ public class PurchaseOperations extends AbstractTableOperations {
 	 int index = searchItems.indexOf(upc);
 	 
 	 String theupc = searchItems.get(index);
-	 String title = searchItems.get(index+1);
-	 String category = searchItems.get(index+2);
-	 String leadsinger = searchItems.get(index+3);
-	 Double price = Double.parseDouble(searchItems.get(index+4));
+//	 String title = searchItems.get(index+1);
+//	 String category = searchItems.get(index+2);
+//	 String leadsinger = searchItems.get(index+3);
+//	 Double price = Double.parseDouble(searchItems.get(index+4));
 	 Integer qty = Integer.parseInt(searchItems.get(index+5));
 	 
 	 MainFrame.clearSearchResults();
 	 
 	 MainFrame.saveOnlinePurchaseItem(theupc);
 	 MainFrame.saveOnlinePurchaseItem(qty.toString());
+	 
 	 
  }
 //TODO: IAN FINISH THIS METHOD
@@ -366,30 +367,25 @@ public class PurchaseOperations extends AbstractTableOperations {
 			else qqty = "AND i.stock >= "+qty.toString();
 					System.out.println(qqty);
 			if (title != null && !title.isEmpty()){
-				qtitle = " AND i.ititle = '"+title+"'";
+				qtitle = " AND i.ititle = "+title;
 			}
 			System.out.println(qtitle);
 			if (category != null && !category.isEmpty()){
-				qcat = " AND i.category = '"+category+"'";
+				qcat = " AND i.category = "+category;
 			}
 			System.out.println(qcat);
 			if (leadsinger != null && !leadsinger.isEmpty()){
-				qls = " AND l.sname = '"+leadsinger+"'";
+				qls = " AND l.sname = "+leadsinger;
 			}
 			System.out.println(qls);
-			
-
 			
 			String statement = "SELECT i.upc, ititle, category, sname, price FROM Item i, LeadSinger l WHERE i.upc = l.upc "+qqty+qtitle+qcat+qls;
 			//String statement = "SELECT * FROM Item i, LeadSinger l WHERE i.upc=l.upc";
 			//String statement = "SELECT i.upc, i.ititle, i.category, l.sname, i.price FROM Item i inner join LeadSinger l on i.upc = l.upc WHERE "+qqty+qtitle+qcat+qls;
 
-			
 			System.out.println(statement);
 			ps = con.prepareStatement(statement,ResultSet.TYPE_SCROLL_INSENSITIVE,
 					ResultSet.CONCUR_READ_ONLY);
-			
-			
 			
 			System.out.println("About to Execute Online Search");
 			
@@ -421,8 +417,17 @@ public class PurchaseOperations extends AbstractTableOperations {
 				MainFrame.addSearchItem(rsleadsinger);
 				
 				MainFrame.addSearchItem(qty.toString());
+				MainFrame.incSearchResultCount();
 			}
-			
+			ArrayList<String> searchresults = MainFrame.getOnlineSearchItems();
+			String s= "" ;
+			for (int j=0; j<MainFrame.getSearchResultItemCount();j++){
+				for(int i=0;i<5;i++){
+				s += searchresults.get(i)+" ";
+				}
+				s+="\n";
+			}
+			MainFrame.showSearchResults(s);
 			return true;
 			
 		} catch (SQLException ex) {

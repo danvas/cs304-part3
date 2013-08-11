@@ -77,6 +77,9 @@ public class MainFrame extends JFrame {
 	private JTextField opcardxd;
 	private JTextField optitle;
 	private JTextField opcat;
+	private static JTextArea onlineSearchTextArea;
+	private JTextArea shoppingBasketTextArea;
+	private static Integer searchResultItemCount = 0;
 	/**
 	 * Launch the application.
 	 */
@@ -943,14 +946,14 @@ public class MainFrame extends JFrame {
 		onlinePurchase.setBorder(new EmptyBorder(10, 10, 10, 10));
 		customerOperations.add(onlinePurchase, "name_1452390541607518");
 		GridBagLayout gbl_onlinePurchase = new GridBagLayout();
-		gbl_onlinePurchase.columnWidths = new int[] {15, 10, 54, 76, 0};
+		gbl_onlinePurchase.columnWidths = new int[] {15, 73, 85, 58, 0};
 		gbl_onlinePurchase.rowHeights = new int[] {0, 0, 0, 0, 0, 0, 0, 0, 0, 20};
 		gbl_onlinePurchase.columnWeights = new double[]{0.0, 1.0, 1.0, 1.0, 1.0};
 		gbl_onlinePurchase.rowWeights = new double[]{0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
 		onlinePurchase.setLayout(gbl_onlinePurchase);
 		
 		JLabel label_1 = new JLabel("Item Search");
-		label_1.setFont(new Font("Tahoma", Font.BOLD, 11));
+		label_1.setFont(new Font("Tahoma", Font.BOLD, 12));
 		GridBagConstraints gbc_label_1 = new GridBagConstraints();
 		gbc_label_1.insets = new Insets(0, 0, 5, 5);
 		gbc_label_1.gridx = 0;
@@ -993,9 +996,10 @@ public class MainFrame extends JFrame {
 		
 		JLabel lblLeadingSingers = new JLabel("Leading Singers:");
 		GridBagConstraints gbc_lblLeadingSingers = new GridBagConstraints();
-		gbc_lblLeadingSingers.anchor = GridBagConstraints.WEST;
+		gbc_lblLeadingSingers.gridwidth = 2;
+		gbc_lblLeadingSingers.anchor = GridBagConstraints.EAST;
 		gbc_lblLeadingSingers.insets = new Insets(0, 0, 5, 5);
-		gbc_lblLeadingSingers.gridx = 1;
+		gbc_lblLeadingSingers.gridx = 0;
 		gbc_lblLeadingSingers.gridy = 1;
 		onlinePurchase.add(lblLeadingSingers, gbc_lblLeadingSingers);
 		
@@ -1059,13 +1063,13 @@ public class MainFrame extends JFrame {
 		lblShoppingBasket.setFont(new Font("Tahoma", Font.BOLD, 11));
 		GridBagConstraints gbc_lblShoppingBasket = new GridBagConstraints();
 		gbc_lblShoppingBasket.gridwidth = 2;
-		gbc_lblShoppingBasket.insets = new Insets(0, 0, 5, 5);
+		gbc_lblShoppingBasket.insets = new Insets(0, 0, 5, 0);
 		gbc_lblShoppingBasket.gridx = 4;
 		gbc_lblShoppingBasket.gridy = 2;
 		onlinePurchase.add(lblShoppingBasket, gbc_lblShoppingBasket);
 		JScrollPane scrollPane_2 = new JScrollPane();
 		GridBagConstraints gbc_scrollPane_2 = new GridBagConstraints();
-		gbc_scrollPane_2.gridheight = 3;
+		gbc_scrollPane_2.gridheight = 4;
 		gbc_scrollPane_2.gridwidth = 4;
 		gbc_scrollPane_2.insets = new Insets(0, 0, 5, 5);
 		gbc_scrollPane_2.fill = GridBagConstraints.BOTH;
@@ -1073,20 +1077,9 @@ public class MainFrame extends JFrame {
 		gbc_scrollPane_2.gridy = 3;
 		onlinePurchase.add(scrollPane_2, gbc_scrollPane_2);
 		
-		JTextArea onlineSearchTextArea = new JTextArea();
+		this.onlineSearchTextArea = new JTextArea();
 		scrollPane_2.setViewportView(onlineSearchTextArea);
-		
-		JButton btnAddItem_2 = new JButton("Add Item");
-		btnAddItem_2.addActionListener(new ActionListener() {
-			//TODO: ONLINE PURCHASE ADD ITEM BUTTON
-			public void actionPerformed(ActionEvent arg0) {
-				PurchaseOperations p = new PurchaseOperations();
-//				if(p.addItemToVirtualBasket(title, category, leadsinger, qty)){
-//					onlineItemCount++;
-//					System.out.println();
-//				}
-			}
-		});
+		onlineSearchTextArea.append("  UPC     Title     Category     LeadSinger     Price          \n----------------------------------------------------------------");
 		
 		JScrollPane scrollPane = new JScrollPane();
 		GridBagConstraints gbc_scrollPane = new GridBagConstraints();
@@ -1098,25 +1091,9 @@ public class MainFrame extends JFrame {
 		gbc_scrollPane.gridy = 3;
 		onlinePurchase.add(scrollPane, gbc_scrollPane);
 		
-		JTextArea textArea_1 = new JTextArea();
-		scrollPane.setViewportView(textArea_1);
-		
-		JLabel label_2 = new JLabel("UPC:");
-		GridBagConstraints gbc_label_2 = new GridBagConstraints();
-		gbc_label_2.anchor = GridBagConstraints.EAST;
-		gbc_label_2.insets = new Insets(0, 0, 5, 5);
-		gbc_label_2.gridx = 0;
-		gbc_label_2.gridy = 6;
-		onlinePurchase.add(label_2, gbc_label_2);
-		
-		textField_2 = new JTextField();
-		GridBagConstraints gbc_textField_2 = new GridBagConstraints();
-		gbc_textField_2.insets = new Insets(0, 0, 5, 5);
-		gbc_textField_2.fill = GridBagConstraints.HORIZONTAL;
-		gbc_textField_2.gridx = 1;
-		gbc_textField_2.gridy = 6;
-		onlinePurchase.add(textField_2, gbc_textField_2);
-		textField_2.setColumns(10);
+		this.shoppingBasketTextArea = new JTextArea();
+		scrollPane.setViewportView(shoppingBasketTextArea);
+		shoppingBasketTextArea.append(" UPC     Price     Quantity\n ----------------------------------");
 		
 		JLabel lblCardNumber = new JLabel("Card Number");
 		GridBagConstraints gbc_lblCardNumber = new GridBagConstraints();
@@ -1134,13 +1111,6 @@ public class MainFrame extends JFrame {
 		gbc_opcardno.gridy = 6;
 		onlinePurchase.add(opcardno, gbc_opcardno);
 		opcardno.setColumns(10);
-		GridBagConstraints gbc_btnAddItem_2 = new GridBagConstraints();
-		gbc_btnAddItem_2.anchor = GridBagConstraints.WEST;
-		gbc_btnAddItem_2.gridwidth = 2;
-		gbc_btnAddItem_2.insets = new Insets(0, 0, 5, 5);
-		gbc_btnAddItem_2.gridx = 1;
-		gbc_btnAddItem_2.gridy = 7;
-		onlinePurchase.add(btnAddItem_2, gbc_btnAddItem_2);
 		
 		JButton btnSubmitOrder = new JButton("Submit Order");
 		
@@ -1149,6 +1119,23 @@ public class MainFrame extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 			}
 		});
+		
+		JLabel label_2 = new JLabel("UPC:");
+		GridBagConstraints gbc_label_2 = new GridBagConstraints();
+		gbc_label_2.anchor = GridBagConstraints.EAST;
+		gbc_label_2.insets = new Insets(0, 0, 5, 5);
+		gbc_label_2.gridx = 0;
+		gbc_label_2.gridy = 7;
+		onlinePurchase.add(label_2, gbc_label_2);
+		
+		textField_2 = new JTextField();
+		GridBagConstraints gbc_textField_2 = new GridBagConstraints();
+		gbc_textField_2.insets = new Insets(0, 0, 5, 5);
+		gbc_textField_2.fill = GridBagConstraints.HORIZONTAL;
+		gbc_textField_2.gridx = 1;
+		gbc_textField_2.gridy = 7;
+		onlinePurchase.add(textField_2, gbc_textField_2);
+		textField_2.setColumns(10);
 		
 		JLabel lblExpiryDate = new JLabel("Expiry Date");
 		GridBagConstraints gbc_lblExpiryDate = new GridBagConstraints();
@@ -1166,6 +1153,25 @@ public class MainFrame extends JFrame {
 		gbc_opcardxd.gridy = 7;
 		onlinePurchase.add(opcardxd, gbc_opcardxd);
 		opcardxd.setColumns(10);
+		
+		JButton btnAddItem_2 = new JButton("Add Item");
+		btnAddItem_2.addActionListener(new ActionListener() {
+			//TODO: ONLINE PURCHASE ADD ITEM BUTTON
+			public void actionPerformed(ActionEvent arg0) {
+				PurchaseOperations p = new PurchaseOperations();
+//				if(p.addItemToVirtualBasket(title, category, leadsinger, qty)){
+//					onlineItemCount++;
+//					System.out.println();
+//				}
+			}
+		});
+		GridBagConstraints gbc_btnAddItem_2 = new GridBagConstraints();
+		gbc_btnAddItem_2.anchor = GridBagConstraints.WEST;
+		gbc_btnAddItem_2.gridwidth = 2;
+		gbc_btnAddItem_2.insets = new Insets(0, 0, 0, 5);
+		gbc_btnAddItem_2.gridx = 1;
+		gbc_btnAddItem_2.gridy = 8;
+		onlinePurchase.add(btnAddItem_2, gbc_btnAddItem_2);
 		GridBagConstraints gbc_btnSubmitOrder = new GridBagConstraints();
 		gbc_btnSubmitOrder.gridx = 5;
 		gbc_btnSubmitOrder.gridy = 8;
@@ -1192,6 +1198,9 @@ public class MainFrame extends JFrame {
 	
 	public static void showDailySalesReport(String s){
 		dailySalesReportTextArea.append(s);
+	}
+	public static void showSearchResults(String s){
+		onlineSearchTextArea.append(s);
 	}
 public static void addInstoreItemToPurchase(String item){
 	purchaseItems.append(item+"\n");
@@ -1237,4 +1246,12 @@ public static void saveOnlinePurchaseItem(String s){
 public static int getOnlinePurchaseCount(){
 	return onlineItemCount;
 }
+
+public static Integer getSearchResultItemCount() {
+	return searchResultItemCount;
+}
+public static void incSearchResultCount(){
+	searchResultItemCount++;
+}
+
 }
