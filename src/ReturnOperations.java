@@ -19,23 +19,23 @@ public class ReturnOperations extends AbstractTableOperations {
 	boolean insert(String receiptId){
 		
 		Integer r = Integer.parseInt(receiptId);
+		String test1 = r.toString();
+		
+		System.out.println(test1);
+		
 		
 		try {
-			ps = con.prepareStatement("INSERT INTO return VALUES (return_retid.nextval,?,sysdate)");
-			if(receiptId!=null){
-				ps.setInt(1, r);
-			}
-			else{
-				ps.setInt(1, Types.INTEGER);
-			}
+			ps = con.prepareStatement("INSERT INTO return VALUES (return_retid.nextval, ? , sysdate)");
+			
+			ps.setInt(1, r);
 //			if(rdate!=null){
 //				ps.setDate(2,rdate);
 //			}
 //			else{
 //				ps.setDate(2, null);
 //			}
-			System.out.println("Executing Query to insert");
-			ps.executeUpdate();
+			System.out.println("Executing Query to insert into return");
+			ps.execute();
 			System.out.println("Query to insert Executed");
 			
 			con.commit();
@@ -96,10 +96,7 @@ public class ReturnOperations extends AbstractTableOperations {
 		ResultSet rs;
 		Integer r = Integer.parseInt(receiptId);
 		Integer u = Integer.parseInt(upc);
-		String test1 = r.toString();
-		String test2 = u.toString();
-		System.out.println(test1);
-		System.out.println(test2);
+
 
 		try {
 			// Checks if purchase has been made within 15 days 
@@ -123,6 +120,7 @@ public class ReturnOperations extends AbstractTableOperations {
 			else {				
 					System.out.println("Processing Return...");
 					// Insert new tuple into Return table
+					
 					insert(receiptId);
 					System.out.println("Inserted into Return");
 					
