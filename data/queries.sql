@@ -40,22 +40,22 @@ SELECT receiptId, pdate, cardno
 FROM Purchase
 WHERE receiptId=1004 AND cardno IS NULL;
 
-
-
 -- Q3) query Item to see if there is sufficient stock for given UPC and quantity
 prompt ****************************************************  Q3;
 SELECT stock
 FROM Item 
 WHERE upc=111113;
 
+-- Q4) update stock in Item by corresponding amount for each item purchased
 
+-- Q6) query Return, ReturnItem for list of returns within the past 15 days
+prompt ****************************************************  Q6;
+SELECT r.retid, r.receiptid, rdate 
+FROM return r, returnitem ri 
+WHERE r.receiptId = '1015' AND ri.upc = '111114' AND r.retid = ri.retid AND rdate >= (sysdate - 15);
 
--- Q7) update stock in Item by corresponding amount for each item purchased
-
-
-
--- Q8)
-prompt ****************************************************  Q8;
+-- Q7) query top n selling items on a given day 
+prompt ****************************************************  Q7;
 WITH 
 sq1 AS 
 	(select * 
@@ -78,9 +78,14 @@ sq2 AS
  	-- n is integer, top n items
  	-- date is string, date in 'YY-MM-DD' format
 
--- Q9) query daily sales report (currently can't specify date)
-prompt ****************************************************  Q9;
-WITH sq1 AS (SELECT * FROM (SELECT i.upc, category, price FROM item i, purchase p, purchaseitem pi WHERE i.upc = pi.upc AND pi.receiptid = p.receiptid ORDER BY category)), sq2 AS (SELECT upc, sum(quantity) AS units FROM purchase p, purchaseitem pi WHERE p.receiptid = pi.receiptid AND pdate >= '03-03-18' and pdate <= '03-03-18' GROUP BY upc ORDER BY units) SELECT sq1.upc, DISTINCT(category), sq1.price, sq2.units, (sq1.price * sq2.units) AS total_value FROM sq1, sq2 WHERE sq1.upc = sq2.upc ORDER BY category;
+-- Q8) query daily sales report
+prompt ****************************************************  Q8;
+WITH sq1 AS (SELECT * FROM (SELECT i.upc, category, price FROM item i, purchase p, purchaseitem pi WHERE i.upc = pi.upc AND pi.receiptid = p.receiptid ORDER BY category)), 
+sq2 AS (SELECT upc, sum(quantity) AS units FROM purchase p, purchaseitem pi WHERE p.receiptid = pi.receiptid AND pdate >= '03-03-18' and pdate <= '03-03-18' GROUP BY upc ORDER BY units) 
+SELECT sq1.upc, DISTINCT(category), sq1.price, sq2.units, (sq1.price * sq2.units) AS total_value 
+FROM sq1, sq2 
+WHERE sq1.upc = sq2.upc 
+ORDER BY category;
 
 -- output new lines (for readability)
 prompt 
