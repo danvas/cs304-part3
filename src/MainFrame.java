@@ -36,6 +36,9 @@ import java.util.ArrayList;
 import java.util.Date;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.JTextArea;
+import javax.swing.border.LineBorder;
+import java.awt.Color;
+import javax.swing.DropMode;
 
 public class MainFrame extends JFrame {
 	private AMSOracleConnection con = null;
@@ -54,12 +57,9 @@ public class MainFrame extends JFrame {
 	private JTextField custPNum;
 	private JTextField inpupc;
 	private JTextField ccno;
-	private JTextField opCategory;
-	private JTextField optitle;
 	private JTextField opqty;
 	private JTextField opls;
 	private JTextField opcardno;
-	private JTextField opcardexpd;
 	private static ArrayList<String> savedInstoreItems;
 	private static JTextArea purchaseItems;
 	private static String dailySalesReport="";
@@ -72,6 +72,11 @@ public class MainFrame extends JFrame {
 	private String customerId = "";
 	private static ArrayList<String> onlineSearchItems;
 	private static ArrayList<String> onlinePurchaseItems;
+	private static Integer onlineItemCount=0;
+	private JTextField textField_2;
+	private JTextField opcardxd;
+	private JTextField optitle;
+	private JTextField opcat;
 	/**
 	 * Launch the application.
 	 */
@@ -714,7 +719,7 @@ public class MainFrame extends JFrame {
 		customerOperations.setLayout(new CardLayout(0, 0));
 		
 		JPanel customerLogin = new JPanel();
-		customerLogin.setBorder(new EtchedBorder(EtchedBorder.RAISED, null, null));
+		customerLogin.setBorder(new LineBorder(new Color(0, 0, 0)));
 		customerOperations.add(customerLogin, "name_1546903163253674");
 		GridBagLayout gbl_customerLogin = new GridBagLayout();
 		gbl_customerLogin.columnWidths = new int[]{0, 0, 0, 0, 0, 0, 0, 0, 0};
@@ -787,13 +792,6 @@ public class MainFrame extends JFrame {
 			gbc_btnSubmit_1.gridy = 6;
 			customerLogin.add(btnSubmit_1, gbc_btnSubmit_1);
 		
-		JLabel lblNotRegistered = new JLabel("Not Registered?");
-		GridBagConstraints gbc_lblNotRegistered = new GridBagConstraints();
-		gbc_lblNotRegistered.insets = new Insets(0, 0, 5, 0);
-		gbc_lblNotRegistered.gridx = 7;
-		gbc_lblNotRegistered.gridy = 7;
-		customerLogin.add(lblNotRegistered, gbc_lblNotRegistered);
-		
 		JButton btnRegisterNow = new JButton("Register Now");
 		btnRegisterNow.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -801,9 +799,16 @@ public class MainFrame extends JFrame {
 				cl.show(customerOperations,"name_1452387567243092");
 			}
 		});
+		
+		JLabel lblNotRegistered = new JLabel("Not Registered?");
+		GridBagConstraints gbc_lblNotRegistered = new GridBagConstraints();
+		gbc_lblNotRegistered.insets = new Insets(0, 0, 5, 5);
+		gbc_lblNotRegistered.gridx = 6;
+		gbc_lblNotRegistered.gridy = 7;
+		customerLogin.add(lblNotRegistered, gbc_lblNotRegistered);
 		GridBagConstraints gbc_btnRegisterNow = new GridBagConstraints();
-		gbc_btnRegisterNow.insets = new Insets(0, 0, 5, 0);
-		gbc_btnRegisterNow.gridx = 7;
+		gbc_btnRegisterNow.insets = new Insets(0, 0, 5, 5);
+		gbc_btnRegisterNow.gridx = 6;
 		gbc_btnRegisterNow.gridy = 8;
 		customerLogin.add(btnRegisterNow, gbc_btnRegisterNow);
 		
@@ -923,7 +928,7 @@ public class MainFrame extends JFrame {
 			}
 
 			private void goToOnlinePurchase() {
-				// TODO Auto-generated method stub
+				
 				CardLayout cl = (CardLayout) customerOperations.getLayout();
 				 cl.show(customerOperations, "name_1452390541607518");
 			}
@@ -938,10 +943,10 @@ public class MainFrame extends JFrame {
 		onlinePurchase.setBorder(new EmptyBorder(10, 10, 10, 10));
 		customerOperations.add(onlinePurchase, "name_1452390541607518");
 		GridBagLayout gbl_onlinePurchase = new GridBagLayout();
-		gbl_onlinePurchase.columnWidths = new int[] {15, 10, 10, 10, 0, 0, 10, 10, 10, 10, 10, 10};
-		gbl_onlinePurchase.rowHeights = new int[] {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 20};
-		gbl_onlinePurchase.columnWeights = new double[]{0.0, 0.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 0.0};
-		gbl_onlinePurchase.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, Double.MIN_VALUE};
+		gbl_onlinePurchase.columnWidths = new int[] {15, 10, 54, 76, 0};
+		gbl_onlinePurchase.rowHeights = new int[] {0, 0, 0, 0, 0, 0, 0, 0, 0, 20};
+		gbl_onlinePurchase.columnWeights = new double[]{0.0, 1.0, 1.0, 1.0, 1.0};
+		gbl_onlinePurchase.rowWeights = new double[]{0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
 		onlinePurchase.setLayout(gbl_onlinePurchase);
 		
 		JLabel label_1 = new JLabel("Item Search");
@@ -949,162 +954,193 @@ public class MainFrame extends JFrame {
 		GridBagConstraints gbc_label_1 = new GridBagConstraints();
 		gbc_label_1.insets = new Insets(0, 0, 5, 5);
 		gbc_label_1.gridx = 0;
-		gbc_label_1.gridy = 1;
+		gbc_label_1.gridy = 0;
 		onlinePurchase.add(label_1, gbc_label_1);
 		
 		JLabel label_3 = new JLabel("Quantity:");
 		GridBagConstraints gbc_label_3 = new GridBagConstraints();
+		gbc_label_3.anchor = GridBagConstraints.WEST;
 		gbc_label_3.insets = new Insets(0, 0, 5, 5);
 		gbc_label_3.gridx = 1;
-		gbc_label_3.gridy = 1;
+		gbc_label_3.gridy = 0;
 		onlinePurchase.add(label_3, gbc_label_3);
 		
 		opqty = new JTextField();
 		GridBagConstraints gbc_opqty = new GridBagConstraints();
-		gbc_opqty.gridwidth = 5;
 		gbc_opqty.insets = new Insets(0, 0, 5, 5);
 		gbc_opqty.fill = GridBagConstraints.HORIZONTAL;
 		gbc_opqty.gridx = 2;
-		gbc_opqty.gridy = 1;
+		gbc_opqty.gridy = 0;
 		onlinePurchase.add(opqty, gbc_opqty);
 		opqty.setColumns(10);
 		
-		JLabel lblTitle = new JLabel("Title:");
-		GridBagConstraints gbc_lblTitle = new GridBagConstraints();
-		gbc_lblTitle.anchor = GridBagConstraints.WEST;
-		gbc_lblTitle.insets = new Insets(0, 0, 5, 5);
-		gbc_lblTitle.gridx = 8;
-		gbc_lblTitle.gridy = 1;
-		onlinePurchase.add(lblTitle, gbc_lblTitle);
+		JLabel opcatlbl = new JLabel("Category");
+		GridBagConstraints gbc_opcatlbl = new GridBagConstraints();
+		gbc_opcatlbl.anchor = GridBagConstraints.EAST;
+		gbc_opcatlbl.insets = new Insets(0, 0, 5, 5);
+		gbc_opcatlbl.gridx = 3;
+		gbc_opcatlbl.gridy = 0;
+		onlinePurchase.add(opcatlbl, gbc_opcatlbl);
 		
-		optitle = new JTextField();
-		optitle.setColumns(10);
-		GridBagConstraints gbc_optitle = new GridBagConstraints();
-		gbc_optitle.gridwidth = 3;
-		gbc_optitle.insets = new Insets(0, 0, 5, 5);
-		gbc_optitle.fill = GridBagConstraints.HORIZONTAL;
-		gbc_optitle.gridx = 9;
-		gbc_optitle.gridy = 1;
-		onlinePurchase.add(optitle, gbc_optitle);
+		opcat = new JTextField();
+		GridBagConstraints gbc_opcat = new GridBagConstraints();
+		gbc_opcat.insets = new Insets(0, 0, 5, 5);
+		gbc_opcat.fill = GridBagConstraints.HORIZONTAL;
+		gbc_opcat.gridx = 4;
+		gbc_opcat.gridy = 0;
+		onlinePurchase.add(opcat, gbc_opcat);
+		opcat.setColumns(10);
 		
 		JLabel lblLeadingSingers = new JLabel("Leading Singers:");
 		GridBagConstraints gbc_lblLeadingSingers = new GridBagConstraints();
 		gbc_lblLeadingSingers.anchor = GridBagConstraints.WEST;
 		gbc_lblLeadingSingers.insets = new Insets(0, 0, 5, 5);
 		gbc_lblLeadingSingers.gridx = 1;
-		gbc_lblLeadingSingers.gridy = 2;
+		gbc_lblLeadingSingers.gridy = 1;
 		onlinePurchase.add(lblLeadingSingers, gbc_lblLeadingSingers);
 		
-		opls = new JTextField();
-		GridBagConstraints gbc_opls = new GridBagConstraints();
-		gbc_opls.gridwidth = 5;
-		gbc_opls.insets = new Insets(0, 0, 5, 5);
-		gbc_opls.fill = GridBagConstraints.HORIZONTAL;
-		gbc_opls.gridx = 2;
-		gbc_opls.gridy = 2;
-		onlinePurchase.add(opls, gbc_opls);
-		opls.setColumns(10);
-		
-		JLabel lblCategory = new JLabel("Category:");
-		GridBagConstraints gbc_lblCategory = new GridBagConstraints();
-		gbc_lblCategory.anchor = GridBagConstraints.WEST;
-		gbc_lblCategory.insets = new Insets(0, 0, 5, 5);
-		gbc_lblCategory.gridx = 8;
-		gbc_lblCategory.gridy = 2;
-		onlinePurchase.add(lblCategory, gbc_lblCategory);
-		
-		opCategory = new JTextField();
-		opCategory.setColumns(10);
-		GridBagConstraints gbc_opCategory = new GridBagConstraints();
-		gbc_opCategory.gridwidth = 3;
-		gbc_opCategory.insets = new Insets(0, 0, 5, 5);
-		gbc_opCategory.fill = GridBagConstraints.HORIZONTAL;
-		gbc_opCategory.gridx = 9;
-		gbc_opCategory.gridy = 2;
-		onlinePurchase.add(opCategory, gbc_opCategory);
-		
-		JLabel lblSearchItems = new JLabel("Search Items");
-		lblSearchItems.setFont(new Font("Tahoma", Font.BOLD, 11));
-		GridBagConstraints gbc_lblSearchItems = new GridBagConstraints();
-		gbc_lblSearchItems.anchor = GridBagConstraints.NORTHWEST;
-		gbc_lblSearchItems.insets = new Insets(0, 0, 5, 5);
-		gbc_lblSearchItems.gridx = 0;
-		gbc_lblSearchItems.gridy = 3;
-		onlinePurchase.add(lblSearchItems, gbc_lblSearchItems);
-		
-		JLabel lblSearchResults = new JLabel("Shopping Cart");
-		lblSearchResults.setFont(new Font("Tahoma", Font.BOLD, 11));
-		GridBagConstraints gbc_lblSearchResults = new GridBagConstraints();
-		gbc_lblSearchResults.gridwidth = 4;
-		gbc_lblSearchResults.insets = new Insets(0, 0, 5, 5);
-		gbc_lblSearchResults.gridx = 8;
-		gbc_lblSearchResults.gridy = 3;
-		onlinePurchase.add(lblSearchResults, gbc_lblSearchResults);
-		
+		//TODO Online Search Add Item
 		JButton btnSearchItems = new JButton("Search Items");
 		btnSearchItems.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				Integer qty = Integer.parseInt(opqty.getText().trim());
 				String title = optitle.getText().trim();
-				String category = opCategory.getText().trim();
+				String category = opcat.getText().trim();
 				String ls = opls.getText().trim();
 				PurchaseOperations p = new PurchaseOperations();
 				
-//				if (p.onlinePurchaseItemSearch(title,category,ls,qty)){
-//					System.out.println("Query was successful. Item should be displayed in search table.");
-//				}
+				if (p.onlinePurchaseItemSearch(title,category,ls,qty)){
+					System.out.println("Query was successful. Item should be displayed in search results");
+				}
 			}
 		});
+		
+		opls = new JTextField();
+		GridBagConstraints gbc_opls = new GridBagConstraints();
+		gbc_opls.insets = new Insets(0, 0, 5, 5);
+		gbc_opls.fill = GridBagConstraints.HORIZONTAL;
+		gbc_opls.gridx = 2;
+		gbc_opls.gridy = 1;
+		onlinePurchase.add(opls, gbc_opls);
+		opls.setColumns(10);
+		
+		JLabel lblNewLabel_7 = new JLabel("Title");
+		GridBagConstraints gbc_lblNewLabel_7 = new GridBagConstraints();
+		gbc_lblNewLabel_7.insets = new Insets(0, 0, 5, 5);
+		gbc_lblNewLabel_7.gridx = 3;
+		gbc_lblNewLabel_7.gridy = 1;
+		onlinePurchase.add(lblNewLabel_7, gbc_lblNewLabel_7);
+		
+		optitle = new JTextField();
+		GridBagConstraints gbc_optitle = new GridBagConstraints();
+		gbc_optitle.insets = new Insets(0, 0, 5, 5);
+		gbc_optitle.fill = GridBagConstraints.HORIZONTAL;
+		gbc_optitle.gridx = 4;
+		gbc_optitle.gridy = 1;
+		onlinePurchase.add(optitle, gbc_optitle);
+		optitle.setColumns(10);
 		GridBagConstraints gbc_btnSearchItems = new GridBagConstraints();
-		gbc_btnSearchItems.gridwidth = 2;
 		gbc_btnSearchItems.insets = new Insets(0, 0, 5, 0);
-		gbc_btnSearchItems.gridx = 12;
-		gbc_btnSearchItems.gridy = 3;
+		gbc_btnSearchItems.gridx = 5;
+		gbc_btnSearchItems.gridy = 1;
 		onlinePurchase.add(btnSearchItems, gbc_btnSearchItems);
+		
+		JLabel lblSearchItems = new JLabel("Search Items");
+		lblSearchItems.setFont(new Font("Tahoma", Font.BOLD, 11));
+		GridBagConstraints gbc_lblSearchItems = new GridBagConstraints();
+		gbc_lblSearchItems.gridwidth = 2;
+		gbc_lblSearchItems.anchor = GridBagConstraints.NORTHWEST;
+		gbc_lblSearchItems.insets = new Insets(0, 0, 5, 5);
+		gbc_lblSearchItems.gridx = 1;
+		gbc_lblSearchItems.gridy = 2;
+		onlinePurchase.add(lblSearchItems, gbc_lblSearchItems);
+		
+		JLabel lblShoppingBasket = new JLabel("Shopping Basket");
+		lblShoppingBasket.setFont(new Font("Tahoma", Font.BOLD, 11));
+		GridBagConstraints gbc_lblShoppingBasket = new GridBagConstraints();
+		gbc_lblShoppingBasket.gridwidth = 2;
+		gbc_lblShoppingBasket.insets = new Insets(0, 0, 5, 5);
+		gbc_lblShoppingBasket.gridx = 4;
+		gbc_lblShoppingBasket.gridy = 2;
+		onlinePurchase.add(lblShoppingBasket, gbc_lblShoppingBasket);
 		JScrollPane scrollPane_2 = new JScrollPane();
 		GridBagConstraints gbc_scrollPane_2 = new GridBagConstraints();
-		gbc_scrollPane_2.gridheight = 5;
-		gbc_scrollPane_2.gridwidth = 7;
+		gbc_scrollPane_2.gridheight = 3;
+		gbc_scrollPane_2.gridwidth = 4;
 		gbc_scrollPane_2.insets = new Insets(0, 0, 5, 5);
 		gbc_scrollPane_2.fill = GridBagConstraints.BOTH;
 		gbc_scrollPane_2.gridx = 0;
-		gbc_scrollPane_2.gridy = 4;
+		gbc_scrollPane_2.gridy = 3;
 		onlinePurchase.add(scrollPane_2, gbc_scrollPane_2);
 		
 		JTextArea onlineSearchTextArea = new JTextArea();
 		scrollPane_2.setViewportView(onlineSearchTextArea);
-		JScrollPane scrollPane_1 = new JScrollPane();
-		GridBagConstraints gbc_scrollPane_1 = new GridBagConstraints();
-		gbc_scrollPane_1.insets = new Insets(0, 0, 5, 0);
-		gbc_scrollPane_1.gridheight = 5;
-		gbc_scrollPane_1.gridwidth = 7;
-		gbc_scrollPane_1.fill = GridBagConstraints.BOTH;
-		gbc_scrollPane_1.gridx = 7;
-		gbc_scrollPane_1.gridy = 4;
-		onlinePurchase.add(scrollPane_1, gbc_scrollPane_1);
-		
-		JTextArea onlinePurchaseCart = new JTextArea();
-		scrollPane_1.setViewportView(onlinePurchaseCart);
 		
 		JButton btnAddItem_2 = new JButton("Add Item");
 		btnAddItem_2.addActionListener(new ActionListener() {
 			//TODO: ONLINE PURCHASE ADD ITEM BUTTON
 			public void actionPerformed(ActionEvent arg0) {
+				PurchaseOperations p = new PurchaseOperations();
+//				if(p.addItemToVirtualBasket(title, category, leadsinger, qty)){
+//					onlineItemCount++;
+//					System.out.println();
+//				}
 			}
 		});
-		GridBagConstraints gbc_btnAddItem_2 = new GridBagConstraints();
-		gbc_btnAddItem_2.insets = new Insets(0, 0, 5, 5);
-		gbc_btnAddItem_2.gridx = 0;
-		gbc_btnAddItem_2.gridy = 10;
-		onlinePurchase.add(btnAddItem_2, gbc_btnAddItem_2);
+		
+		JScrollPane scrollPane = new JScrollPane();
+		GridBagConstraints gbc_scrollPane = new GridBagConstraints();
+		gbc_scrollPane.gridheight = 3;
+		gbc_scrollPane.gridwidth = 2;
+		gbc_scrollPane.insets = new Insets(0, 0, 5, 0);
+		gbc_scrollPane.fill = GridBagConstraints.BOTH;
+		gbc_scrollPane.gridx = 4;
+		gbc_scrollPane.gridy = 3;
+		onlinePurchase.add(scrollPane, gbc_scrollPane);
+		
+		JTextArea textArea_1 = new JTextArea();
+		scrollPane.setViewportView(textArea_1);
+		
+		JLabel label_2 = new JLabel("UPC:");
+		GridBagConstraints gbc_label_2 = new GridBagConstraints();
+		gbc_label_2.anchor = GridBagConstraints.EAST;
+		gbc_label_2.insets = new Insets(0, 0, 5, 5);
+		gbc_label_2.gridx = 0;
+		gbc_label_2.gridy = 6;
+		onlinePurchase.add(label_2, gbc_label_2);
+		
+		textField_2 = new JTextField();
+		GridBagConstraints gbc_textField_2 = new GridBagConstraints();
+		gbc_textField_2.insets = new Insets(0, 0, 5, 5);
+		gbc_textField_2.fill = GridBagConstraints.HORIZONTAL;
+		gbc_textField_2.gridx = 1;
+		gbc_textField_2.gridy = 6;
+		onlinePurchase.add(textField_2, gbc_textField_2);
+		textField_2.setColumns(10);
 		
 		JLabel lblCardNumber = new JLabel("Card Number");
 		GridBagConstraints gbc_lblCardNumber = new GridBagConstraints();
-		gbc_lblCardNumber.anchor = GridBagConstraints.EAST;
 		gbc_lblCardNumber.insets = new Insets(0, 0, 5, 5);
-		gbc_lblCardNumber.gridx = 1;
-		gbc_lblCardNumber.gridy = 10;
+		gbc_lblCardNumber.anchor = GridBagConstraints.EAST;
+		gbc_lblCardNumber.gridx = 4;
+		gbc_lblCardNumber.gridy = 6;
 		onlinePurchase.add(lblCardNumber, gbc_lblCardNumber);
+		
+		opcardno = new JTextField();
+		GridBagConstraints gbc_opcardno = new GridBagConstraints();
+		gbc_opcardno.insets = new Insets(0, 0, 5, 0);
+		gbc_opcardno.fill = GridBagConstraints.HORIZONTAL;
+		gbc_opcardno.gridx = 5;
+		gbc_opcardno.gridy = 6;
+		onlinePurchase.add(opcardno, gbc_opcardno);
+		opcardno.setColumns(10);
+		GridBagConstraints gbc_btnAddItem_2 = new GridBagConstraints();
+		gbc_btnAddItem_2.anchor = GridBagConstraints.WEST;
+		gbc_btnAddItem_2.gridwidth = 2;
+		gbc_btnAddItem_2.insets = new Insets(0, 0, 5, 5);
+		gbc_btnAddItem_2.gridx = 1;
+		gbc_btnAddItem_2.gridy = 7;
+		onlinePurchase.add(btnAddItem_2, gbc_btnAddItem_2);
 		
 		JButton btnSubmitOrder = new JButton("Submit Order");
 		
@@ -1114,37 +1150,25 @@ public class MainFrame extends JFrame {
 			}
 		});
 		
-		opcardno = new JTextField();
-		GridBagConstraints gbc_opcardno = new GridBagConstraints();
-		gbc_opcardno.gridwidth = 5;
-		gbc_opcardno.insets = new Insets(0, 0, 5, 5);
-		gbc_opcardno.fill = GridBagConstraints.HORIZONTAL;
-		gbc_opcardno.gridx = 2;
-		gbc_opcardno.gridy = 10;
-		onlinePurchase.add(opcardno, gbc_opcardno);
-		opcardno.setColumns(10);
+		JLabel lblExpiryDate = new JLabel("Expiry Date");
+		GridBagConstraints gbc_lblExpiryDate = new GridBagConstraints();
+		gbc_lblExpiryDate.insets = new Insets(0, 0, 5, 5);
+		gbc_lblExpiryDate.anchor = GridBagConstraints.EAST;
+		gbc_lblExpiryDate.gridx = 4;
+		gbc_lblExpiryDate.gridy = 7;
+		onlinePurchase.add(lblExpiryDate, gbc_lblExpiryDate);
 		
-		JLabel lblCardExpiryDate_1 = new JLabel("Card Expiry Date");
-		GridBagConstraints gbc_lblCardExpiryDate_1 = new GridBagConstraints();
-		gbc_lblCardExpiryDate_1.anchor = GridBagConstraints.EAST;
-		gbc_lblCardExpiryDate_1.insets = new Insets(0, 0, 0, 5);
-		gbc_lblCardExpiryDate_1.gridx = 1;
-		gbc_lblCardExpiryDate_1.gridy = 11;
-		onlinePurchase.add(lblCardExpiryDate_1, gbc_lblCardExpiryDate_1);
-		
-		opcardexpd = new JTextField();
-		opcardexpd.setColumns(10);
-		GridBagConstraints gbc_opcardexpd = new GridBagConstraints();
-		gbc_opcardexpd.gridwidth = 5;
-		gbc_opcardexpd.insets = new Insets(0, 0, 0, 5);
-		gbc_opcardexpd.fill = GridBagConstraints.HORIZONTAL;
-		gbc_opcardexpd.gridx = 2;
-		gbc_opcardexpd.gridy = 11;
-		onlinePurchase.add(opcardexpd, gbc_opcardexpd);
+		opcardxd = new JTextField();
+		GridBagConstraints gbc_opcardxd = new GridBagConstraints();
+		gbc_opcardxd.insets = new Insets(0, 0, 5, 0);
+		gbc_opcardxd.fill = GridBagConstraints.HORIZONTAL;
+		gbc_opcardxd.gridx = 5;
+		gbc_opcardxd.gridy = 7;
+		onlinePurchase.add(opcardxd, gbc_opcardxd);
+		opcardxd.setColumns(10);
 		GridBagConstraints gbc_btnSubmitOrder = new GridBagConstraints();
-		gbc_btnSubmitOrder.gridwidth = 5;
-		gbc_btnSubmitOrder.gridx = 9;
-		gbc_btnSubmitOrder.gridy = 11;
+		gbc_btnSubmitOrder.gridx = 5;
+		gbc_btnSubmitOrder.gridy = 8;
 		onlinePurchase.add(btnSubmitOrder, gbc_btnSubmitOrder);
 	}
 	public void switchToNextCard(String accesslevel){
@@ -1201,10 +1225,16 @@ public static ArrayList<String> getOnlineSearchItems(){
 public static ArrayList<String> getOnlinePurchaseItems(){
 	return onlinePurchaseItems;
 }
-public static void saveOnlineItem(String s){
+public static void addSearchItem(String s){
 	onlineSearchItems.add(s);
+}
+public static void clearSearchResults(){
+	onlineSearchItems.clear();
 }
 public static void saveOnlinePurchaseItem(String s){
 	onlinePurchaseItems.add(s);
+}
+public static int getOnlinePurchaseCount(){
+	return onlineItemCount;
 }
 }

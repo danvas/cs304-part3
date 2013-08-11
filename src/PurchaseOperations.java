@@ -330,10 +330,26 @@ public class PurchaseOperations extends AbstractTableOperations {
 			}
 		}
 	}
-
+ public void addItemToShoppingCart(String upc){
+	 ArrayList<String> searchItems = MainFrame.getOnlinePurchaseItems();
+	 int index = searchItems.indexOf(upc);
+	 
+	 String theupc = searchItems.get(index);
+	 String title = searchItems.get(index+1);
+	 String category = searchItems.get(index+2);
+	 String leadsinger = searchItems.get(index+3);
+	 Double price = Double.parseDouble(searchItems.get(index+4));
+	 Integer qty = Integer.parseInt(searchItems.get(index+5));
+	 
+	 MainFrame.clearSearchResults();
+	 
+	 MainFrame.saveOnlinePurchaseItem(theupc);
+	 MainFrame.saveOnlinePurchaseItem(qty.toString());
+	 
+ }
 //TODO: IAN FINISH THIS METHOD
 	
-	public boolean addItemToVirtualBasket(String title, String category,String leadsinger, Integer qty){
+	public boolean onlinePurchaseItemSearch(String title, String category,String leadsinger, Integer qty){
 		try {
 			String rsupc;
 			String rstitle;
@@ -376,63 +392,35 @@ public class PurchaseOperations extends AbstractTableOperations {
 			
 			
 			System.out.println("About to Execute Online Search");
-//			ps=con.prepareStatement(statement);
-//			
-//			ps = con.prepareStatement("SELECT upc, ititle, category, sname, price FROM item i, leadsinger l WHERE i.upc = l.upc ? ? ? AND stock>=?");		
-//			if (title!=null){
-//				ps.setString(1," AND ititle = " + title);
-//			}
-//			else ps.setString(1,"");
-//			
-//			if(category!=null){
-//				ps.setString(2, " AND category = "+category);
-//			}
-//			else ps.setString(2,"");
-//			
-//			if (leadsinger!=null){
-//				ps.setString(3," AND sname = "+leadsinger);
-//			}
-//			else ps.setString(3,"");
-//			
-//			if (qty!=null){
-//				ps.setInt(4, qty);
-//			}
-//			else return false;
 			
 			ResultSet rs = ps.executeQuery();
-			
-			int i = 0;
-			int j = 0;
+	
 			System.out.println("Just Executed Online Item Search Query");
 			while(rs.next()){
 				
 				System.out.println("We are in the loop");
 				rsupc = rs.getString(1);
 				System.out.println("Checking out rsupc value: "+rsupc);
-				MainFrame.table_1.setValueAt(rsupc, i, j);
-				j++;
+				MainFrame.addSearchItem(rsupc);
 				
 				rstitle = rs.getString(2);
 				System.out.println("Checking out rstitle value: "+rstitle);
-				MainFrame.table_1.setValueAt(rstitle, i, j);
-				j++;
+				MainFrame.addSearchItem(rstitle);
 				
 				rscategory = rs.getString(3);
 				System.out.println("Checking out rscat value: "+rscategory);
-				MainFrame.table_1.setValueAt(rscategory, i, j);
-				j++;
+				MainFrame.addSearchItem(rscategory);
 				
 				rsleadsinger = rs.getString(4);
 				System.out.println("Checking out rsls value: "+rsleadsinger);
-				MainFrame.table_1.setValueAt(rsleadsinger, i, j);
-				j++;
+				MainFrame.addSearchItem(rsleadsinger);
+			
 				
 				rsprice = rs.getDouble(5);
 				System.out.println("Checking out rsprice value: "+rsprice);
-				MainFrame.table_1.setValueAt(rsprice, i, j);
+				MainFrame.addSearchItem(rsleadsinger);
 				
-				i++;
-				j=0;
+				MainFrame.addSearchItem(qty.toString());
 			}
 			
 			return true;
