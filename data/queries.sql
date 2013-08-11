@@ -50,9 +50,16 @@ WHERE upc=111113;
 
 -- Q6) query Return, ReturnItem for list of returns within the past 15 days
 prompt ****************************************************  Q6;
-SELECT r.retid, r.receiptid, rdate 
-FROM return r, returnitem ri 
-WHERE r.receiptId = '1015' AND ri.upc = '111114' AND r.retid = ri.retid AND rdate >= (sysdate - 15);
+WITH pq1 AS (SELECT p.pdate, pi.receiptid, pi.upc, pi.quantity 
+			FROM purchase p, purchaseitem pi 
+			WHERE p.receiptid = pi.receiptid AND p.receiptId = '1013' 
+					AND pi.upc = '111112' AND pdate >= (sysdate - 15)), 
+rq1 AS (SELECT r.retid, r.receiptid, rdate 
+		FROM return r, returnitem ri 
+		WHERE r.retid = ri.retid AND rdate >= sysdate - 15) 
+SELECT DISTINCT(pq1.upc), pq1.receiptId, pq1.quantity 
+FROM pq1, rq1 
+WHERE pq1.receiptId = rq1.receiptId;
 
 -- Q7) query top n selling items on a given day 
 prompt ****************************************************  Q7;

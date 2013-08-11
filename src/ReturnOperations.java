@@ -51,6 +51,7 @@ public class ReturnOperations extends AbstractTableOperations {
 			{
 				event = new ExceptionEvent(this, ex2.getMessage());
 				fireExceptionGenerated(event);
+				System.out.println(ex2.getMessage());
 				return false; 
 			}
 		}
@@ -91,9 +92,16 @@ public class ReturnOperations extends AbstractTableOperations {
 		ResultSet rs;
 
 		try {
-			// Check if the item has already been returned using (sysdate - 15) 
-			ps = con.prepareStatement("SELECT r.retid, r.receiptid, rdate FROM return r, returnitem ri " +
-					"WHERE r.receiptId = ? AND ri.upc = ? AND r.retid = ri.retid AND rdate >= (sysdate - 15)");
+			// Checks if purchase has been made within 15 days 
+			// and if the item has already been returned using (sysdate - 15) 
+			ps = con.prepareStatement("WITH pq1 AS " +
+					"(SELECT p.pdate, pi.receiptid, pi.upc, pi.quantity FROM purchase p, purchaseitem pi " +
+					"WHERE p.receiptid = pi.receiptid AND p.receiptId = ? AND pi.upc = ? AND pdate >= (sysdate - 15)), " +
+					"rq1 AS (SELECT r.retid, r.receiptid, rdate FROM return r, returnitem ri " +
+					"WHERE r.retid = ri.retid AND rdate >= sysdate - 15) " +
+					"SELECT DISTINCT(pq1.upc), pq1.receiptId, pq1.quantity " +
+					"FROM pq1, rq1 " +
+					"WHERE pq1.receiptId = rq1.receiptId");
 			ps.setString(1, receiptId);
 			ps.setString(2, upc);
 			System.out.println("Executing Query to select");
@@ -104,6 +112,7 @@ public class ReturnOperations extends AbstractTableOperations {
 			// If return already exists or greater than 15 days, do nothing
 			if (rs.next()) {
 				System.out.println("Return already made or not within 15 days of purchase");
+				ps.close();
 				return true;
 			}
 			// If return made within 15 days, create tuples in Return and ReturnItem
@@ -123,8 +132,10 @@ public class ReturnOperations extends AbstractTableOperations {
 					ItemOperations io = new ItemOperations();
 					io.updateItem(upc, 1, null);
 					System.out.println("Updated stock on item");
+					ps.close();
 					return true;
 			}
+			
 		}
 		catch (SQLException ex) {
 			ExceptionEvent event = new ExceptionEvent(this, ex.getMessage());
@@ -320,10 +331,10 @@ public class ReturnOperations extends AbstractTableOperations {
 		// both tests are for my account
 		
 		// inside of 15 days and should be inserted
-		ro.returnItem("1008", "111114");
+		ro.returnItem("1013", "111112");
 		
 		// out side of 15 days from today and shouldn't be inserted into tables
-		ro.returnItem("1015", "111114");
+		//ro.returnItem("1015", "111114");
 
 		
 
