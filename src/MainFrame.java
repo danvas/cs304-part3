@@ -75,12 +75,12 @@ public class MainFrame extends JFrame {
 	private static Integer onlineItemCount=0;
 	private JTextField textField_2;
 	private JTextField opcardxd;
-	private JTextField optitle;
 	private JTextField opcat;
 	private static JTextArea onlineSearchTextArea;
 	private static JTextArea shoppingBasketTextArea;
 	private static JTextArea topSellTextArea;
 	private static Integer searchResultItemCount = 0;
+	private JTextField optitle;
 	/**
 	 * Launch the application.
 	 */
@@ -1066,12 +1066,13 @@ public class MainFrame extends JFrame {
 		onlinePurchase.add(lblNewLabel_7, gbc_lblNewLabel_7);
 		
 		optitle = new JTextField();
+		optitle.setColumns(10);
 		GridBagConstraints gbc_optitle = new GridBagConstraints();
 		gbc_optitle.insets = new Insets(0, 0, 5, 5);
+		gbc_optitle.fill = GridBagConstraints.HORIZONTAL;
 		gbc_optitle.gridx = 4;
 		gbc_optitle.gridy = 1;
 		onlinePurchase.add(optitle, gbc_optitle);
-		optitle.setColumns(10);
 		GridBagConstraints gbc_btnSearchItems = new GridBagConstraints();
 		gbc_btnSearchItems.insets = new Insets(0, 0, 5, 0);
 		gbc_btnSearchItems.gridx = 5;

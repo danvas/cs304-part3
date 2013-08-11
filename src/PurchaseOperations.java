@@ -411,6 +411,7 @@ public class PurchaseOperations extends AbstractTableOperations {
 //			String searchItems = "";
 			System.out.println("\nEntering loop...");
 			while(rs.next()){
+				
 				System.out.println(MainFrame.getSearchResultItemCount());
 				String searchItem = "";
 				
