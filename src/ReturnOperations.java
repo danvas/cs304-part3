@@ -34,6 +34,7 @@ public class ReturnOperations extends AbstractTableOperations {
 			System.out.println("Executing Query to insert");
 			ps.executeUpdate();
 			System.out.println("Query to insert Executed");
+			
 			con.commit();
 			
 			return true;
@@ -124,6 +125,7 @@ public class ReturnOperations extends AbstractTableOperations {
 					System.out.println("Inserted into Return");
 					
 					// Insert new tuple into ReturnItem table
+					
 					ReturnItemOperations rio = new ReturnItemOperations();
 					rio.insert(upc, 1);
 					System.out.println("Inserted into ReturnItem");
@@ -319,27 +321,27 @@ public class ReturnOperations extends AbstractTableOperations {
 	
 	public static void main(String args[])
 	{
-		
+
 		System.out.println("test");
-		
+
 		AMSOracleConnection oCon = AMSOracleConnection.getInstance();
 		oCon.connect("ora_o0g6", "a40493058");
-//		oCon.connect("ora_h5n8", "a44140028");
-		
+		//		oCon.connect("ora_h5n8", "a44140028");
+
 		ReturnOperations ro = new ReturnOperations();
-		
+
 		// both tests are for my account
-		
+
 		// inside of 15 days and should be inserted
-		ro.returnItem("1013", "111112");
-		
+		ro.returnItem("1014", "111120");
+
 		// out side of 15 days from today and shouldn't be inserted into tables
 		//ro.returnItem("1015", "111114");
 
-		
 
-		
-		
+
+
+
 
 	}
 

@@ -7,7 +7,7 @@ public class ReturnItemOperations extends AbstractTableOperations {
 	 */
 	boolean insert(String upc, int quantity){
 		try {
-			ps = con.prepareStatement("INSERT INTO returnitem VALUES (return_retid.currentval,?,?)");
+			ps = con.prepareStatement("INSERT INTO returnitem VALUES (return_retid.currval,?,?)");
 			
 			ps.setString(1, upc);
 
@@ -17,22 +17,25 @@ public class ReturnItemOperations extends AbstractTableOperations {
 			else {
 				ps.setInt(2, 0);
 			}
-
+			System.out.println("inserting from RI class");
 			ps.executeUpdate();
+
 			con.commit();
+			System.out.println("inserted via RI class");
 			return true;
 		}
 
 		catch (SQLException ex)  {
 			ExceptionEvent event = new ExceptionEvent(this, ex.getMessage());
 			fireExceptionGenerated(event);
-
+			System.out.println(ex.getMessage());
 			try {
 				con.rollback();
 			}
 			catch (SQLException ex2){
 				event = new ExceptionEvent(this, ex2.getMessage());
 				fireExceptionGenerated(event);
+				System.out.println(ex2.getMessage());
 			}
 			return false;
 		}

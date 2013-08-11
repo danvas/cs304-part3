@@ -400,12 +400,14 @@ public class MainFrame extends JFrame {
 		btnProcessReturn.addActionListener(new ActionListener() {
 			//TODO: RETURN BUTTON
 			public void actionPerformed(ActionEvent arg0) {
-				Integer receiptid = Integer.parseInt(returnReceiptId.getText().trim());
+				String receiptid = returnReceiptId.getText().trim();
 				String retupc = returnUPC.getText().trim();
+				
 				ReturnOperations r = new ReturnOperations();
-				ReturnItemOperations ri = new ReturnItemOperations();
-				Date rdate = new Date();
-				java.sql.Date sqlDate = new java.sql.Date(rdate.getTime());
+				r.returnItem(receiptid, retupc);
+				//ReturnItemOperations ri = new ReturnItemOperations();
+				//Date rdate = new Date();
+				//java.sql.Date sqlDate = new java.sql.Date(rdate.getTime());
 //				int paymenttype = 0;
 //				int qty = 0;
 //				if(r.validateReturn(retupc,receiptid,paymenttype,qty)){
