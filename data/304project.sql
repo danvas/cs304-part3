@@ -1,5 +1,7 @@
+prompt
+prompt
 prompt **************************************************** Creating tables...;
-drop table Item;
+drop table Item cascade constraints;
 create table Item
 (upc char(6) not null,
 ititle varchar(30),
@@ -11,7 +13,7 @@ price number(38,2),
 stock integer,
 PRIMARY KEY (upc));
 
-drop table LeadSinger;
+drop table LeadSinger cascade constraints;
 
 create table LeadSinger
 (upc char(6) not null,
@@ -20,7 +22,7 @@ PRIMARY KEY (upc, sname),
 foreign key (upc) 
 	references Item);
 
-drop table HasSong;
+drop table HasSong cascade constraints;
 
 create table HasSong
 (upc char(6) not null,
@@ -29,7 +31,7 @@ PRIMARY KEY (upc, stitle),
 foreign key (upc) 
 	references Item);
 
-drop table Customer;
+drop table Customer cascade constraints;
 
 create table Customer
 (cid varchar(10) not null,
@@ -39,7 +41,7 @@ address varchar(40),
 phone varchar(10),
 PRIMARY KEY (cid));
 
-drop table Purchase;
+drop table Purchase cascade constraints;
 
 create table Purchase
 (receiptId integer not null,
@@ -58,7 +60,7 @@ CREATE SEQUENCE purchase_receiptId
 START WITH 1000
 INCREMENT BY 1;
 
-drop table PurchaseItem;
+drop table PurchaseItem cascade constraints;
 
 create table PurchaseItem
 (receiptId integer not null,
@@ -71,7 +73,7 @@ foreign key (upc)
 	references Item);
 
 	
-drop table Return;
+drop table Return cascade constraints;
 
 create table Return
 (retid integer not null,
@@ -84,7 +86,7 @@ foreign key (receiptId)
 DROP SEQUENCE return_retid;
 CREATE SEQUENCE return_retid;
 
-drop table ReturnItem;
+drop table ReturnItem cascade constraints;
 
 create table ReturnItem
 (retid integer not null,
@@ -285,14 +287,6 @@ insert into Return
 	values(return_retid.nextval, '1006', '2003-04-02');
 insert into ReturnItem
 	values(return_retid.currval, '111120', 3);
-
-
-
-
-
-
-
-
-
-
-
+prompt
+prompt
+prompt
