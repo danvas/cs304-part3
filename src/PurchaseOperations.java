@@ -381,11 +381,11 @@ public class PurchaseOperations extends AbstractTableOperations {
 			}
 			System.out.println(qtitle);
 			if (category != null && !category.isEmpty()){
-				qcat = " OR i.category = '"+category+"'";
+				qcat = " AND i.category = '"+category+"'";
 			}
 			System.out.println(qcat);
 			if (leadsinger != null && !leadsinger.isEmpty()){
-				qls = " OR l.sname = '"+leadsinger+"'";
+				qls = " AND l.sname = '"+leadsinger+"'";
 			}
 			System.out.println(qls);
 			

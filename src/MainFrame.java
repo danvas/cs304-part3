@@ -1109,7 +1109,7 @@ public class MainFrame extends JFrame {
 		gbc_scrollPane_2.gridy = 3;
 		onlinePurchase.add(scrollPane_2, gbc_scrollPane_2);
 		
-		this.onlineSearchTextArea = new JTextArea();
+		onlineSearchTextArea = new JTextArea();
 		scrollPane_2.setViewportView(onlineSearchTextArea);
 		onlineSearchTextArea.append("  UPC     Title     Category     LeadSinger     Price          \n----------------------------------------------------------------");
 		
