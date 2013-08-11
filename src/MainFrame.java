@@ -633,6 +633,7 @@ public class MainFrame extends JFrame {
 		//TODO: Daily Sales Report Button
 		btnDisplayReport.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
+				dailySalesReportTextArea.setText("");
 				String s = dailySalesDate.getText().trim();
 				ItemOperations i = new ItemOperations();
 				if (i.dailySalesReportGUI(s)){
@@ -721,6 +722,7 @@ public class MainFrame extends JFrame {
 		JButton topSellingButton = new JButton("Submit");
 		topSellingButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
+			topSellTextArea.setText("");
 			ItemOperations i = new ItemOperations();
 			String sd = topSellDate.getText().trim();
 			Integer n = Integer.parseInt(topSellNum.getText());
@@ -1036,6 +1038,7 @@ public class MainFrame extends JFrame {
 		JButton btnSearchItems = new JButton("Search Items");
 		btnSearchItems.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
+				onlineSearchTextArea.setText("");
 				Integer qty = Integer.parseInt(opqty.getText().trim());
 				String title = optitle.getText().trim();
 				String category = opcat.getText().trim();
