@@ -355,7 +355,7 @@ public class PurchaseOperations extends AbstractTableOperations {
 	 //save these values in GUI shopping basket text area
 	 MainFrame.appendShoppingBasketTextArea("  "+theupc+"  ");
 	 MainFrame.appendShoppingBasketTextArea(price.toString()+"  ");
-	 MainFrame.appendShoppingBasketTextArea(qty.toString());
+	 MainFrame.appendShoppingBasketTextArea(qty.toString()+"\n");
 	 
  }
 //TODO: IAN FINISH THIS METHOD
@@ -411,6 +411,7 @@ public class PurchaseOperations extends AbstractTableOperations {
 //			String searchItems = "";
 			System.out.println("\nEntering loop...");
 			while(rs.next()){
+				
 				System.out.println(MainFrame.getSearchResultItemCount());
 				String searchItem = "";
 				
