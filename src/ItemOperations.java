@@ -699,8 +699,8 @@ public class ItemOperations extends AbstractTableOperations{
 		System.out.println("test");
 		//
 		AMSOracleConnection oCon = AMSOracleConnection.getInstance();
-		oCon.connect("ora_o0g6", "a40493058");
-//		oCon.connect("ora_h5n8", "a44140028");
+//		oCon.connect("ora_o0g6", "a40493058");
+		oCon.connect("ora_h5n8", "a44140028");
 		//
 		ItemOperations item = new ItemOperations();
 
@@ -714,8 +714,8 @@ public class ItemOperations extends AbstractTableOperations{
 		//		item.delete("999999");
 		//		item.delete("123457");
 		//
-		item.dailySalesReportGUI("25-05-13");
-		//item.topItems("03-03-18", 3);
+//		item.dailySalesReportGUI("25-05-13");
+		item.topItems("25-may-13", 4);
 		System.out.println("test done");
 
 
