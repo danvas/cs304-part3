@@ -350,7 +350,7 @@ public class PurchaseOperations extends AbstractTableOperations {
 	 //indicate there is 1 purchaseitem in basket
 	 MainFrame.incOnlinePurchaseCount();
 	 
-	 //save these values in text area
+	 //save these values in GUI shopping basket text area
 	 MainFrame.appendShoppingBasketTextArea("  "+theupc+"  ");
 	 MainFrame.appendShoppingBasketTextArea(price.toString()+"  ");
 	 MainFrame.appendShoppingBasketTextArea(qty.toString());
@@ -526,7 +526,8 @@ public class PurchaseOperations extends AbstractTableOperations {
 	public boolean completeOnlinePurchase(String cardno, String cardexpdate,String cid){
 		String upc;
 		Integer qty;
-		ArrayList<String> items = MainFrame.getPurchaseItems();
+		Double price;
+		ArrayList<String> items = MainFrame.getOnlinePurchaseItems();
 		java.util.Date pdate = new Date();
 		java.sql.Date sqlpdate = new java.sql.Date(pdate.getTime());
 			
@@ -552,8 +553,13 @@ public class PurchaseOperations extends AbstractTableOperations {
 				System.out.println("entered for loop");
 				upc = items.get(0);
 				System.out.println("UPC is:" + upc);
-				qty = Integer.parseInt(items.get(1));
+				
+				price = Double.parseDouble(items.get(1));
+				System.out.println("Price is:" + price.toString() );
+				
+				qty = Integer.parseInt(items.get(2));
 				System.out.println("Quantity is:" + qty.toString() );
+				
 				ps = con.prepareStatement("INSERT INTO PurchaseItem VALUES (purchase_receiptId.currval,?,?)");
 				items.remove(0); 
 				items.remove(0);
