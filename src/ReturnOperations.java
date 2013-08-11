@@ -95,7 +95,7 @@ public class ReturnOperations extends AbstractTableOperations {
 		try {
 			// Checks if purchase has been made within 15 days 
 			// and if the item has already been returned using (sysdate - 15) 
-			ps = con.prepareStatement("SELECT p.pdate, pi.receiptid, pi.upc, pi.quantity FROM purchase p, purchaseitem pi WHERE p.receiptid = pi.receiptid AND p.receiptId ? AND pi.upc = ? AND pdate >= (sysdate - 15) MINUS select p.pdate, pi.receiptid, pi.upc, pi.quantity from purchase p, purchaseitem pi, return r, returnitem ri where ri.retid = r.retid and r.receiptid = p.receiptid and p.receiptid = pi.receiptid and r.rdate >= (sysdate - 15)");
+			ps = con.prepareStatement("SELECT DISTINCT(UPC), RECEIPTID , QUANTITY FROM (SELECT p.pdate, pi.receiptid, pi.upc, pi.quantity FROM purchase p, purchaseitem pi WHERE p.receiptid = pi.receiptid AND p.receiptId ? AND pi.upc = ? AND pdate >= (sysdate - 15) MINUS select p.pdate, pi.receiptid, pi.upc, pi.quantity from purchase p, purchaseitem pi, return r, returnitem ri where ri.retid = r.retid and r.receiptid = p.receiptid and p.receiptid = pi.receiptid and r.rdate >= (sysdate - 15))");
 			ps.setString(1, receiptId);
 			ps.setString(2, upc);
 			System.out.println("Executing Query to select");
