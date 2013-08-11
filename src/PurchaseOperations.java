@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 import java.util.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -376,18 +377,20 @@ public class PurchaseOperations extends AbstractTableOperations {
 			else qqty = "AND i.stock >= "+qty.toString();
 					System.out.println(qqty);
 			if (title != null && !title.isEmpty()){
-				qtitle = " AND i.ititle = "+title;
+				qtitle = " AND i.ititle = '"+title+"'";
 			}
 			System.out.println(qtitle);
 			if (category != null && !category.isEmpty()){
-				qcat = " AND i.category = "+category;
+				qcat = " OR i.category = '"+category+"'";
 			}
 			System.out.println(qcat);
 			if (leadsinger != null && !leadsinger.isEmpty()){
-				qls = " AND l.sname = "+leadsinger;
+				qls = " OR l.sname = '"+leadsinger+"'";
 			}
 			System.out.println(qls);
 			
+			//String statement = "SELECT i.upc, ititle, category, sname, price FROM Item i, LeadSinger l WHERE i.upc = l.upc "+qqty+qtitle+qcat+qls;
+
 			String statement = "SELECT i.upc, ititle, category, sname, price FROM Item i, LeadSinger l WHERE i.upc = l.upc "+qqty+qtitle+qcat+qls;
 			//String statement = "SELECT * FROM Item i, LeadSinger l WHERE i.upc=l.upc";
 			//String statement = "SELECT i.upc, i.ititle, i.category, l.sname, i.price FROM Item i inner join LeadSinger l on i.upc = l.upc WHERE "+qqty+qtitle+qcat+qls;
@@ -405,42 +408,53 @@ public class PurchaseOperations extends AbstractTableOperations {
 			ResultSet rs = ps.executeQuery();
 	
 			System.out.println("Just Executed Online Item Search Query");
+//			String searchItems = "";
+			System.out.println("\nEntering loop...");
 			while(rs.next()){
+				System.out.println(MainFrame.getSearchResultItemCount());
+				String searchItem = "";
 				
-				System.out.println("We are in the loop");
 				rsupc = rs.getString(1);
 				System.out.println("Checking out rsupc value: "+rsupc);
-				MainFrame.addSearchItem(rsupc);
+				searchItem += (rsupc);
+//				MainFrame.addSearchItem(rsupc);
 				
 				rstitle = rs.getString(2);
 				System.out.println("Checking out rstitle value: "+rstitle);
-				MainFrame.addSearchItem(rstitle);
+				searchItem += ("\t" + rstitle); //TODO: fix output format (low priority)
+//				MainFrame.addSearchItem(rstitle);
 				
 				rscategory = rs.getString(3);
 				System.out.println("Checking out rscat value: "+rscategory);
-				MainFrame.addSearchItem(rscategory);
+				searchItem += ("\t" + rscategory);
+//				MainFrame.addSearchItem(rscategory);
 				
 				rsleadsinger = rs.getString(4);
 				System.out.println("Checking out rsls value: "+rsleadsinger);
-				MainFrame.addSearchItem(rsleadsinger);
+				searchItem += ("\t" + rsleadsinger);
+//				MainFrame.addSearchItem(rsleadsinger);
 			
 				
 				rsprice = rs.getDouble(5);
 				System.out.println("Checking out rsprice value: "+rsprice);
-				MainFrame.addSearchItem(rsprice.toString());
+				searchItem += ("\t" + rsprice);
+//				MainFrame.addSearchItem(rsprice.toString());
 				
-				MainFrame.addSearchItem(qty.toString());
+//				MainFrame.addSearchItem(qty.toString());
+				MainFrame.addSearchItem(searchItem + "\t" + qty.toString() + "\n");
 				MainFrame.incSearchResultCount();
+//				searchItems += searchItem;
+				System.out.println("\n");
 			}
+			System.out.println("Exiting loop...\n");
 			ArrayList<String> searchresults = MainFrame.getOnlineSearchItems();
 			String s= "" ;
 			for (int j=0; j<MainFrame.getSearchResultItemCount();j++){
-				for(int i=0;i<5;i++){
-				s += searchresults.get(i)+" ";
-				}
-				s+="\n";
+				s += searchresults.get(j)+" ";
 			}
 			MainFrame.showSearchResults(s);
+			System.out.println(s);
+
 			return true;
 			
 		} catch (SQLException ex) {

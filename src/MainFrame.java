@@ -989,13 +989,13 @@ public class MainFrame extends JFrame {
 		gbc_label_1.gridy = 0;
 		onlinePurchase.add(label_1, gbc_label_1);
 		
-		JLabel label_3 = new JLabel("Quantity:");
-		GridBagConstraints gbc_label_3 = new GridBagConstraints();
-		gbc_label_3.anchor = GridBagConstraints.WEST;
-		gbc_label_3.insets = new Insets(0, 0, 5, 5);
-		gbc_label_3.gridx = 1;
-		gbc_label_3.gridy = 0;
-		onlinePurchase.add(label_3, gbc_label_3);
+		JLabel lblQuantity = new JLabel("Quantity");
+		GridBagConstraints gbc_lblQuantity = new GridBagConstraints();
+		gbc_lblQuantity.anchor = GridBagConstraints.EAST;
+		gbc_lblQuantity.insets = new Insets(0, 0, 5, 5);
+		gbc_lblQuantity.gridx = 1;
+		gbc_lblQuantity.gridy = 0;
+		onlinePurchase.add(lblQuantity, gbc_lblQuantity);
 		
 		opqty = new JTextField();
 		GridBagConstraints gbc_opqty = new GridBagConstraints();
@@ -1059,6 +1059,7 @@ public class MainFrame extends JFrame {
 		
 		JLabel lblNewLabel_7 = new JLabel("Title");
 		GridBagConstraints gbc_lblNewLabel_7 = new GridBagConstraints();
+		gbc_lblNewLabel_7.anchor = GridBagConstraints.EAST;
 		gbc_lblNewLabel_7.insets = new Insets(0, 0, 5, 5);
 		gbc_lblNewLabel_7.gridx = 3;
 		gbc_lblNewLabel_7.gridy = 1;
@@ -1067,7 +1068,6 @@ public class MainFrame extends JFrame {
 		optitle = new JTextField();
 		GridBagConstraints gbc_optitle = new GridBagConstraints();
 		gbc_optitle.insets = new Insets(0, 0, 5, 5);
-		gbc_optitle.fill = GridBagConstraints.HORIZONTAL;
 		gbc_optitle.gridx = 4;
 		gbc_optitle.gridy = 1;
 		onlinePurchase.add(optitle, gbc_optitle);
