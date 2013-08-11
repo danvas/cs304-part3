@@ -12,29 +12,36 @@ import java.util.Calendar;
 
 
 public class ReturnOperations extends AbstractTableOperations {
-	boolean insert(Integer receiptId,Date rdate){
+	/*
+	 * Insert a new tuple in Return table. Return date will uses sysdate 
+	 * specifying the current date.
+	 */
+	boolean insert(String receiptId){
 		try {
-			ps = con.prepareStatement("INSERT INTO return VALUES (receipt_retid.nextval,?,?)");
+			ps = con.prepareStatement("INSERT INTO return VALUES (return_retid.nextval,?,sysdate)");
 			if(receiptId!=null){
-				ps.setInt(1, receiptId);
+				ps.setString(1, receiptId);
 			}
 			else{
-				ps.setNull(1, Types.INTEGER);
+				ps.setString(1, null);
 			}
-			if(rdate!=null){
-				ps.setDate(2,rdate);
-			}
-			else{
-				ps.setDate(2, null);
-			}
+//			if(rdate!=null){
+//				ps.setDate(2,rdate);
+//			}
+//			else{
+//				ps.setDate(2, null);
+//			}
+			System.out.println("Executing Query to insert");
 			ps.executeUpdate();
+			System.out.println("Query to insert Executed");
 			con.commit();
+			
 			return true;
 		} 
 		catch (SQLException ex) {
 			ExceptionEvent event = new ExceptionEvent(this, ex.getMessage());
 			fireExceptionGenerated(event);
-
+			System.out.println(ex.getMessage());
 			try
 			{
 				con.rollback();
@@ -80,32 +87,31 @@ public class ReturnOperations extends AbstractTableOperations {
 	/*
 	 * Process a return for an item.
 	 */
-	public boolean returnItem(Integer receiptId, String upc) {
+	public boolean returnItem(String receiptId, String upc) {
 		ResultSet rs;
 
 		try {
-			// check if the item has already been returned
-			ps = con.prepareStatement("SELECT r.retid, r.receiptid, rdate FROM return r, returnitem ri WHERE r.receiptId = ? AND ri.upc = ?");
-			ps.setInt(1, receiptId);
+			// Check if the item has already been returned using (sysdate - 15) 
+			ps = con.prepareStatement("SELECT r.retid, r.receiptid, rdate FROM return r, returnitem ri " +
+					"WHERE r.receiptId = ? AND ri.upc = ? AND r.retid = ri.retid AND rdate >= (sysdate - 15)");
+			ps.setString(1, receiptId);
 			ps.setString(2, upc);
-			System.out.println("Executing Query");
+			System.out.println("Executing Query to select");
 			
 			rs = ps.executeQuery();
-			System.out.println("Query Executed");
-			ps.close();
-
+			System.out.println("Query to select Executed");
+			
+			// If return already exists or greater than 15 days, do nothing
 			if (rs.next()) {
-				System.out.println("Return already made");
+				System.out.println("Return already made or not within 15 days of purchase");
 				return true;
 			}
-			else {
-				//TODO: fix date
-				Date currdate = null;
-				// If return made within 15 days, update tables below
-				if (checkValidDate (receiptId)) {
-					
+			// If return made within 15 days, create tuples in Return and ReturnItem
+			// and update stock in Item
+			else {				
+					System.out.println("Processing Return...");
 					// Insert new tuple into Return table
-					insert(receiptId, currdate);
+					insert(receiptId);
 					System.out.println("Inserted into Return");
 					
 					// Insert new tuple into ReturnItem table
@@ -118,9 +124,6 @@ public class ReturnOperations extends AbstractTableOperations {
 					io.updateItem(upc, 1, null);
 					System.out.println("Updated stock on item");
 					return true;
-				}
-				System.out.println("Return greater than 15 days");
-				return false;
 			}
 		}
 		catch (SQLException ex) {
@@ -137,23 +140,23 @@ public class ReturnOperations extends AbstractTableOperations {
 				return false;
 			}
 		}  
-
 	}
+	
 	/*
 	 * Checks if return date is within 15 days
-	 * TODO: does this work?
+	 * Not being used
 	 */
 	boolean checkValidDate (Integer receiptId){
-		
+
 		Date pdate;
 		String cid;
 		String cardno;
 		String expDate;
 		String eDate;
 		String dDate;
-		
-		
-		
+
+
+
 		try{
 
 			ps = con.prepareStatement("SELECT * FROM purchase where receiptId = ?");
@@ -163,105 +166,105 @@ public class ReturnOperations extends AbstractTableOperations {
 				ps.setInt(1, receiptId);
 			}
 			else ps.setNull(1,Types.INTEGER);
-			
+
 
 
 			ResultSet rs = ps.executeQuery();
 			// get info on ResultSet
-			  ResultSetMetaData rsmd = rs.getMetaData();
+			ResultSetMetaData rsmd = rs.getMetaData();
 
-			  // get number of columns
-			  int numCols = rsmd.getColumnCount();
+			// get number of columns
+			int numCols = rsmd.getColumnCount();
 
-			  System.out.println(" ");
-			  
-			  // display column names;
-			  for (int i = 0; i < numCols; i++)
-			  {
-			      // get column name and print it
+			System.out.println(" ");
 
-			      System.out.printf("%-15s", rsmd.getColumnName(i+1));    
-			  }
+			// display column names;
+			for (int i = 0; i < numCols; i++)
+			{
+				// get column name and print it
 
-			  System.out.println(" ");
+				System.out.printf("%-15s", rsmd.getColumnName(i+1));    
+			}
 
-			  while(rs.next())
-			  {
-			      // for display purposes get everything from Oracle 
-			      // as a string
+			System.out.println(" ");
 
-			      // simplified output formatting; truncation may occur
+			while(rs.next())
+			{
+				// for display purposes get everything from Oracle 
+				// as a string
 
-			      pdate = rs.getDate("pdate");
-			      System.out.printf("%-15.15s", pdate);
+				// simplified output formatting; truncation may occur
 
-			      cid = rs.getString("cid");
-			      System.out.printf("%-15.15s", cid);
+				pdate = rs.getDate("pdate");
+				System.out.printf("%-15.15s", pdate);
 
-			      cardno = rs.getString("cardno");
-			      if (rs.wasNull())
-			      {
-			    	  System.out.printf("%-15.15s", " ");
-		              }
-			      else
-			      {
-			    	  System.out.printf("%-15.15s", cardno);
-			      }
+				cid = rs.getString("cid");
+				System.out.printf("%-15.15s", cid);
 
-			      expDate = rs.getString("EXPIRYDATE");
-			      System.out.printf("%-15.15s", expDate);
+				cardno = rs.getString("cardno");
+				if (rs.wasNull())
+				{
+					System.out.printf("%-15.15s", " ");
+				}
+				else
+				{
+					System.out.printf("%-15.15s", cardno);
+				}
 
-			      eDate = rs.getString("EXPECTEDDATE");
-			      if (rs.wasNull())
-			      {
-			    	  System.out.printf("%-15.15s\n", " ");
-		              }
-			      else
-			      {
-			    	  System.out.printf("%-15.15s\n", eDate);
-			      } 
-			      dDate = rs.getString("DELIVEREDDATE");
-			      if (rs.wasNull())
-			      {
-			    	  System.out.printf("%-15.15s\n", " ");
-		              }
-			      else
-			      {
-			    	  System.out.printf("%-15.15s\n", dDate);
-			      } 
-			      
-			  }
-			  
-			  
-//		 
-//			  // close the statement; 
-//			  // the ResultSet will also be closed
-//			  stmt.close();
-//			}
-//			
-			
-//			Date utilDate = new Date(sqlDate.getTime());
-			
-//			DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
-			   //get current date time with Date()
-//			   Date date = new Date();
-//			   System.out.println(dateFormat.format(date));
-		 
-			   //get current date time with Calendar()
-//			   Calendar cal = Calendar.getInstance();
-			   
-//			   System.out.println(dateFormat.format(cal.getTime()));
-			   
-//			   System.out.println(dateFormat.format(rs.getDate("pdate")));
-//			   java.sql.Date sqlDate = dateFormat.format(rs.getTime(2));
-			   
-//			if (utilDate.before(cal.getTime()));
-//				System.out.println("before");
+				expDate = rs.getString("EXPIRYDATE");
+				System.out.printf("%-15.15s", expDate);
 
-//			SimpleDateFormat fm = new SimpleDateFormat("dd/MM/yy");
-//			java.util.Date utilDate = fm.parse(stringdate);
-//			java.sql.Date sqldate = new java.sql.Date(utilDate.getTime());
-//			ps.setDate(1,sqldate);
+				eDate = rs.getString("EXPECTEDDATE");
+				if (rs.wasNull())
+				{
+					System.out.printf("%-15.15s\n", " ");
+				}
+				else
+				{
+					System.out.printf("%-15.15s\n", eDate);
+				} 
+				dDate = rs.getString("DELIVEREDDATE");
+				if (rs.wasNull())
+				{
+					System.out.printf("%-15.15s\n", " ");
+				}
+				else
+				{
+					System.out.printf("%-15.15s\n", dDate);
+				} 
+
+			}
+
+
+			//		 
+			//			  // close the statement; 
+			//			  // the ResultSet will also be closed
+			//			  stmt.close();
+			//			}
+			//			
+
+			//			Date utilDate = new Date(sqlDate.getTime());
+
+			//			DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
+			//get current date time with Date()
+			//			   Date date = new Date();
+			//			   System.out.println(dateFormat.format(date));
+
+			//get current date time with Calendar()
+			//			   Calendar cal = Calendar.getInstance();
+
+			//			   System.out.println(dateFormat.format(cal.getTime()));
+
+			//			   System.out.println(dateFormat.format(rs.getDate("pdate")));
+			//			   java.sql.Date sqlDate = dateFormat.format(rs.getTime(2));
+
+			//			if (utilDate.before(cal.getTime()));
+			//				System.out.println("before");
+
+			//			SimpleDateFormat fm = new SimpleDateFormat("dd/MM/yy");
+			//			java.util.Date utilDate = fm.parse(stringdate);
+			//			java.sql.Date sqldate = new java.sql.Date(utilDate.getTime());
+			//			ps.setDate(1,sqldate);
 
 
 			return true;
@@ -313,8 +316,15 @@ public class ReturnOperations extends AbstractTableOperations {
 //		oCon.connect("ora_h5n8", "a44140028");
 		
 		ReturnOperations ro = new ReturnOperations();
-		//ro.insert(1007, rdate)
-		ro.checkValidDate(1005);
+		
+		// both tests are for my account
+		
+		// inside of 15 days and should be inserted
+		ro.returnItem("1008", "111114");
+		
+		// out side of 15 days from today and shouldn't be inserted into tables
+		ro.returnItem("1015", "111114");
+
 		
 
 		
