@@ -331,21 +331,29 @@ public class PurchaseOperations extends AbstractTableOperations {
 		}
 	}
  public void addItemToShoppingCart(String upc){
-	 ArrayList<String> searchItems = MainFrame.getOnlinePurchaseItems();
+	 ArrayList<String> searchItems = MainFrame.getOnlineSearchItems();
 	 int index = searchItems.indexOf(upc);
 	 
 	 String theupc = searchItems.get(index);
 //	 String title = searchItems.get(index+1);
 //	 String category = searchItems.get(index+2);
 //	 String leadsinger = searchItems.get(index+3);
-//	 Double price = Double.parseDouble(searchItems.get(index+4));
+	 Double price = Double.parseDouble(searchItems.get(index+4));
 	 Integer qty = Integer.parseInt(searchItems.get(index+5));
 	 
 	 MainFrame.clearSearchResults();
-	 
+	 //save upc, price, qty as strings to onlinePurchaseItems
 	 MainFrame.saveOnlinePurchaseItem(theupc);
+	 MainFrame.saveOnlinePurchaseItem(price.toString());
 	 MainFrame.saveOnlinePurchaseItem(qty.toString());
 	 
+	 //indicate there is 1 purchaseitem in basket
+	 MainFrame.incOnlinePurchaseCount();
+	 
+	 //save these values in text area
+	 MainFrame.appendShoppingBasketTextArea("  "+theupc+"  ");
+	 MainFrame.appendShoppingBasketTextArea(price.toString()+"  ");
+	 MainFrame.appendShoppingBasketTextArea(qty.toString());
 	 
  }
 //TODO: IAN FINISH THIS METHOD
@@ -383,9 +391,13 @@ public class PurchaseOperations extends AbstractTableOperations {
 			//String statement = "SELECT * FROM Item i, LeadSinger l WHERE i.upc=l.upc";
 			//String statement = "SELECT i.upc, i.ititle, i.category, l.sname, i.price FROM Item i inner join LeadSinger l on i.upc = l.upc WHERE "+qqty+qtitle+qcat+qls;
 
+			
+			
+			
 			System.out.println(statement);
-			ps = con.prepareStatement(statement,ResultSet.TYPE_SCROLL_INSENSITIVE,
-					ResultSet.CONCUR_READ_ONLY);
+			ps = con.prepareStatement(statement);
+			//,ResultSet.TYPE_SCROLL_INSENSITIVE,
+			//ResultSet.CONCUR_READ_ONLY
 			
 			System.out.println("About to Execute Online Search");
 			
@@ -414,7 +426,7 @@ public class PurchaseOperations extends AbstractTableOperations {
 				
 				rsprice = rs.getDouble(5);
 				System.out.println("Checking out rsprice value: "+rsprice);
-				MainFrame.addSearchItem(rsleadsinger);
+				MainFrame.addSearchItem(rsprice.toString());
 				
 				MainFrame.addSearchItem(qty.toString());
 				MainFrame.incSearchResultCount();
