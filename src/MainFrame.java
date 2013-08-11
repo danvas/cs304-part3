@@ -67,8 +67,8 @@ public class MainFrame extends JFrame {
 	private static ArrayList<String> instorePurchaseItems;
 	private JTextField dailySalesDate;
 	private static JTextArea dailySalesReportTextArea;
-	private JTextField textField;
-	private JTextField textField_1;
+	private JTextField topSellDate;
+	private JTextField topSellNum;
 	private String customerId = "";
 	private static ArrayList<String> onlineSearchItems;
 	private static ArrayList<String> onlinePurchaseItems;
@@ -79,6 +79,7 @@ public class MainFrame extends JFrame {
 	private JTextField opcat;
 	private static JTextArea onlineSearchTextArea;
 	private static JTextArea shoppingBasketTextArea;
+	private static JTextArea topSellTextArea;
 	private static Integer searchResultItemCount = 0;
 	/**
 	 * Launch the application.
@@ -661,9 +662,9 @@ public class MainFrame extends JFrame {
 		topSellingItemsTab.setBorder(new EmptyBorder(10, 10, 10, 10));
 		managerOperations.addTab("Top Selling Items", null, topSellingItemsTab, null);
 		GridBagLayout gbl_topSellingItemsTab = new GridBagLayout();
-		gbl_topSellingItemsTab.columnWidths = new int[]{190, 0, 0, 0, 0, 46, 0};
+		gbl_topSellingItemsTab.columnWidths = new int[]{156, 0, 74, 46, 0};
 		gbl_topSellingItemsTab.rowHeights = new int[]{14, 0, 0, 0};
-		gbl_topSellingItemsTab.columnWeights = new double[]{1.0, 0.0, 0.0, 0.0, 0.0, 1.0, Double.MIN_VALUE};
+		gbl_topSellingItemsTab.columnWeights = new double[]{1.0, 0.0, 0.0, 1.0, Double.MIN_VALUE};
 		gbl_topSellingItemsTab.rowWeights = new double[]{0.0, 0.0, 1.0, Double.MIN_VALUE};
 		topSellingItemsTab.setLayout(gbl_topSellingItemsTab);
 		
@@ -684,48 +685,66 @@ public class MainFrame extends JFrame {
 		gbc_lblDate.gridy = 0;
 		topSellingItemsTab.add(lblDate, gbc_lblDate);
 		
-		textField = new JTextField();
-		GridBagConstraints gbc_textField = new GridBagConstraints();
-		gbc_textField.gridwidth = 3;
-		gbc_textField.insets = new Insets(0, 0, 5, 5);
-		gbc_textField.fill = GridBagConstraints.HORIZONTAL;
-		gbc_textField.gridx = 2;
-		gbc_textField.gridy = 0;
-		topSellingItemsTab.add(textField, gbc_textField);
-		textField.setColumns(10);
+		topSellDate = new JTextField();
+		GridBagConstraints gbc_topSellDate = new GridBagConstraints();
+		gbc_topSellDate.insets = new Insets(0, 0, 5, 5);
+		gbc_topSellDate.fill = GridBagConstraints.HORIZONTAL;
+		gbc_topSellDate.gridx = 2;
+		gbc_topSellDate.gridy = 0;
+		topSellingItemsTab.add(topSellDate, gbc_topSellDate);
+		topSellDate.setColumns(10);
+		
+		JLabel lblDdmmyy_1 = new JLabel("dd-MM-yy");
+		GridBagConstraints gbc_lblDdmmyy_1 = new GridBagConstraints();
+		gbc_lblDdmmyy_1.insets = new Insets(0, 0, 5, 0);
+		gbc_lblDdmmyy_1.gridx = 3;
+		gbc_lblDdmmyy_1.gridy = 0;
+		topSellingItemsTab.add(lblDdmmyy_1, gbc_lblDdmmyy_1);
 		
 		JLabel lblNumberOfItems = new JLabel("Number of Items:");
 		GridBagConstraints gbc_lblNumberOfItems = new GridBagConstraints();
-		gbc_lblNumberOfItems.anchor = GridBagConstraints.EAST;
+		gbc_lblNumberOfItems.anchor = GridBagConstraints.WEST;
 		gbc_lblNumberOfItems.insets = new Insets(0, 0, 5, 5);
 		gbc_lblNumberOfItems.gridx = 1;
 		gbc_lblNumberOfItems.gridy = 1;
 		topSellingItemsTab.add(lblNumberOfItems, gbc_lblNumberOfItems);
 		
-		textField_1 = new JTextField();
-		GridBagConstraints gbc_textField_1 = new GridBagConstraints();
-		gbc_textField_1.gridwidth = 3;
-		gbc_textField_1.insets = new Insets(0, 0, 5, 5);
-		gbc_textField_1.fill = GridBagConstraints.HORIZONTAL;
-		gbc_textField_1.gridx = 2;
-		gbc_textField_1.gridy = 1;
-		topSellingItemsTab.add(textField_1, gbc_textField_1);
-		textField_1.setColumns(10);
+		topSellNum = new JTextField();
+		GridBagConstraints gbc_topSellNum = new GridBagConstraints();
+		gbc_topSellNum.insets = new Insets(0, 0, 5, 5);
+		gbc_topSellNum.fill = GridBagConstraints.HORIZONTAL;
+		gbc_topSellNum.gridx = 2;
+		gbc_topSellNum.gridy = 1;
+		topSellingItemsTab.add(topSellNum, gbc_topSellNum);
+		topSellNum.setColumns(10);
 		
-		JButton btnSubmit_2 = new JButton("Submit");
-		GridBagConstraints gbc_btnSubmit_2 = new GridBagConstraints();
-		gbc_btnSubmit_2.insets = new Insets(0, 0, 5, 0);
-		gbc_btnSubmit_2.gridx = 5;
-		gbc_btnSubmit_2.gridy = 1;
-		topSellingItemsTab.add(btnSubmit_2, gbc_btnSubmit_2);
+		JButton topSellingButton = new JButton("Submit");
+		topSellingButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+			ItemOperations i = new ItemOperations();
+			String sd = topSellDate.getText().trim();
+			Integer n = Integer.parseInt(topSellNum.getText());
+			if(i.topSellingItemsReportGUI(sd, n)){
+				System.out.println("Report should be displayed in GUI");
+			}
+			}
+		});
+		GridBagConstraints gbc_topSellingButton = new GridBagConstraints();
+		gbc_topSellingButton.insets = new Insets(0, 0, 5, 0);
+		gbc_topSellingButton.gridx = 3;
+		gbc_topSellingButton.gridy = 1;
+		topSellingItemsTab.add(topSellingButton, gbc_topSellingButton);
 		
-		JTextArea textArea = new JTextArea();
-		GridBagConstraints gbc_textArea = new GridBagConstraints();
-		gbc_textArea.gridwidth = 6;
-		gbc_textArea.fill = GridBagConstraints.BOTH;
-		gbc_textArea.gridx = 0;
-		gbc_textArea.gridy = 2;
-		topSellingItemsTab.add(textArea, gbc_textArea);
+		JScrollPane scrollPane_1 = new JScrollPane();
+		GridBagConstraints gbc_scrollPane_1 = new GridBagConstraints();
+		gbc_scrollPane_1.fill = GridBagConstraints.BOTH;
+		gbc_scrollPane_1.gridwidth = 4;
+		gbc_scrollPane_1.gridx = 0;
+		gbc_scrollPane_1.gridy = 2;
+		topSellingItemsTab.add(scrollPane_1, gbc_scrollPane_1);
+		
+		topSellTextArea = new JTextArea();
+		scrollPane_1.setViewportView(topSellTextArea);
 		
 		final JPanel customerOperations = new JPanel();
 		contentPane.add(customerOperations, "name_1452058092586835");
@@ -1269,5 +1288,7 @@ public static void incSearchResultCount(){
 public static void appendShoppingBasketTextArea(String s){
 	shoppingBasketTextArea.append(s);
 }
-
+public static void appendTopSellingItemsReport(String s){
+	topSellTextArea.append(s);
+}
 }

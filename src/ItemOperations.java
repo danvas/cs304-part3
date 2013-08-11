@@ -652,7 +652,134 @@ public class ItemOperations extends AbstractTableOperations{
 		}
 
 	}
+	
+	public boolean topSellingItemsReportGUI(String date, Integer n){
+		String title;
+		String company;
+		Integer stock;
+		Integer sold;
+		ResultSet rs;
+		ResultSetMetaData rsmd;
+		String jtext = "";
+		try{
 
+			ps = con.prepareStatement("WITH sq1 AS (select * from (select upc,  sum(quantity) as Sold from purchaseitem pi, purchase p where p.receiptid = pi.receiptid and pdate >= ? and pdate <= ? group by upc order by sold desc) where rownum <= ?), sq2 AS (select distinct (pi.upc), ititle, stock, company from item i, purchase p, purchaseitem pi where i.upc = pi.upc and pi.receiptid = p.receiptid) SELECT ititle as Title, company, stock, Sold FROM sq1, sq2 WHERE  sq1.upc = sq2.upc ORDER BY Sold desc",
+					ResultSet.TYPE_SCROLL_INSENSITIVE,
+					ResultSet.CONCUR_READ_ONLY);
+			//			if (date != null)
+			//			{
+			
+			DateFormat formatter = new SimpleDateFormat("dd-MM-yy");
+			java.util.Date jdate = formatter.parse(date);
+			java.sql.Date sqldate = new java.sql.Date(jdate.getTime());
+			
+			ps.setDate(1, sqldate);
+			ps.setDate(2, sqldate);
+			ps.setInt(3, n);
+
+
+			System.out.println("about to execute");
+
+			rs = ps.executeQuery();
+
+			System.out.println("after execute");
+
+			// get info on ResultSet
+			rsmd = rs.getMetaData();
+
+			// get number of columns
+			int numCols = rsmd.getColumnCount();
+
+			//			String nc = toString(numCols);
+
+			System.out.println(" ");
+			jtext+=" ";
+			// display column names;
+			for (int i = 0; i < numCols; i++)
+			{
+				// get column name and print it
+
+				System.out.printf("%-30s", rsmd.getColumnName(i+1));   
+				jtext+= rsmd.getColumnName(i+1)+"               ";
+			}
+
+			System.out.println(" ");
+			jtext+="\n--------------------------------------------------------------------------\n";
+		
+			while(rs.next())
+			{
+				// for display purposes get everything from Oracle 
+				// as a string
+
+				// simplified output formatting; truncation may occur
+
+				title = rs.getString("title");
+				if(rs.wasNull()){
+					jtext+="                    ";
+				}
+				else{
+					jtext+= "\n"+title;
+				}
+				System.out.printf("%-30.30s", title);
+				
+				
+				company = rs.getString("company");
+				if (rs.wasNull())
+				{
+					System.out.printf("%-30.30s", " ");
+					jtext+="                    ";
+				}
+				else
+				{
+					System.out.printf("%-30.30s", company);
+					jtext+="               "+company;
+				}
+
+				stock = rs.getInt("stock");
+				if (rs.wasNull())
+				{
+					System.out.printf("%-30.30s", " ");
+					jtext+= "                              ";
+				}
+				else
+				{
+					System.out.printf("%-30.30s", stock + " ");
+					jtext+="                    "+stock;
+				}
+
+				sold = rs.getInt("sold");
+				if (rs.wasNull())
+				{
+					System.out.printf("%-30.30s\n", " ");
+					jtext+="                    \n";
+				}
+				else
+				{
+					System.out.printf("%-30.30s\n", sold + " ");
+					jtext+="                    "+sold+"\n";
+				} 
+
+			}
+			MainFrame.appendTopSellingItemsReport(jtext);
+			return true;
+		}
+		catch(SQLException | ParseException ex){
+			ExceptionEvent event = new ExceptionEvent(this, ex.getMessage());
+			fireExceptionGenerated(event);
+			System.out.println(ex.getMessage());
+			try {
+				con.rollback();
+				return false; 
+			}
+			catch (SQLException ex2) {
+				event = new ExceptionEvent(this, ex2.getMessage());
+				fireExceptionGenerated(event);
+				return false; 
+			}
+		}
+
+	}
+	
 	public boolean reduceStockForPurchase(ArrayList<String> items){
 		try {
 			ps = con.prepareStatement("UPDATE item SET stock = stock - ? WHERE upc = ?");
