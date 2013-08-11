@@ -357,17 +357,25 @@ public class MainFrame extends JFrame {
 		clerkOperations.addTab("Return", null, processReturn, null);
 		GridBagLayout gbl_processReturn = new GridBagLayout();
 		gbl_processReturn.columnWidths = new int[]{0, 0, 0, 0, 0};
-		gbl_processReturn.rowHeights = new int[]{0, 0, 0, 0, 0, 0, 0};
+		gbl_processReturn.rowHeights = new int[]{35, 0, 0, 0, 0, 0, 0};
 		gbl_processReturn.columnWeights = new double[]{0.0, 0.0, 0.0, 1.0, Double.MIN_VALUE};
 		gbl_processReturn.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 1.0, Double.MIN_VALUE};
 		processReturn.setLayout(gbl_processReturn);
+		
+		JLabel lblNewLabel_8 = new JLabel("Return Item");
+		lblNewLabel_8.setFont(new Font("Tahoma", Font.BOLD, 11));
+		GridBagConstraints gbc_lblNewLabel_8 = new GridBagConstraints();
+		gbc_lblNewLabel_8.insets = new Insets(0, 0, 5, 5);
+		gbc_lblNewLabel_8.gridx = 1;
+		gbc_lblNewLabel_8.gridy = 0;
+		processReturn.add(lblNewLabel_8, gbc_lblNewLabel_8);
 		
 		JLabel lblReceiptid = new JLabel("ReceiptID:");
 		GridBagConstraints gbc_lblReceiptid = new GridBagConstraints();
 		gbc_lblReceiptid.insets = new Insets(0, 0, 5, 5);
 		gbc_lblReceiptid.anchor = GridBagConstraints.EAST;
 		gbc_lblReceiptid.gridx = 1;
-		gbc_lblReceiptid.gridy = 1;
+		gbc_lblReceiptid.gridy = 2;
 		processReturn.add(lblReceiptid, gbc_lblReceiptid);
 		
 		returnReceiptId = new JTextField();
@@ -375,7 +383,7 @@ public class MainFrame extends JFrame {
 		gbc_returnReceiptId.insets = new Insets(0, 0, 5, 5);
 		gbc_returnReceiptId.fill = GridBagConstraints.HORIZONTAL;
 		gbc_returnReceiptId.gridx = 2;
-		gbc_returnReceiptId.gridy = 1;
+		gbc_returnReceiptId.gridy = 2;
 		processReturn.add(returnReceiptId, gbc_returnReceiptId);
 		returnReceiptId.setColumns(10);
 		
@@ -384,7 +392,7 @@ public class MainFrame extends JFrame {
 		gbc_lblUpc_2.anchor = GridBagConstraints.EAST;
 		gbc_lblUpc_2.insets = new Insets(0, 0, 5, 5);
 		gbc_lblUpc_2.gridx = 1;
-		gbc_lblUpc_2.gridy = 2;
+		gbc_lblUpc_2.gridy = 3;
 		processReturn.add(lblUpc_2, gbc_lblUpc_2);
 		
 		returnUPC = new JTextField();
@@ -393,7 +401,7 @@ public class MainFrame extends JFrame {
 		gbc_returnUPC.insets = new Insets(0, 0, 5, 5);
 		gbc_returnUPC.fill = GridBagConstraints.HORIZONTAL;
 		gbc_returnUPC.gridx = 2;
-		gbc_returnUPC.gridy = 2;
+		gbc_returnUPC.gridy = 3;
 		processReturn.add(returnUPC, gbc_returnUPC);
 		
 		JButton btnProcessReturn = new JButton("Process Return");
@@ -423,12 +431,12 @@ public class MainFrame extends JFrame {
 //					}
 				}
 			});
-	
-		GridBagConstraints gbc_btnProcessReturn = new GridBagConstraints();
-		gbc_btnProcessReturn.insets = new Insets(0, 0, 5, 0);
-		gbc_btnProcessReturn.gridx = 3;
-		gbc_btnProcessReturn.gridy = 2;
-		processReturn.add(btnProcessReturn, gbc_btnProcessReturn);
+		
+			GridBagConstraints gbc_btnProcessReturn = new GridBagConstraints();
+			gbc_btnProcessReturn.insets = new Insets(0, 0, 5, 0);
+			gbc_btnProcessReturn.gridx = 3;
+			gbc_btnProcessReturn.gridy = 3;
+			processReturn.add(btnProcessReturn, gbc_btnProcessReturn);
 		
 		JTabbedPane managerOperations = new JTabbedPane(JTabbedPane.TOP);
 		contentPane.add(managerOperations, "name_1449473464875310");
@@ -596,7 +604,7 @@ public class MainFrame extends JFrame {
 		gbc_lblDailySalesReport.gridy = 0;
 		dailySalesReportTab.add(lblDailySalesReport, gbc_lblDailySalesReport);
 		
-		JLabel lblDdmmyy = new JLabel("dd/mon/yy");
+		JLabel lblDdmmyy = new JLabel("dd-mm-yy");
 		GridBagConstraints gbc_lblDdmmyy = new GridBagConstraints();
 		gbc_lblDdmmyy.insets = new Insets(0, 0, 5, 5);
 		gbc_lblDdmmyy.gridx = 2;

@@ -393,16 +393,16 @@ public class ItemOperations extends AbstractTableOperations{
 
 				upc = rs.getString("upc");
 				System.out.printf("%-10.10s", upc);
-				report+=upc;
+				report+="\n"+upc+"       ";
 
 				category = rs.getString("category");
 				if (rs.wasNull()) {
 					System.out.printf("%-10.10s", " ");
-					report+=" ";
+					report+="                         ";
 				}
 				else {
 					System.out.printf("%-10.10s", category);
-					report+=category;
+					report+=category+"     ";
 					switch (category) {
 					}
 				}
@@ -410,22 +410,22 @@ public class ItemOperations extends AbstractTableOperations{
 				price = rs.getDouble("price");
 				if (rs.wasNull()){
 					System.out.printf("%-10.10s", " ");
-					report+=" ";
+					report+="                             ";
 				}
 				else {
 					System.out.printf("%-10.10s", price + " ");
-					report+= price+" ";
+					report+= price+"         ";
 					totalPrice += price;
 				}
 
 				units = rs.getInt("units");
 				if (rs.wasNull()) {
 					System.out.printf("%-10.10s", " ");
-					report+=" ";
+					report+="         ";
 				}
 				else {
 					System.out.printf("%-10.10s", units + " ");
-					report+=(units+" ");
+					report+=(units+"         ");
 			
 				} 
 
@@ -436,8 +436,9 @@ public class ItemOperations extends AbstractTableOperations{
 				}
 				else {
 					System.out.printf("%-10.10s\n", tValue + " ");
-					report+="\n"+tValue+" ";
+					report+=tValue+" ";
 				} 
+				if(category!=null&&!category.isEmpty()){
 				switch (category) {
 					case "Classical":		
 						qClassical += units;
@@ -469,6 +470,7 @@ public class ItemOperations extends AbstractTableOperations{
 						break;
 					default:				
 						break; 
+				}
 				}
 				totalQuantity += units;
 				
