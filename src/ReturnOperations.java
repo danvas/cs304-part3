@@ -17,13 +17,16 @@ public class ReturnOperations extends AbstractTableOperations {
 	 * specifying the current date.
 	 */
 	boolean insert(String receiptId){
+		
+		Integer r = Integer.parseInt(receiptId);
+		
 		try {
 			ps = con.prepareStatement("INSERT INTO return VALUES (return_retid.nextval,?,sysdate)");
-			if(receiptId!=null){
-				ps.setString(1, receiptId);
+			if(receiptId!= null){
+				ps.setInt(1, r);
 			}
 			else{
-				ps.setString(1, null);
+				ps.setInt(1, Types.INTEGER);
 			}
 //			if(rdate!=null){
 //				ps.setDate(2,rdate);
@@ -91,20 +94,26 @@ public class ReturnOperations extends AbstractTableOperations {
 	 */
 	public boolean returnItem(String receiptId, String upc) {
 		ResultSet rs;
+		Integer r = Integer.parseInt(receiptId);
+		Integer u = Integer.parseInt(upc);
+		String test1 = r.toString();
+		String test2 = u.toString();
+		System.out.println(test1);
+		System.out.println(test2);
 
 		try {
 			// Checks if purchase has been made within 15 days 
 			// and if the item has already been returned using (sysdate - 15) 
 			ps = con.prepareStatement("SELECT DISTINCT(UPC), RECEIPTID , QUANTITY FROM (SELECT p.pdate, pi.receiptid, pi.upc, pi.quantity FROM purchase p, purchaseitem pi WHERE p.receiptid = pi.receiptid AND p.receiptId = ? AND pi.upc = ? AND pdate >= (sysdate - 15) MINUS select p.pdate, pi.receiptid, pi.upc, pi.quantity from purchase p, purchaseitem pi, return r, returnitem ri where ri.retid = r.retid and r.receiptid = p.receiptid and p.receiptid = pi.receiptid and r.rdate >= (sysdate - 15))");
-			ps.setString(1, receiptId);
-			ps.setString(2, upc);
+			ps.setInt(1, r);
+			ps.setInt(2, u);
 			System.out.println("Executing Query to select");
 			
 			rs = ps.executeQuery();
 			System.out.println("Query to select Executed");
 			
 			// If return already exists or greater than 15 days, do nothing
-			if (!rs.next()) {
+			if (rs == null) {
 				System.out.println("Return already made or not within 15 days of purchase");
 				ps.close();
 				return true;
