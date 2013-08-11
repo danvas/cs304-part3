@@ -3,6 +3,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Types;
+import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -529,6 +530,7 @@ public class PurchaseOperations extends AbstractTableOperations {
 		Double price;
 		ArrayList<String> items = MainFrame.getOnlinePurchaseItems();
 		java.util.Date pdate = new Date();
+		DateFormat formatter = new SimpleDateFormat("dd/MM/yy");
 		java.sql.Date sqlpdate = new java.sql.Date(pdate.getTime());
 			
 		try {
@@ -543,7 +545,14 @@ public class PurchaseOperations extends AbstractTableOperations {
 			else{
 			return false;
 			}
-			ps.setDate(5, null); // expecteddate
+			//We are calculating a date 10 days in the future for expected date
+			java.util.Date expdate = new Date();
+			Calendar cal = Calendar.getInstance();
+			cal.setTime(expdate);
+			cal.add(Calendar.DATE,10);
+			expdate = cal.getTime();
+			java.sql.Date date = new java.sql.Date(expdate.getTime());
+			ps.setDate(5, date); // expecteddate
 			ps.setDate(6,null); // deliverydate
 
 			ps.executeUpdate();
