@@ -110,7 +110,7 @@ public class ReturnOperations extends AbstractTableOperations {
 			System.out.println("Query to select Executed");
 			
 			// If return already exists or greater than 15 days, do nothing
-			if (rs == null) {
+			if (!rs.next()) {
 				System.out.println("Return already made or not within 15 days of purchase");
 				ps.close();
 				return true;
@@ -325,15 +325,15 @@ public class ReturnOperations extends AbstractTableOperations {
 		System.out.println("test");
 
 		AMSOracleConnection oCon = AMSOracleConnection.getInstance();
-//		oCon.connect("ora_o0g6", "a40493058");
-				oCon.connect("ora_h5n8", "a44140028");
+		oCon.connect("ora_o0g6", "a40493058");
+		//		oCon.connect("ora_h5n8", "a44140028");
 
 		ReturnOperations ro = new ReturnOperations();
 
 		// both tests are for my account
 
 		// inside of 15 days and should be inserted
-		ro.returnItem("1011", "111114");
+		ro.returnItem("1014", "111120");
 
 		// out side of 15 days from today and shouldn't be inserted into tables
 		//ro.returnItem("1015", "111114");
