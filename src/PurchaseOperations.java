@@ -355,7 +355,7 @@ public class PurchaseOperations extends AbstractTableOperations {
 	 //save these values in GUI shopping basket text area
 	 MainFrame.appendShoppingBasketTextArea("  "+theupc+"  ");
 	 MainFrame.appendShoppingBasketTextArea(price.toString()+"  ");
-	 MainFrame.appendShoppingBasketTextArea(qty.toString());
+	 MainFrame.appendShoppingBasketTextArea(qty.toString()+"\n");
 	 
  }
 //TODO: IAN FINISH THIS METHOD
