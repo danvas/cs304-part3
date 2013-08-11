@@ -78,7 +78,7 @@ public class MainFrame extends JFrame {
 	private JTextField optitle;
 	private JTextField opcat;
 	private static JTextArea onlineSearchTextArea;
-	private JTextArea shoppingBasketTextArea;
+	private static JTextArea shoppingBasketTextArea;
 	private static Integer searchResultItemCount = 0;
 	/**
 	 * Launch the application.
@@ -1093,7 +1093,7 @@ public class MainFrame extends JFrame {
 		gbc_scrollPane.gridy = 3;
 		onlinePurchase.add(scrollPane, gbc_scrollPane);
 		
-		this.shoppingBasketTextArea = new JTextArea();
+		shoppingBasketTextArea = new JTextArea();
 		scrollPane.setViewportView(shoppingBasketTextArea);
 		shoppingBasketTextArea.append(" UPC     Price     Quantity\n ----------------------------------");
 		
@@ -1248,12 +1248,18 @@ public static void saveOnlinePurchaseItem(String s){
 public static int getOnlinePurchaseCount(){
 	return onlineItemCount;
 }
+public static void incOnlinePurchaseCount(){
+	onlineItemCount++;
+}
 
 public static Integer getSearchResultItemCount() {
 	return searchResultItemCount;
 }
 public static void incSearchResultCount(){
 	searchResultItemCount++;
+}
+public static void appendShoppingBasketTextArea(String s){
+	shoppingBasketTextArea.append(s);
 }
 
 }
