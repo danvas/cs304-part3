@@ -22,7 +22,7 @@ public class ReturnOperations extends AbstractTableOperations {
 		
 		try {
 			ps = con.prepareStatement("INSERT INTO return VALUES (return_retid.nextval,?,sysdate)");
-			if(receiptId!= null){
+			if(receiptId!=null){
 				ps.setInt(1, r);
 			}
 			else{
