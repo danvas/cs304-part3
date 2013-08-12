@@ -501,10 +501,16 @@ public class MainFrame extends JFrame {
 		//TODO: Manager AddItem button
 		btnAddItem.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				Double priceDouble;
 				ItemOperations i = new ItemOperations();
 				String upcString = additemupc.getText();
 				Integer qtyString = Integer.parseInt(additemqty.getText());
-				Double priceDouble = Double.parseDouble(additemprice.getText());
+				if (additemprice.getText() == null || additemprice.getText().isEmpty()) {
+					priceDouble = 0.0;
+				}
+				else {
+					priceDouble = Double.parseDouble(additemprice.getText());
+				}
 				i.managerAddItem(upcString, qtyString, priceDouble);
 			}
 		});
