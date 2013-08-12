@@ -116,6 +116,34 @@ public class ItemOperations extends AbstractTableOperations{
 		}
 	}
 
+	boolean updateItem(String upc, Integer stock){	
+		try{
+			ps = con.prepareStatement("UPDATE item SET stock = stock + ? WHERE upc = ?");
+
+			ps.setInt(1, stock.intValue());
+			ps.setString(2, upc);
+
+			ps.executeUpdate();
+			con.commit();
+			System.out.println("item updated");
+			return true;
+		}
+		catch(SQLException ex){
+			ExceptionEvent event = new ExceptionEvent(this, ex.getMessage());
+			fireExceptionGenerated(event);
+
+			try	{
+				con.rollback();
+				return false; 
+			}
+			catch (SQLException ex2){
+				event = new ExceptionEvent(this, ex2.getMessage());
+				fireExceptionGenerated(event);
+				return false; 
+			}
+		}
+	}
+	
 	boolean delete(String upc){
 		try {
 			ps = con.prepareStatement("DELETE FROM item WHERE upc = ?");
@@ -159,11 +187,22 @@ public class ItemOperations extends AbstractTableOperations{
 			if (rs.next()) {
 				System.out.println("upc exists. now updating");
 				//rs.getString()
+				if (price==null||price==0)
+				{
+					updateItem(upc,stock);
+				}
+				else{
 				updateItem(upc, stock, price);
+				}
 				return true;
 			}
 			else if (!rs.next()) {
-				insert(upc, "", "", "", "", "", price, stock );
+				if(price==null|price==0.0){
+				insert(upc, "", "", "", "", "", -1.0, stock );
+				}
+				else{
+					insert(upc, "", "", "", "", "", price, stock );
+				}
 				return true;
 			}
 			else return false;
