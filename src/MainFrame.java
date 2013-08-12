@@ -1112,7 +1112,6 @@ public class MainFrame extends JFrame {
 		
 		onlineSearchTextArea = new JTextArea();
 		scrollPane_2.setViewportView(onlineSearchTextArea);
-		onlineSearchTextArea.append("  UPC     Title     Category     LeadSinger     Price          \n----------------------------------------------------------------");
 		
 		JScrollPane scrollPane = new JScrollPane();
 		GridBagConstraints gbc_scrollPane = new GridBagConstraints();
@@ -1303,5 +1302,8 @@ public static void appendShoppingBasketTextArea(String s){
 }
 public static void appendTopSellingItemsReport(String s){
 	topSellTextArea.append(s);
+}
+public static void appendSearchText(String s){
+onlineSearchTextArea.append(s);
 }
 }

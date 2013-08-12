@@ -399,7 +399,7 @@ public class PurchaseOperations extends AbstractTableOperations {
 			//String statement = "SELECT i.upc, i.ititle, i.category, l.sname, i.price FROM Item i inner join LeadSinger l on i.upc = l.upc WHERE "+qqty+qtitle+qcat+qls;
 
 			
-			
+			MainFrame.appendSearchText("UPC   Title   Category   Lead Singer   Price\n -----------------------------------------------------------------");
 			
 			System.out.println(statement);
 			ps = con.prepareStatement(statement);
