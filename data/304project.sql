@@ -273,6 +273,9 @@ insert into PurchaseItem
 	values(purchase_receiptId.currval, '111120', 5);
 insert into PurchaseItem
 	values(purchase_receiptId.currval, '111116', 7);
+insert into Purchase
+	values(purchase_receiptId.nextval, '2013-07-31', null, null, null, null, null);
+insert into PurchaseItem values('1009', '111118', 4);
 prompt **************************************************** Inserting into Return and ReturnItem;
 
 insert into Return
