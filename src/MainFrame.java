@@ -1150,6 +1150,14 @@ public class MainFrame extends JFrame {
 		//TODO: Submit Online Purchase Button
 		btnSubmitOrder.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				PurchaseOperations po = new PurchaseOperations();
+				String cnumber = opcardno.getText();
+				String cexpdate = opcardxd.getText();
+				String cardHolder = customerId;
+				if (po.completeOnlinePurchase(cnumber, cexpdate, cardHolder)) {
+					System.out.println("Online purchase made");
+				}
+				
 			}
 		});
 		
@@ -1191,11 +1199,12 @@ public class MainFrame extends JFrame {
 		btnAddItem_2.addActionListener(new ActionListener() {
 			//TODO: ONLINE PURCHASE ADD ITEM BUTTON
 			public void actionPerformed(ActionEvent arg0) {
+				String upc = textField_2.getText().trim(); 
 				PurchaseOperations p = new PurchaseOperations();
-//				if(p.addItemToVirtualBasket(title, category, leadsinger, qty)){
-//					onlineItemCount++;
-//					System.out.println();
-//				}
+				if(p.addItemToShoppingCart(upc)){
+					onlineItemCount++;
+					System.out.println();
+				}
 			}
 		});
 		GridBagConstraints gbc_btnAddItem_2 = new GridBagConstraints();

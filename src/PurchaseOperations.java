@@ -332,7 +332,7 @@ public class PurchaseOperations extends AbstractTableOperations {
 			}
 		}
 	}
- public void addItemToShoppingCart(String upc){
+ public boolean addItemToShoppingCart(String upc){
 	 ArrayList<String> searchItems = MainFrame.getOnlineSearchItems();
 	 int index = searchItems.indexOf(upc);
 	 
@@ -341,7 +341,8 @@ public class PurchaseOperations extends AbstractTableOperations {
 //	 String category = searchItems.get(index+2);
 //	 String leadsinger = searchItems.get(index+3);
 	 Double price = Double.parseDouble(searchItems.get(index+4));
-	 Integer qty = Integer.parseInt(searchItems.get(index+5));
+	 Integer qty = Integer.parseInt(searchItems.get(index+5).trim());
+	 System.out.println("is it printing");
 	 
 	 MainFrame.clearSearchResults();
 	 //save upc, price, qty as strings to onlinePurchaseItems
@@ -353,9 +354,11 @@ public class PurchaseOperations extends AbstractTableOperations {
 	 MainFrame.incOnlinePurchaseCount();
 	 
 	 //save these values in GUI shopping basket text area
-	 MainFrame.appendShoppingBasketTextArea("  "+theupc+"  ");
+	 MainFrame.appendShoppingBasketTextArea("\n  "+theupc+"  ");
 	 MainFrame.appendShoppingBasketTextArea(price.toString()+"  ");
-	 MainFrame.appendShoppingBasketTextArea(qty.toString()+"\n");
+	 MainFrame.appendShoppingBasketTextArea(qty.toString());
+	 
+	 return true;
 	 
  }
 //TODO: IAN FINISH THIS METHOD
@@ -410,51 +413,53 @@ public class PurchaseOperations extends AbstractTableOperations {
 			System.out.println("Just Executed Online Item Search Query");
 //			String searchItems = "";
 			System.out.println("\nEntering loop...");
+			String searchItem = "";
+
 			while(rs.next()){
 				
 				System.out.println(MainFrame.getSearchResultItemCount());
-				String searchItem = "";
 				
 				rsupc = rs.getString(1);
 				System.out.println("Checking out rsupc value: "+rsupc);
 				searchItem += (rsupc);
-//				MainFrame.addSearchItem(rsupc);
+				MainFrame.addSearchItem(rsupc);
 				
 				rstitle = rs.getString(2);
 				System.out.println("Checking out rstitle value: "+rstitle);
 				searchItem += ("\t" + rstitle); //TODO: fix output format (low priority)
-//				MainFrame.addSearchItem(rstitle);
+				MainFrame.addSearchItem(rstitle);
 				
 				rscategory = rs.getString(3);
 				System.out.println("Checking out rscat value: "+rscategory);
 				searchItem += ("\t" + rscategory);
-//				MainFrame.addSearchItem(rscategory);
+				MainFrame.addSearchItem(rscategory);
 				
 				rsleadsinger = rs.getString(4);
 				System.out.println("Checking out rsls value: "+rsleadsinger);
 				searchItem += ("\t" + rsleadsinger);
-//				MainFrame.addSearchItem(rsleadsinger);
+				MainFrame.addSearchItem(rsleadsinger);
 			
 				
 				rsprice = rs.getDouble(5);
 				System.out.println("Checking out rsprice value: "+rsprice);
 				searchItem += ("\t" + rsprice);
-//				MainFrame.addSearchItem(rsprice.toString());
+				MainFrame.addSearchItem(rsprice.toString());
 				
-//				MainFrame.addSearchItem(qty.toString());
-				MainFrame.addSearchItem(searchItem + "\t" + qty.toString() + "\n");
+				MainFrame.addSearchItem(qty.toString());
+				searchItem += "\n";
+//				MainFrame.addSearchItem(searchItem + "\t" + qty.toString() + "\n");
 				MainFrame.incSearchResultCount();
 //				searchItems += searchItem;
 				System.out.println("\n");
 			}
 			System.out.println("Exiting loop...\n");
-			ArrayList<String> searchresults = MainFrame.getOnlineSearchItems();
-			String s= "" ;
-			for (int j=0; j<MainFrame.getSearchResultItemCount();j++){
-				s += searchresults.get(j)+" ";
-			}
-			MainFrame.showSearchResults(s);
-			System.out.println(s);
+//			ArrayList<String> searchresults = MainFrame.getOnlineSearchItems();
+//			String s= "" ;
+//			for (int j=0; (j<MainFrame.getSearchResultItemCount() * 6);j++){
+//				s += searchresults.get(j)+" ";
+//			}
+			MainFrame.showSearchResults(searchItem);
+			System.out.println(searchItem);
 
 			return true;
 			
