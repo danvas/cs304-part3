@@ -1199,10 +1199,10 @@ public class MainFrame extends JFrame {
 		btnAddItem_2.addActionListener(new ActionListener() {
 			//TODO: ONLINE PURCHASE ADD ITEM BUTTON
 			public void actionPerformed(ActionEvent arg0) {
+				onlineSearchTextArea.setText("");
 				String upc = textField_2.getText().trim(); 
 				PurchaseOperations p = new PurchaseOperations();
 				if(p.addItemToShoppingCart(upc)){
-					onlineItemCount++;
 					System.out.println();
 				}
 			}

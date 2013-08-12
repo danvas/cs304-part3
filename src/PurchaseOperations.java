@@ -592,6 +592,7 @@ public class PurchaseOperations extends AbstractTableOperations {
 				ps = con.prepareStatement("INSERT INTO PurchaseItem VALUES (purchase_receiptId.currval,?,?)");
 				items.remove(0); 
 				items.remove(0);
+				items.remove(0);
 				ps.setString(1,upc);
 				ps.setInt(2,qty);
 				
