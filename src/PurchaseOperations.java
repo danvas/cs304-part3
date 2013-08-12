@@ -637,23 +637,23 @@ public class PurchaseOperations extends AbstractTableOperations {
 		return receiptId;
 		
 	}
-//	public static void main(String args[])
-//	{
-//		
-//	// Receipt tests:
-//	AMSOracleConnection oCon = AMSOracleConnection.getInstance();
-//
+	public static void main(String args[])
+	{
+		
+	// Receipt tests:
+	AMSOracleConnection oCon = AMSOracleConnection.getInstance();
+	oCon.connect("ora_o0g6", "a40493058");
 //	oCon.connect("ora_n7o8", "a36421089");
-//	PurchaseOperations po = new PurchaseOperations();
-//	System.out.println("test******** receipt w/card");
-//	po.printReceipt(1001);
-//	System.out.println("test******** receipt w/o card");
-//	po.printReceipt(1004);
+	PurchaseOperations po = new PurchaseOperations();
+	System.out.println("test******** receipt w/card");
+	po.printReceipt(1001);
+	System.out.println("test******** receipt w/o card");
+	po.printReceipt(1004);
 	
-//		System.out.println("test");
-//		
+		System.out.println("test");
+		
 //		AMSOracleConnection oCon = AMSOracleConnection.getInstance();
-////		oCon.connect("ora_o0g6", "a40493058");
+//		oCon.connect("ora_o0g6", "a40493058");
 //		oCon.connect("ora_h5n8", "a44140028");
 //		
 //		PurchaseOperations po = new PurchaseOperations();
@@ -673,7 +673,7 @@ public class PurchaseOperations extends AbstractTableOperations {
 //		
 //		
 //
-//	} 
+	} 
 	
 	
 	

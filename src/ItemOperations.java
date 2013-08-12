@@ -739,7 +739,7 @@ public class ItemOperations extends AbstractTableOperations{
 				// get column name and print it
 
 				System.out.printf("%-30s", rsmd.getColumnName(i+1));   
-				jtext+= rsmd.getColumnName(i+1)+"               ";
+				jtext+= rsmd.getColumnName(i+1)+ "\t               ";
 			}
 
 			System.out.println(" ");
@@ -754,7 +754,7 @@ public class ItemOperations extends AbstractTableOperations{
 
 				title = rs.getString("title");
 				if(rs.wasNull()){
-					jtext+="                    ";
+					jtext+="\t\t                    ";
 				}
 				else{
 					jtext+= "\n"+title;
@@ -766,36 +766,36 @@ public class ItemOperations extends AbstractTableOperations{
 				if (rs.wasNull())
 				{
 					System.out.printf("%-30.30s", " ");
-					jtext+="                    ";
+					jtext+="\t                    ";
 				}
 				else
 				{
 					System.out.printf("%-30.30s", company);
-					jtext+="               "+company;
+					jtext+="\t               "+company;
 				}
 
 				stock = rs.getInt("stock");
 				if (rs.wasNull())
 				{
 					System.out.printf("%-30.30s", " ");
-					jtext+= "                              ";
+					jtext+= "\t                              ";
 				}
 				else
 				{
 					System.out.printf("%-30.30s", stock + " ");
-					jtext+="                    "+stock;
+					jtext+="\t                    "+stock;
 				}
 
 				sold = rs.getInt("sold");
 				if (rs.wasNull())
 				{
 					System.out.printf("%-30.30s\n", " ");
-					jtext+="                    \n";
+					jtext+="\t                    \n";
 				}
 				else
 				{
 					System.out.printf("%-30.30s\n", sold + " ");
-					jtext+="                    "+sold+"\n";
+					jtext+="\t                    "+sold+"\n";
 				} 
 
 			}
