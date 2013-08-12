@@ -357,7 +357,6 @@ public class PurchaseOperations extends AbstractTableOperations {
 	 MainFrame.appendShoppingBasketTextArea("\n  "+theupc+"  ");
 	 MainFrame.appendShoppingBasketTextArea(price.toString()+"  ");
 	 MainFrame.appendShoppingBasketTextArea(qty.toString());
-	 
 	 return true;
 	 
  }
@@ -578,7 +577,8 @@ public class PurchaseOperations extends AbstractTableOperations {
 			ps.executeUpdate();
 			System.out.println("Insertion to Purchase Was Successful");
 			
-			for(int i=0; i<MainFrame.getNumberInstorePurchaseItems();i++){
+			
+			for(int i=0; i<MainFrame.getOnlinePurchaseCount();i++){
 				System.out.println("entered for loop");
 				upc = items.get(0);
 				System.out.println("UPC is:" + upc);
