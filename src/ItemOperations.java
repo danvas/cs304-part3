@@ -512,40 +512,41 @@ public class ItemOperations extends AbstractTableOperations{
 				}
 				}
 				totalQuantity += units;
+				totalPrice += tClassical + tCountry + tInstrumental + tPop + tRap + tRock;
 				
 			}
 			System.out.println("---------------------------------------------------");
 			report+="\n---------------------------------------------------\n";
 			if (qClassical != 0) {
 				System.out.println("Classical subtotal: " + qClassical + " units $ " + tClassical);
-				report+= "Classical subtotal: " + qClassical + " units $ " + tClassical;
+				report+= "Classical subtotal: " + qClassical + " units $ " + tClassical + "\n";
 			}
 			if (qCountry != 0) {
 				System.out.println("Country subtotal: " + qCountry + " units $ " + tCountry);
-				report+="Country subtotal: " + qCountry + " units $ " + tCountry;
+				report+="Country subtotal: " + qCountry + " units $ " + tCountry + "\n";
 			}
 			if (qInstrumental != 0) {
 				System.out.println("Instrumental subtotal: " + qInstrumental + " units $ " + tInstrumental);
-				report+="Instrumental subtotal: " + qInstrumental + " units $ " + tInstrumental;
+				report+="Instrumental subtotal: " + qInstrumental + " units $ " + tInstrumental+ "\n";
 			}
 			if (qNewAge != 0) {
 				System.out.println("New Age subtotal: " + qNewAge + " units $ " + tNewAge);
-				report+="New Age subtotal: " + qNewAge + " units $ " + tNewAge;
+				report+="New Age subtotal: " + qNewAge + " units $ " + tNewAge+ "\n";
 			}
 			if (qPop != 0) {
 				System.out.println("Pop subtotal: " + qPop + " units $ " + tPop);
-				report+="Pop subtotal: " + qPop + " units $ " + tPop;
+				report+="Pop subtotal: " + qPop + " units $ " + tPop+ "\n";
 			}
 			if (qRap != 0) {
 				System.out.println("Rap subtotal: " + qRap + " units $ " + tRap);
-				report+="Rap subtotal: " + qRap + " units $ " + tRap;
+				report+="Rap subtotal: " + qRap + " units $ " + tRap+ "\n";
 			}
 			if (qRock != 0) {
 				System.out.println("Rock subtotal: " + qRock + " units $ " + tRock);
-				report+="Rock subtotal: " + qRock + " units $ " + tRock;
+				report+="Rock subtotal: " + qRock + " units $ " + tRock+ "\n";
 			}
 			System.out.println("Total daily sales: " + totalQuantity + " units $" + totalPrice);
-			report+="\n"+ "Total daily sales: " + totalQuantity + " units $" + totalPrice;
+			report+="\n"+ "Total daily sales: " + totalQuantity + " units $" + totalPrice+ "\n";
 			
 			ps.close();
 			MainFrame.setDailySalesReport(report);
@@ -861,38 +862,38 @@ public class ItemOperations extends AbstractTableOperations{
 		
 	}
 	
-	public static void main(String args[])
-	{
-
-		System.out.println("test");
-		//
-		AMSOracleConnection oCon = AMSOracleConnection.getInstance();
-//		oCon.connect("ora_o0g6", "a40493058");
-		oCon.connect("ora_h5n8", "a44140028");
-		//
-		ItemOperations item = new ItemOperations();
-
-
-
-		//		item.insert("999888", "test", "CD", "test", "test", "test", 999.99, 99);
-		//		item.insert("123457", "cpsc", "CD", "instrumental", "company", "year", 111.12, 27);
-
-		//		//item.displayItem();
-		//		item.delete("999888");
-		//		item.delete("999999");
-		//		item.delete("123457");
-		//
-//		item.dailySalesReportGUI("25-05-13");
-		item.topItems("25-may-13", 4);
-		System.out.println("test done");
-
-
-		
-//		
+//	public static void main(String args[])
+//	{
 //
-//		item.topItems("25-05-13", 4);
-
-	} 
+//		System.out.println("test");
+//		//
+//		AMSOracleConnection oCon = AMSOracleConnection.getInstance();
+////		oCon.connect("ora_o0g6", "a40493058");
+//		oCon.connect("ora_h5n8", "a44140028");
+//		//
+//		ItemOperations item = new ItemOperations();
+//
+//
+//
+//		//		item.insert("999888", "test", "CD", "test", "test", "test", 999.99, 99);
+//		//		item.insert("123457", "cpsc", "CD", "instrumental", "company", "year", 111.12, 27);
+//
+//		//		//item.displayItem();
+//		//		item.delete("999888");
+//		//		item.delete("999999");
+//		//		item.delete("123457");
+//		//
+////		item.dailySalesReportGUI("25-05-13");
+//		item.topItems("25-may-13", 4);
+//		System.out.println("test done");
+//
+//
+//		
+////		
+////
+////		item.topItems("25-05-13", 4);
+//
+//	} 
 
 
 }

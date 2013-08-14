@@ -646,9 +646,9 @@ public class PurchaseOperations extends AbstractTableOperations {
 //	oCon.connect("ora_n7o8", "a36421089");
 	PurchaseOperations po = new PurchaseOperations();
 	System.out.println("test******** receipt w/card");
-	po.printReceipt(1001);
+	po.printReceipt(1032);
 	System.out.println("test******** receipt w/o card");
-	po.printReceipt(1004);
+	po.printReceipt(1032);
 	
 		System.out.println("test");
 		
